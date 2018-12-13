@@ -4,39 +4,39 @@ import { Provider } from 'react-redux';
 import store from './store';
 import './App.css';
 
-import LoginPage from './components/LoginPage';
-import ResetPasswordPage from './components/ResetPasswordPage';
-
-import AdminLandingPage from './components/AdminLandingPage';
-import RegisterPage from './components/RegisterPage';
-import AdminEditPage from './components/AdminEditPage';
-import AdminEditBalancePage from './components/AdminEditBalancePage';
-import AdminPendingPage from './components/AdminPendingPage';
-import AdminApprovePage from './components/AdminApprovePage';
-import AdminRejectPage from './components/AdminRejectPage';
-
-import EmployeeLandingPage from './components/EmployeeLandingPage';
-import ProfilePage from './components/ProfilePage';
-import PasswordPage from './components/PasswordPage';
-import PasswordPageAdmin from './components/PasswordPageAdmin';
-
-import LeaveRequestPage from './components/LeaveRequestPage';
-import LeaveEditPage from './components/LeaveEditPage';
-import EmployeePendingPage from './components/EmployeePendingPage';
-import EmployeeApprovePage from './components/EmployeeApprovePage';
-import EmployeeRejectPage from './components/EmployeeRejectPage';
-
-import SupervisorLandingPage from './components/SupervisorLandingPage';
-import SupervisorPendingPage from './components/SupervisorPendingPage';
-import SupervisorApprovePage from './components/SupervisorApprovePage';
-import SupervisorRejectPage from './components/SupervisorRejectPage';
-
-import DirectorLandingPage from './components/DirectorLandingPage';
-import DirectorPendingPage from './components/DirectorPendingPage';
-import DirectorApprovePage from './components/DirectorApprovePage';
-import DirectorRejectPage from './components/DirectorRejectPage';
-
 import Notfound from './components/NotFound';
+
+import LoginPage from './pages/LoginPage';
+import ProfilePage from './pages/ProfilePage';
+import ResetPasswordPage from './pages/password/ResetPasswordPage';
+import PasswordPage from './pages/password/PasswordPage';
+
+import LeaveRequestPage from './pages/Leave/LeaveRequestPage';
+import LeaveEditPage from './pages/Leave/LeaveEditPage';
+
+import AdminLandingPage from './pages/admin/AdminLandingPage';
+import AdminRegisterPage from './pages/admin/AdminRegisterPage';
+import AdminEditPage from './pages/admin/AdminEditPage';
+import AdminEditBalancePage from './pages/admin/AdminEditBalancePage';
+import AdminPendingPage from './pages/admin/AdminPendingPage';
+import AdminApprovePage from './pages/admin/AdminApprovePage';
+import AdminRejectPage from './pages/admin/AdminRejectPage';
+import AdminPasswordPage from './pages/admin/AdminPasswordPage';
+
+import DirectorLandingPage from './pages/director/DirectorLandingPage';
+import DirectorPendingPage from './pages/director/DirectorPendingPage';
+import DirectorApprovePage from './pages/director/DirectorApprovePage';
+import DirectorRejectPage from './pages/director/DirectorRejectPage';
+
+import SupervisorLandingPage from './pages/supervisor/SupervisorLandingPage';
+import SupervisorPendingPage from './pages/supervisor/SupervisorPendingPage';
+import SupervisorApprovePage from './pages/supervisor/SupervisorApprovePage';
+import SupervisorRejectPage from './pages/supervisor/SupervisorRejectPage';
+
+import EmployeeLandingPage from './pages/employee/EmployeeLandingPage';
+import EmployeePendingPage from './pages/employee/EmployeePendingPage';
+import EmployeeApprovePage from './pages/employee/EmployeeApprovePage';
+import EmployeeRejectPage from './pages/employee/EmployeeRejectPage';
 
 class App extends Component {
   render() {
@@ -49,14 +49,16 @@ class App extends Component {
               <Route exact path="/login" component={LoginPage} />
               <Route exact path="/reset-password" component={ResetPasswordPage} />
 
+              {/* admin */}
               <Route exact path="/admin" component={AdminLandingPage} />
-              <Route exact path="/admin/register-user" component={RegisterPage} />            
+              <Route exact path="/admin/register-user" component={AdminRegisterPage} />            
               <Route exact path={`/admin/edit-user/:id`} component={AdminEditPage}/>
               <Route exact path={`/admin/edit-balance/:id`} component={AdminEditBalancePage}/>
-              <Route path={`/admin/edit-password`} component={PasswordPageAdmin}/>
+              
               <Route exact path="/admin/list-pending-request" component={AdminPendingPage} />
-              <Route exact path="/admin/list-approve-request" component={AdminApprovePage} />              
-              <Route exact path="/admin/list-reject-request" component={AdminRejectPage} />              
+              <Route exact path="/admin/list-approve-request" component={AdminApprovePage} />
+              <Route exact path="/admin/list-reject-request" component={AdminRejectPage} />
+              <Route path={`/admin/edit-password`} component={AdminPasswordPage}/>
                            
               <Route exact path="/employee" component={EmployeeLandingPage} />
 
