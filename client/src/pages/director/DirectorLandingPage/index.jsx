@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { fetchAdminLeaveApprove } from "../store/Actions/adminActions";
+import { fetchAdminLeaveApprove } from "../../../store/Actions/adminActions";
 import FullCalendar from "fullcalendar-reactwrapper";
 import moment from "moment";
 import "fullcalendar/dist/fullcalendar.css";
-import HeaderNav from "./menu/HeaderNav";
-import Loading from "./menu/Loading";
-import Footer from "./menu/Footer";
+import HeaderNav from "../../../pages/menu/HeaderNav";
+import Loading from "../../../components/Loading";
+import Footer from "../../../components/Footer";
 import "./style.css";
 import { Layout, message } from "antd";
 const { Content } = Layout;
@@ -65,7 +65,7 @@ export class DirectorLandingPage extends Component {
         events.push({
           title: `${this.state.leaves[i].name} ${this.state.leaves[i].total} day(s) for ${
             this.state.leaves[i].type_name
-          }`,
+            }`,
           start: this.formatDate(
             moment(this.state.leaves[i].date_from, "DD-MM-YYYY")
           ),
@@ -93,7 +93,7 @@ export class DirectorLandingPage extends Component {
                 paddingBottom: "20px"
               }}
             >
-              <div style={{ padding: 20, background: "#fff"}}>
+              <div style={{ padding: 20, background: "#fff" }}>
                 <FullCalendar
                   id="your-custom-ID"
                   header={{
@@ -101,12 +101,12 @@ export class DirectorLandingPage extends Component {
                     center: "title",
                     right: "month,basicWeek,basicDay"
                   }}
-                  navLinks={true} 
+                  navLinks={true}
                   editable={true}
                   eventLimit={true}
                   events={events}
                   eventColor={"#378006"}
-                  eventClick={function(calEvent, jsEvent, view, resourceObj) {
+                  eventClick={function (calEvent, jsEvent, view, resourceObj) {
                     message.info(calEvent.title);
                   }}
                 />

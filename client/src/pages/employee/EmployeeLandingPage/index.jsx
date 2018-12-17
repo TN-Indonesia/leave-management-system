@@ -1,10 +1,10 @@
 import React from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { userSummaryFetchData } from "../store/Actions/userSummaryAction";
-import HeaderNav from "./menu/HeaderNav";
-import Loading from "./menu/Loading";
-import Footer from "./menu/Footer";
+import { userSummaryFetchData } from "../../../store/Actions/userSummaryAction";
+import HeaderNav from "../../../pages/menu/HeaderNav";
+import Loading from "../../../components/Loading";
+import Footer from "../../../components/Footer";
 import "./style.css";
 import { Layout, Row, Col } from "antd";
 const { Content } = Layout;

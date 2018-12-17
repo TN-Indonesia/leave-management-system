@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { formOnchange, registerUser } from "../../../../store/Actions/registerAction";
-import { getSupervisors } from "../../../../store/Actions/AddSupervisorAction";
-import HeaderNav from "../../../menu/HeaderAdmin";
-import Footer from "../../../menu/Footer";
+import { formOnchange, registerUser } from "../../../store/Actions/registerAction";
+import { getSupervisors } from "../../../store/Actions/AddSupervisorAction";
+import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
+import Footer from "../../../components/Footer";
 import "./style.css";
 import { Layout, Form, Input, Select, Button, DatePicker } from "antd";
 const { Content } = Layout;
@@ -189,7 +189,7 @@ class RegisterPage extends Component {
     return (
       <div>
         <Layout>
-          <HeaderNav />
+          <HeaderAdmin />
 
           <Content
             className="container"

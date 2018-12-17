@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import {
   handleEdit,
   resetPassword
-} from "../store/Actions/resetPasswordAction";
+} from "../../../store/Actions/resetPasswordAction";
 import { Layout, Form, Icon, Input, Button } from "antd";
 const { Header, Content } = Layout;
 const { Footer } = Layout;

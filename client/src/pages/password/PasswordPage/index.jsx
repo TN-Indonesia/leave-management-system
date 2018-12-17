@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { handleEdit, updateNewPassword } from "../../../../store/Actions/passwordAction";
-import HeaderNav from "../../../menu/HeaderNav";
-import Footer from "../../../menu/Footer";
+import { handleEdit, updateNewPassword } from "../../../store/Actions/passwordAction";
+import HeaderNav from "../../../pages/menu/HeaderNav";
+import Footer from "../../../components/Footer";
 import { Layout, Form, Input, Button } from "antd";
 const { Content } = Layout;
 const FormItem = Form.Item;

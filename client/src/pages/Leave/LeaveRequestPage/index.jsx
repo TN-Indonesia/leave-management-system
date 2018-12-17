@@ -7,10 +7,11 @@ import {
   formOnChange,
   SumbitLeave,
   SumbitLeaveSupervisor
-} from "../store/Actions/leaveRequestAction";
-import { typeLeaveFetchData } from "../store/Actions/typeLeaveAction";
-import HeaderNav from "./menu/HeaderNav";
-import Footer from "./menu/Footer";
+} from "../../../store/Actions/leaveRequestAction";
+import { typeLeaveFetchData } from "../../../store/Actions/typeLeaveAction";
+import HeaderNav from "../../../pages/menu/HeaderNav";
+import Footer from "../../../components/Footer";
+import "./style.css";
 import {
   Layout,
   Form,

@@ -7,8 +7,12 @@ import {
   fetchedEdit,
   handleEdit,
   saveEditLeave
-} from "../store/Actions/editRequestAction";
-import { typeLeaveFetchData } from "../store/Actions/typeLeaveAction";
+} from "../../../store/Actions/editRequestAction";
+import { typeLeaveFetchData } from "../../../store/Actions/typeLeaveAction";
+import HeaderNav from "../../../pages/menu/HeaderNav";
+import Loading from "../../../components/Loading";
+import Footer from "../../../components/Footer";
+import "./style.css";
 import {
   Layout,
   Button,
@@ -18,9 +22,6 @@ import {
   Checkbox,
   DatePicker
 } from "antd";
-import HeaderNav from "./menu/HeaderNav";
-import Loading from "./menu/Loading";
-import Footer from "./menu/Footer";
 const { Content } = Layout;
 const { TextArea } = Input;
 const FormItem = Form.Item;
@@ -310,6 +311,7 @@ class LeaveEditPage extends Component {
     const dates = this.getDates(start, end);
     const dateFormat = "DD-MM-YYYY";
     let typeID;
+    console.log(typeID)
 
     if (datesHalf !== null) {
       for (let i in dates) {

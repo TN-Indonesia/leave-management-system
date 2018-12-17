@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { employeeGetRequestApprove } from "../store/Actions/employeeAction";
-import HeaderNav from "./menu/HeaderNav";
-import Loading from "./menu/Loading";
-import Footer from "./menu/Footer";
+import { employeeGetRequestApprove } from "../../../store/Actions/employeeAction";
+import HeaderNav from "../../../pages/menu/HeaderNav";
+import Loading from "../../../components/Loading";
+import Footer from "../../../components/Footer";
 import "./style.css";
 import { Layout, Table, Modal, Button, Input, Icon } from "antd";
 const { Content } = Layout;

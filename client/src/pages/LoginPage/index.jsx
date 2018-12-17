@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { handleFormInput, submitLogin } from "../../../store/Actions/loginActions";
+import { handleFormInput, submitLogin } from "../../store/Actions/loginActions";
 import { Layout, Form, Icon, Input, Button } from "antd";
 const { Header, Content } = Layout;
 const { Footer } = Layout;

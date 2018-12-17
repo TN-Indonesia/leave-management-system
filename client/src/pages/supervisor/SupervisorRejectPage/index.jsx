@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { fetchSupervisorLeaveReject } from "../store/Actions/supervisorActions";
+import { fetchSupervisorLeaveReject } from "../../../store/Actions/supervisorActions";
+import HeaderNav from "../../../pages/menu/HeaderNav";
+import Loading from "../../../components/Loading";
+import Footer from "../../../components/Footer";
+import "./style.css";
 import { Layout, Table, Modal, Button, Input, Icon } from "antd";
-import HeaderNav from "./menu/HeaderNav";
-import Loading from "./menu/Loading";
-import Footer from "./menu/Footer";
 const { Content } = Layout;
 let data;
 
@@ -72,8 +73,8 @@ class SupervisorRejectPage extends Component {
                       text.toLowerCase() === searchText.toLowerCase() ? (
                         <span key={i}>{text}</span>
                       ) : (
-                        text
-                      ) // eslint-disable-line
+                          text
+                        ) // eslint-disable-line
                   )}
               </span>
             )
@@ -106,8 +107,8 @@ class SupervisorRejectPage extends Component {
                         {text}
                       </span>
                     ) : (
-                      text
-                    ) // eslint-disable-line
+                        text
+                      ) // eslint-disable-line
                 )}
                 }
               </span>
@@ -332,7 +333,7 @@ class SupervisorRejectPage extends Component {
                 Reason : {this.state.user && this.state.user.reason} <br />
                 From : {this.state.user && this.state.user.date_from} <br />
                 To : {this.state.user && this.state.user.date_to} <br />
-                Half Day : {this.state.user && this.state.user.half_dates !== "" ? ( this.state.user.half_dates ):("none")} <br />
+                Half Day : {this.state.user && this.state.user.half_dates !== "" ? (this.state.user.half_dates) : ("none")} <br />
                 Back On : {this.state.user && this.state.user.back_on} <br />
                 Total Leave : {this.state.user &&
                   this.state.user.total} day <br />

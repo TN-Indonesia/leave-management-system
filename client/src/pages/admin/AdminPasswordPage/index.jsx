@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { handleEdit, updateNewPassword } from "../../../../store/Actions/passwordAction";
-import HeaderNav from "../../../menu/HeaderAdmin";
-import Footer from "../../../menu/Footer";
+import { handleEdit, updateNewPassword } from "../../../store/Actions/passwordAction";
+import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
+import Footer from "../../../components/Footer";
 import "./style.css";
 import { Layout, Form, Input, Button } from "antd";
 const { Content } = Layout;
@@ -98,7 +98,7 @@ class PasswordPage extends Component {
 
     return (
       <Layout>
-        <HeaderNav />
+        <HeaderAdmin />
         <Content
           className="container"
           style={{

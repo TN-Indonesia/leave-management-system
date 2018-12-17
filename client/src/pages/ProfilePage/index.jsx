@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { profileFetchData } from "../../../store/Actions/profileAction";
-import { getSupervisors } from "../../../store/Actions/AddSupervisorAction";
+import { connect } from "react-redux";
+import { profileFetchData } from "../../store/Actions/profileAction";
+import { getSupervisors } from "../../store/Actions/AddSupervisorAction";
 import moment from "moment-timezone";
 import { Layout, Button, Form, Input, Select, DatePicker } from "antd";
-import HeaderNav from "../../menu/HeaderNav";
-import Footer from "../../menu/Footer";
+import HeaderNav from "../../pages/menu/HeaderNav";
+import Footer from "../../components/Footer";
 const { Content } = Layout;
 const FormItem = Form.Item;
 const Option = Select.Option;

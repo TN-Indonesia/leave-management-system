@@ -5,10 +5,10 @@ import {
   fetchDirectorLeavePending,
   directorApproveRequest,
   directorRejectRequest
-} from "../store/Actions/directorActions";
-import HeaderNav from "./menu/HeaderNav";
-import Loading from "./menu/Loading";
-import Footer from "./menu/Footer";
+} from "../../../store/Actions/directorActions";
+import HeaderNav from "../../../pages/menu/HeaderNav";
+import Loading from "../../../components/Loading";
+import Footer from "../../../components/Footer";
 import "./style.css";
 import { Layout, Table, Modal, Button, Input, Icon } from "antd";
 const { Content } = Layout;

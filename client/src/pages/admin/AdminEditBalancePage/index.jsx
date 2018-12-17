@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { adminEditLeaveBalances } from "../../../../store/Actions/adminActions";
+import { adminEditLeaveBalances } from "../../../store/Actions/adminActions";
 import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
 import Loading from "../../../components/Loading";
 import Footer from "../../../components/Footer";
@@ -49,6 +49,7 @@ class AdminEditBalancePage extends Component {
       ...this.props.balances,
       [e.target.name]: e.target.value
     };
+    console.log(edit)
     // this.props.handleEdit(edit);
     console.log(e.target.name, e.target.value);
   };

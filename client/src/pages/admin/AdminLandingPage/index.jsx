@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { adminGetUsers, adminDeleteUser } from "../../../../store/Actions/adminActions";
-import HeaderNav from "../../../menu/HeaderAdmin";
-import Loading from "../../../menu/Loading";
-import Footer from "../../../menu/Footer";
+import { adminGetUsers, adminDeleteUser } from "../../../store/Actions/adminActions";
+import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
+import Loading from "../../../components/Loading";
+import Footer from "../../../components/Footer";
 import "./style.css";
 import { Layout, Table, Button, Divider, Popconfirm, message } from "antd";
 const { Content } = Layout;
@@ -129,7 +129,7 @@ class AdminLandingPage extends Component {
     } else {
       return (
         <Layout>
-          <HeaderNav />
+          <HeaderAdmin />
 
           <Content
             className="container"

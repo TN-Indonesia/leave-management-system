@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { fetchSupervisorLeaveApprove } from "../store/Actions/supervisorActions";
+import { fetchSupervisorLeaveApprove } from "../../../store/Actions/supervisorActions";
+import HeaderNav from "../../../pages/menu/HeaderNav";
+import Loading from "../../../components/Loading";
+import Footer from "../../../components/Footer";
+import "./style.css";
 import { Layout, Table, Modal, Button, Input, Icon } from "antd";
-import HeaderNav from "./menu/HeaderNav";
-import Loading from "./menu/Loading";
-import Footer from "./menu/Footer";
 const { Content } = Layout;
 let data;
 

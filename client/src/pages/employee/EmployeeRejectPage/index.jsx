@@ -4,10 +4,10 @@ import { connect } from "react-redux";
 import {
   employeeGetRequestReject,
   employeeDeleteRequest
-} from "../store/Actions/employeeAction";
-import HeaderNav from "./menu/HeaderNav";
-import Loading from "./menu/Loading";
-import Footer from "./menu/Footer";
+} from "../../../store/Actions/employeeAction";
+import HeaderNav from "../../../pages/menu/HeaderNav";
+import Loading from "../../../components/Loading";
+import Footer from "../../../components/Footer";
 import "./style.css";
 import {
   Layout,
@@ -85,8 +85,8 @@ class EmployeeRejectPage extends Component {
                         {text}
                       </span>
                     ) : (
-                      text
-                    ) // eslint-disable-line
+                        text
+                      ) // eslint-disable-line
                 )}
                 }
               </span>
@@ -292,7 +292,7 @@ class EmployeeRejectPage extends Component {
                 Reason : {this.state.user && this.state.user.reason} <br />
                 From : {this.state.user && this.state.user.date_from} <br />
                 To : {this.state.user && this.state.user.date_to} <br />
-                Half Day : {this.state.user && this.state.user.half_dates !== "" ? ( this.state.user.half_dates ):("none")} <br />
+                Half Day : {this.state.user && this.state.user.half_dates !== "" ? (this.state.user.half_dates) : ("none")} <br />
                 Back On : {this.state.user && this.state.user.back_on} <br />
                 Total Leave : {this.state.user &&
                   this.state.user.total} day <br />

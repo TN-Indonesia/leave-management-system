@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 import {
   fetchedEdit,
   handleEdit,
   saveEditUser
-} from "../../../../store/Actions/editUserAction";
-import { getSupervisors } from "../../../../store/Actions/AddSupervisorAction";
+} from "../../../store/Actions/editUserAction";
+import { getSupervisors } from "../../../store/Actions/AddSupervisorAction";
 import moment from "moment-business-days";
-import HeaderNav from "../../../menu/HeaderAdmin";
-import Footer from "../../../menu/Footer";
+import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
+import Footer from "../../../components/Footer";
 import "./style.css";
 import { Layout, Button, Form, Input, Select, DatePicker } from "antd";
 const { Content } = Layout;
@@ -31,7 +31,7 @@ class AdminEditPage extends Component {
   }
 
   componentWillMount() {
-    console.log(" ----------------- Admin-Edit-User ----------------- ");   
+    console.log(" ----------------- Admin-Edit-User ----------------- ");
   }
 
   componentDidMount() {
@@ -56,7 +56,7 @@ class AdminEditPage extends Component {
     }
   }
 
-  saveEdit = () => {    
+  saveEdit = () => {
     this.props.saveEditUser(this.props.user, url => {
       this.props.history.push(url);
     });
@@ -167,7 +167,7 @@ class AdminEditPage extends Component {
     return (
       <div>
         <Layout>
-          <HeaderNav />
+          <HeaderAdmin />
           <Content
             className="container"
             style={{
@@ -324,8 +324,8 @@ class AdminEditPage extends Component {
                       </Select>
                     </FormItem>
                   ) : (
-                    ""
-                  )}
+                      ""
+                    )}
 
                   <FormItem>
                     <Button

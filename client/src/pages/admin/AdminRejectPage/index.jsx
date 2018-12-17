@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { fetchAdminLeaveReject } from "../../../../store/Actions/adminActions";
-import HeaderNav from "../../../menu/HeaderAdmin";
-import Loading from "../../../menu/Loading";
-import Footer from "../../../menu/Footer";
+import { fetchAdminLeaveReject } from "../../../store/Actions/adminActions";
+import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
+import Loading from "../../../components/Loading";
+import Footer from "../../../components/Footer";
 import "./style.css";
 import { Layout, Table, Modal, Button, Input, Icon } from "antd";
 const { Content } = Layout;
@@ -280,7 +280,7 @@ class AdminRejectPage extends Component {
     } else {
       return (
         <Layout>
-          <HeaderNav />
+          <HeaderAdmin />
           <Content
             className="container"
             style={{

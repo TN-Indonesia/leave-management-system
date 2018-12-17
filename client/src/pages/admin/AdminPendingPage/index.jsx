@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { fetchAdminLeavePending } from "../../../../store/Actions/adminActions";
-import HeaderNav from "../../../menu/HeaderAdmin";
-import Loading from "../../../menu/Loading";
-import Footer from "../../../menu/Footer";
+import { fetchAdminLeavePending } from "../../../store/Actions/adminActions";
+import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
+import Loading from "../../../components/Loading";
+import Footer from "../../../components/Footer";
 import "./style.css";
 import { Layout, Table, Modal, Button, Input, Icon } from "antd";
 const { Content } = Layout;
@@ -73,8 +73,8 @@ class AdminPendingPage extends Component {
                       text.toLowerCase() === searchText.toLowerCase() ? (
                         <span key={i}>{text}</span>
                       ) : (
-                        text
-                      ) // eslint-disable-line
+                          text
+                        ) // eslint-disable-line
                   )}
               </span>
             )
@@ -107,8 +107,8 @@ class AdminPendingPage extends Component {
                         {text}
                       </span>
                     ) : (
-                      text
-                    ) // eslint-disable-line
+                        text
+                      ) // eslint-disable-line
                 )}
                 }
               </span>
@@ -154,7 +154,7 @@ class AdminPendingPage extends Component {
     const { visible, loading } = this.state;
     const columns = [
       {
-        title: "ID",
+        title: "Request ID",
         dataIndex: "id",
         key: "id",
         width: 90,
@@ -190,7 +190,7 @@ class AdminPendingPage extends Component {
         }
       },
       {
-        title: "Employee Number",
+        title: "Employee ID",
         dataIndex: "employee_number",
         key: "employee_number",
         width: 100
@@ -280,7 +280,7 @@ class AdminPendingPage extends Component {
     } else {
       return (
         <Layout>
-          <HeaderNav />
+          <HeaderAdmin />
           <Content
             className="container"
             style={{
@@ -333,7 +333,7 @@ class AdminPendingPage extends Component {
                 Reason : {this.state.user && this.state.user.reason} <br />
                 From : {this.state.user && this.state.user.date_from} <br />
                 To : {this.state.user && this.state.user.date_to} <br />
-                Half Day : {this.state.user && this.state.user.half_dates !== "" ? ( this.state.user.half_dates ):("none")} <br />
+                Half Day : {this.state.user && this.state.user.half_dates !== "" ? (this.state.user.half_dates) : ("none")} <br />
                 Back On : {this.state.user && this.state.user.back_on} <br />
                 Total Leave : {this.state.user &&
                   this.state.user.total} day <br />
