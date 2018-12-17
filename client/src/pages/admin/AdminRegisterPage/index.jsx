@@ -212,8 +212,8 @@ class RegisterPage extends Component {
               <h1> REGISTER USER </h1>
               <div>
                 <Form onSubmit={this.handleSubmit} className="login-form">
-                  <FormItem {...formItemLayout} label="Employee Number">
-                    {getFieldDecorator("employee number", {
+                  <FormItem {...formItemLayout} label="Employee ID">
+                    {getFieldDecorator("Employee ID", {
                       rules: [
                         {
                           required: true
@@ -224,7 +224,7 @@ class RegisterPage extends Component {
                         type="number"
                         id="employee_number"
                         name="employee_number"
-                        placeholder="employee number"
+                        placeholder="Employee ID"
                         onChange={this.handleOnChangeEmployeeNumber}
                       />
                     )}

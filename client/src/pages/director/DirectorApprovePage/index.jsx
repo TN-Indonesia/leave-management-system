@@ -154,7 +154,7 @@ class DirectorApprovePage extends Component {
     const { visible, loading, searchID } = this.state;
     const columns = [
       {
-        title: "ID",
+        title: "Request No.",
         dataIndex: "id",
         key: "id",
         width: 90,
@@ -190,7 +190,7 @@ class DirectorApprovePage extends Component {
         }
       },
       {
-        title: "Employee Number",
+        title: "Employee ID",
         dataIndex: "employee_number",
         key: "employee_number",
         width: 100

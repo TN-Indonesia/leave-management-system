@@ -14,7 +14,7 @@ class AdminLandingPage extends Component {
     super(props);
     this.columns = [
       {
-        title: "Employee Number",
+        title: "Employee ID",
         dataIndex: "employee_number",
         key: "employee_number",
         width: "10%"
