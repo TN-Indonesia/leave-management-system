@@ -18,24 +18,24 @@ import (
 )
 
 // RegisterPGSQL ...
-func RegisterPGSQL() {
-	maxIdle := 30
-	maxConn := 30
+// func RegisterPGSQL() {
+// 	maxIdle := 30
+// 	maxConn := 30
 
-	errRegisterDriver := orm.RegisterDriver("postgres", orm.DRPostgres)
-	if errRegisterDriver != nil {
-		helpers.CheckErr("error while register driver @RegisterPGSQL", errRegisterDriver)
-	}
+// 	errRegisterDriver := orm.RegisterDriver("postgres", orm.DRPostgres)
+// 	if errRegisterDriver != nil {
+// 		helpers.CheckErr("error while register driver @RegisterPGSQL", errRegisterDriver)
+// 	}
 
-	errRegisterDataBase := orm.RegisterDataBase("default", "postgres",
-		adapter.CallPGSQL(),
-		maxIdle, maxConn)
-	if errRegisterDataBase != nil {
-		helpers.CheckErr("error while register DB @RegisterPGSQL", errRegisterDataBase)
-	}
+// 	errRegisterDataBase := orm.RegisterDataBase("default", "postgres",
+// 		adapter.CallPGSQL(),
+// 		maxIdle, maxConn)
+// 	if errRegisterDataBase != nil {
+// 		helpers.CheckErr("error while register DB @RegisterPGSQL", errRegisterDataBase)
+// 	}
 
-	RegisterModel()
-}
+// 	RegisterModel()
+// }
 
 // RegisterSQLite ...
 func RegisterSQLite() {
@@ -58,9 +58,11 @@ func RegisterSQLite() {
 	CreateTableLeaveRequest()
 	CreateTableTypeLeave()
 	CreateTableUserTypeLeave()
+	CreateTablePublicHoliday()
 
 	MigrateData("users")
 	MigrateData("type_leave")
+	MigrateData("public_holiday")
 }
 
 // RegisterModel to register database
@@ -69,6 +71,7 @@ func RegisterModel() {
 	orm.RegisterModel(new(dbStruct.User))
 	orm.RegisterModel(new(dbStruct.TypeLeave))
 	orm.RegisterModel(new(dbStruct.UserTypeLeave))
+	orm.RegisterModel(new(dbStruct.PublicHoliday))
 }
 
 // CreateTableUser ...
@@ -201,6 +204,33 @@ func CreateTableUserTypeLeave() {
 	beego.Debug(res)
 }
 
+// CreateTablePublicHoliday ...
+func CreateTablePublicHoliday() {
+	var publicHoliday dbStruct.PublicHoliday
+
+	o := orm.NewOrm()
+	o.Using("default")
+
+	qb := []string{
+		"CREATE TABLE IF NOT EXISTS",
+		publicHoliday.TableName(),
+		"(",
+		"date_start INTEGER NOT NULL",
+		"date_end INTEGER NOT NULL",
+		"description TEXT NOT NULL",
+		");",
+	}
+
+	sql := strings.Join(qb, " ")
+	beego.Debug(sql)
+
+	res, err := o.Raw(sql).Exec()
+	if err != nil {
+		helpers.CheckErr("error creating table public_holiday @CreateTablePublicHoliday", err)
+	}
+	beego.Debug(res)
+}
+
 // MigrateData ...
 func MigrateData(param string) {
 	o := orm.NewOrm()
@@ -238,6 +268,22 @@ func MigrateData(param string) {
 
 		cnt, errMulti := o.InsertMulti(len(users), users)
 		beego.Debug(cnt, errMulti)
+	} else if param == "public_holiday" {
+		var publicHoliday []dbStruct.PublicHoliday
+		fl := constant.GOPATH + "/src/" + constant.GOAPP + "/database/sqlite/seeders/public_holiday.json"
+
+		raw, err := ioutil.ReadFile(fl)
+		if err != nil {
+			helpers.CheckErr("failed read file seeder @MigrateData", err)
+		}
+
+		err = json.Unmarshal(raw, &publicHoliday)
+		if err != nil {
+			helpers.CheckErr("failed unmarshall seeders @MigrateData", err)
+		}
+
+		cnt, errMulti := o.InsertMulti(len(publicHoliday), publicHoliday)
+		beego.Debug(cnt, errMulti)
 	}
 }
 
@@ -248,6 +294,7 @@ func ResetDB() {
 		leave         dbStruct.LeaveRequest
 		typeLeave     dbStruct.TypeLeave
 		userTypeLeave dbStruct.UserTypeLeave
+		publicHoliday dbStruct.PublicHoliday
 	)
 
 	o := orm.NewOrm()
@@ -276,10 +323,15 @@ func ResetDB() {
 		helpers.CheckErr("error reset user_type_leave @ResetDB", errRaw4)
 	}
 
+	res5, errRaw5 := o.Raw(`DELETE FROM ` + publicHoliday.TableName()).Exec()
+	if errRaw5 != nil {
+		helpers.CheckErr("error reset user_type_leave @ResetDB", errRaw5)
+	}
+
 	err = o.Commit()
 	if err != nil {
 		helpers.CheckErr("Error commit", err)
 	}
 
-	beego.Debug(res1, res2, res3, res4)
+	beego.Debug(res1, res2, res3, res4, res5)
 }
