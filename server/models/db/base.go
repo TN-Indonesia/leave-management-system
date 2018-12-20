@@ -3,18 +3,16 @@ package db
 import (
 	"encoding/json"
 	"io/ioutil"
-	"strings"
-
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/orm"
-
-	// _ "github.com/lib/pq"
-	_ "github.com/mattn/go-sqlite3"
-
 	"server/adapter"
 	"server/helpers"
 	"server/helpers/constant"
+	"server/models/db/migrate"
 	dbStruct "server/structs/db"
+	"strings"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm" // _ "github.com/lib/pq"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 // RegisterPGSQL ...
@@ -58,6 +56,7 @@ func RegisterSQLite() {
 	CreateTableLeaveRequest()
 	CreateTableTypeLeave()
 	CreateTableUserTypeLeave()
+	MigrateTable()
 
 	MigrateData("users")
 	MigrateData("type_leave")
@@ -282,4 +281,9 @@ func ResetDB() {
 	}
 
 	beego.Debug(res1, res2, res3, res4)
+}
+
+// MigrateTable : migration for all table
+func MigrateTable() {
+	migrate.AlterUserAddID()
 }
