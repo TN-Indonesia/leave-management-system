@@ -4,11 +4,10 @@ import (
 	"encoding/base64"
 	"errors"
 	"server/helpers"
-	"time"
-
 	structAPI "server/structs/api"
 	structDB "server/structs/db"
 	structLogic "server/structs/logic"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )

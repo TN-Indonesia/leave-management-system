@@ -4,7 +4,8 @@ import "time"
 
 // User ...
 type User struct {
-	EmployeeNumber   int64     `json:"employee_number" orm:"column(employee_number);pk"`
+	ID               int64     `json:"id" orm:"column(id);pk"`
+	EmployeeNumber   int64     `json:"employee_number" orm:"column(employee_number)"`
 	Name             string    `json:"name" orm:"column(name)"`
 	Gender           string    `json:"gender" orm:"column(gender)"`
 	Position         string    `json:"position" orm:"column(position)"`

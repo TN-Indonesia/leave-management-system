@@ -4,11 +4,10 @@ import (
 	"encoding/base64"
 	"errors"
 	"server/helpers"
-	"strconv"
-	"strings"
-
 	structDB "server/structs/db"
 	structLogic "server/structs/logic"
+	"strconv"
+	"strings"
 
 	"github.com/astaxie/beego/orm"
 	"golang.org/x/crypto/bcrypt"

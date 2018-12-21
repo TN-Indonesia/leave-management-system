@@ -5,13 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"server/helpers"
-	"strconv"
-
 	logicAdmin "server/models/logic/admin"
 	logic "server/models/logic/user"
 	logicUser "server/models/logic/user"
 	structAPI "server/structs/api"
 	structDB "server/structs/db"
+	"strconv"
 
 	"github.com/astaxie/beego"
 )
@@ -146,14 +145,14 @@ func (c *AdminController) DeleteUser() {
 	var resp structAPI.RespData
 
 	idStr := c.Ctx.Input.Param(":id")
-	employeeNumber, errCon := strconv.ParseInt(idStr, 0, 64)
+	ID, errCon := strconv.ParseInt(idStr, 0, 64)
 	if errCon != nil {
 		helpers.CheckErr("Convert id failed @DeleteUser - controller", errCon)
 		resp.Error = errors.New("Convert id failed").Error()
 		return
 	}
 
-	if err := logicAdmin.DeleteUser(employeeNumber); err == nil {
+	if err := logicAdmin.DeleteUser(ID); err == nil {
 		resp.Body = "Deleted success"
 	} else {
 		resp.Error = err.Error()
@@ -174,7 +173,7 @@ func (c *AdminController) UpdateUser() {
 	)
 
 	body := c.Ctx.Input.RequestBody
-	// fmt.Println("UPDATE-USER=======>", string(body))
+	fmt.Println("UPDATE-USER=======>", string(body))
 
 	err := json.Unmarshal(body, &reqUser)
 	if err != nil {
@@ -185,7 +184,7 @@ func (c *AdminController) UpdateUser() {
 	}
 
 	idStr := c.Ctx.Input.Param(":id")
-	employeeNumber, errCon := strconv.ParseInt(idStr, 0, 64)
+	ID, errCon := strconv.ParseInt(idStr, 0, 64)
 	if errCon != nil {
 		helpers.CheckErr("Convert id failed @UpdateUser - controller", errCon)
 		resp.Error = errors.New("Convert id failed").Error()
@@ -209,7 +208,7 @@ func (c *AdminController) UpdateUser() {
 		UpdatedAt:        resTime,
 	}
 
-	errUpdate := logic.DBPostAdmin.UpdateUser(&user, employeeNumber)
+	errUpdate := logic.DBPostAdmin.UpdateUser(&user, ID)
 	if errUpdate != nil {
 		resp.Error = errUpdate.Error()
 	} else {

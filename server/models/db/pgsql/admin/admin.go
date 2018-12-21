@@ -4,10 +4,8 @@ import (
 	"errors"
 	"server/helpers"
 	"server/helpers/constant"
-
 	structDB "server/structs/db"
 	structLogic "server/structs/logic"
-
 	"strings"
 
 	"github.com/astaxie/beego"
@@ -21,10 +19,56 @@ type Admin struct{}
 func (u *Admin) AddUser(user structDB.User) error {
 	o := orm.NewOrm()
 
-	_, err := o.Insert(&user)
+	// _, err := o.Insert(&user)
+	// if err != nil {
+	// 	helpers.CheckErr("Error insert @AddUser", err)
+	// 	return errors.New("Insert users failed")
+	// }
+
+	qb, err := orm.NewQueryBuilder("mysql")
 	if err != nil {
-		helpers.CheckErr("Error insert @AddUser", err)
+		helpers.CheckErr("Query builder failed @AddUser", err)
+		return err
+	}
+
+	qb.InsertInto(user.TableName(),
+		"employee_number",
+		"name",
+		"gender",
+		"position",
+		"start_working_date",
+		"mobile_phone",
+		"email",
+		"password",
+		"role",
+		"supervisor_id",
+		"updated_at",
+	).Values("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?")
+	sql := qb.String()
+
+	res, err := o.Raw(sql,
+		user.EmployeeNumber,
+		user.Name,
+		user.Gender,
+		user.Position,
+		user.StartWorkingDate,
+		user.MobilePhone,
+		user.Email,
+		user.Password,
+		user.Role,
+		user.SupervisorID,
+		user.UpdatedAt,
+	).Exec()
+
+	if err != nil {
+		helpers.CheckErr("Error insert data User @AddUser", err)
 		return errors.New("Insert users failed")
+	}
+
+	_, err = res.RowsAffected()
+	if err != nil {
+		helpers.CheckErr("Error get rows affected @AddUser", err)
+		return err
 	}
 
 	return err
@@ -73,14 +117,14 @@ func (u *Admin) GetUser(employeeNumber int64) (user structDB.User, err error) {
 }
 
 // DeleteUser ...
-func (u *Admin) DeleteUser(employeeNumber int64) (err error) {
+func (u *Admin) DeleteUser(ID int64) (err error) {
 	o := orm.NewOrm()
-	v := structDB.User{EmployeeNumber: employeeNumber}
+	v := structDB.User{ID: ID}
 
 	err = o.Read(&v)
 	if err == nil {
 		var num int64
-		if num, err = o.Delete(&structDB.User{EmployeeNumber: employeeNumber}); err == nil {
+		if num, err = o.Delete(&structDB.User{ID: ID}); err == nil {
 			beego.Debug("Number of records deleted in database:", num)
 		} else if err != nil {
 			helpers.CheckErr("Error delete user @DeleteUser", err)
@@ -96,7 +140,7 @@ func (u *Admin) DeleteUser(employeeNumber int64) (err error) {
 }
 
 // UpdateUser ...
-func (u *Admin) UpdateUser(e *structDB.User, employeeNumber int64) (err error) {
+func (u *Admin) UpdateUser(e *structDB.User, ID int64) (err error) {
 	var (
 		user  structLogic.GetEmployee
 		count int
@@ -109,7 +153,7 @@ func (u *Admin) UpdateUser(e *structDB.User, employeeNumber int64) (err error) {
 		return errQB
 	}
 
-	o.Raw(`SELECT name, email FROM `+e.TableName()+` WHERE employee_number = ?`, employeeNumber).QueryRow(&user)
+	o.Raw(`SELECT name, email FROM `+e.TableName()+` WHERE id = ?`, ID).QueryRow(&user)
 
 	if e.Email != user.Email {
 		o.Raw(`SELECT count(*) as Count FROM `+e.TableName()+` WHERE email = ?`, e.Email).QueryRow(&count)
@@ -117,7 +161,8 @@ func (u *Admin) UpdateUser(e *structDB.User, employeeNumber int64) (err error) {
 			return errors.New("Email already register")
 		} else {
 			qb.Update(e.TableName()).
-				Set("name = ?",
+				Set("employee_number = ?",
+					"name = ?",
 					"gender = ?",
 					"position = ?",
 					"start_working_date = ?",
@@ -125,12 +170,13 @@ func (u *Admin) UpdateUser(e *structDB.User, employeeNumber int64) (err error) {
 					"email= ?",
 					"role = ?",
 					"supervisor_id = ?",
-					"updated_at = ?").Where("employee_number = ? ")
+					"updated_at = ?").Where("id = ? ")
 			sql := qb.String()
 
 			e.Email = strings.ToLower(e.Email)
 
 			res, errRaw := o.Raw(sql,
+				e.EmployeeNumber,
 				e.Name,
 				e.Gender,
 				e.Position,
@@ -140,7 +186,7 @@ func (u *Admin) UpdateUser(e *structDB.User, employeeNumber int64) (err error) {
 				e.Role,
 				e.SupervisorID,
 				e.UpdatedAt,
-				employeeNumber).Exec()
+				ID).Exec()
 
 			if errRaw != nil {
 				helpers.CheckErr("Error update user @UpdateUser", errRaw)
@@ -155,7 +201,8 @@ func (u *Admin) UpdateUser(e *structDB.User, employeeNumber int64) (err error) {
 		}
 	} else {
 		qb.Update(e.TableName()).
-			Set("name = ?",
+			Set("employee_number = ?",
+				"name = ?",
 				"gender = ?",
 				"position = ?",
 				"start_working_date = ?",
@@ -163,12 +210,13 @@ func (u *Admin) UpdateUser(e *structDB.User, employeeNumber int64) (err error) {
 				"email= ?",
 				"role = ?",
 				"supervisor_id = ?",
-				"updated_at = ?").Where("employee_number = ? ")
+				"updated_at = ?").Where("id = ? ")
 		sql := qb.String()
 
 		e.Email = strings.ToLower(e.Email)
 
 		res, errRaw := o.Raw(sql,
+			e.EmployeeNumber,
 			e.Name,
 			e.Gender,
 			e.Position,
@@ -178,7 +226,7 @@ func (u *Admin) UpdateUser(e *structDB.User, employeeNumber int64) (err error) {
 			e.Role,
 			e.SupervisorID,
 			e.UpdatedAt,
-			employeeNumber).Exec()
+			ID).Exec()
 
 		if errRaw != nil {
 			helpers.CheckErr("Error update user @UpdateUser", errRaw)

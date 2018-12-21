@@ -6,7 +6,7 @@ import {
 const userState = {
 	loading: true,
 	user: {
-		employee_number: '',
+		employee_number: 0,
 		name: '',
 		gender: '',
 		position: '',

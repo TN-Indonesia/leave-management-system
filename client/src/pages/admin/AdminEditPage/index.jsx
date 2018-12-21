@@ -49,7 +49,7 @@ class AdminEditPage extends Component {
     } else {
       let id = Number(this.props.history.location.pathname.split("/").pop());
       let user = this.props.history.location.state.users.filter(
-        el => el.employee_number === id
+        el => el.id === id
       );
       this.props.fetchedEdit(user[0]);
       this.props.getSupervisors();
@@ -66,6 +66,14 @@ class AdminEditPage extends Component {
     let edit = {
       ...this.props.user,
       [e.target.name]: e.target.value
+    };
+    this.props.handleEdit(edit);
+  };
+
+  handleOnChangeNumber = e => {
+    let edit = {
+      ...this.props.user,
+      [e.target.name]: Number(e.target.value)
     };
     this.props.handleEdit(edit);
   };
@@ -189,6 +197,17 @@ class AdminEditPage extends Component {
               <h1> EDIT USER </h1>
               <div>
                 <Form onSubmit={this.handleSubmit} className="login-form">
+                <FormItem {...formItemLayout} label="Employee Number">
+                    <Input
+                      type="number"
+                      id="employee_number"
+                      name="employee_number"
+                      placeholder="Employee Number"
+                      value={this.props.user.employee_number}
+                      onChange={this.handleOnChangeNumber}
+                    />
+                  </FormItem>
+                  
                   <FormItem {...formItemLayout} label="Name">
                     <Input
                       type="text"

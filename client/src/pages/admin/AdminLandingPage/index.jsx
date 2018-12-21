@@ -52,7 +52,7 @@ class AdminLandingPage extends Component {
           <span>
             <Button
               onClick={() => {
-                this.editUser(this.props.users, record.employee_number);
+                this.editUser(this.props.users, record.id);
               }}
               type="primary"
             >
@@ -64,7 +64,7 @@ class AdminLandingPage extends Component {
               placement="top"
               title={"Are you sure delete this employee?"}
               onConfirm={() => {
-                this.adminDeleteUser(this.props.users, record.employee_number);
+                this.adminDeleteUser(this.props.users, record.id);
                 message.success("Employee has been delete!");
               }}
               okText="Yes"
@@ -102,21 +102,21 @@ class AdminLandingPage extends Component {
     this.props.adminGetUsers();
   }
 
-  editUser = (users, employeeNumber) => {
+  editUser = (users, id) => {
     this.props.history.push({
-      pathname: "/admin/edit-user/" + employeeNumber,
+      pathname: "/admin/edit-user/" + id,
       state: { users: users }
     });
   };
 
-  editBalance = employeeNumber => {
+  editBalance = id => {
     this.props.history.push({
-      pathname: "/admin/edit-balance/" + employeeNumber
+      pathname: "/admin/edit-balance/" + id
     });
   };
 
-  adminDeleteUser = (users, employeeNumber) => {
-    this.props.adminDeleteUser(users, employeeNumber);
+  adminDeleteUser = (users, id) => {
+    this.props.adminDeleteUser(users, id);
   };
 
   onShowSizeChange(current, pageSize) {
@@ -144,7 +144,7 @@ class AdminLandingPage extends Component {
               <Table
                 columns={this.columns}
                 dataSource={this.props.users}
-                rowKey={record => record.employee_number}
+                rowKey={record => record.id}
                 pagination={{
                   className: "my-pagination",
                   defaultCurrent: 1,

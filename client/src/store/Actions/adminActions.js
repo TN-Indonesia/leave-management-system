@@ -113,9 +113,9 @@ export function adminEditLeaveBalances(employeeNumber) {
 	}
 }
 
-export function adminDeleteUser(users, employeeNumber) {
+export function adminDeleteUser(users, id) {
 	return (dispatch) => {
-		fetch(`${ROOT_API}/api/admin/user/${employeeNumber}`, {
+		fetch(`${ROOT_API}/api/admin/user/${id}`, {
 				method: 'DELETE',
 			})
 			.then((resp) => resp.json())
@@ -123,7 +123,7 @@ export function adminDeleteUser(users, employeeNumber) {
 				body,
 				error
 			}) => {
-				let newUserlist = users.filter(el => el.employee_number !== employeeNumber)
+				let newUserlist = users.filter(el => el.id !== id)
 				let payload = {
 					loading: false,
 					users: [
