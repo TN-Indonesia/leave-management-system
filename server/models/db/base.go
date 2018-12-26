@@ -214,9 +214,9 @@ func CreateTablePublicHoliday() {
 		"CREATE TABLE IF NOT EXISTS",
 		publicHoliday.TableName(),
 		"(",
-		"id integer NOT NULL PRIMARY KEY AUTOINCREMENT",
-		"date_start INTEGER NOT NULL",
-		"date_end INTEGER NOT NULL",
+		"id integer NOT NULL PRIMARY KEY AUTOINCREMENT,",
+		"date_start TEXT NOT NULL,",
+		"date_end TEXT NOT NULL,",
 		"description TEXT NOT NULL",
 		");",
 	}

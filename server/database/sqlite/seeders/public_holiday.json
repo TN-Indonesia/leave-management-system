@@ -1,91 +1,110 @@
-[{
-	"id": 1,
-	"date_start": 1546300800,
-	"date_end": 1546300800,
-	"description": "New Year's Day"
-}, {
-	"id": 2,
-	"date_start": 1549324800,
-	"date_end": 1549324800,
-	"description": "Chinese New Year"
-}, {
-	"id": 3,
-	"date_start": 1551916800,
-	"date_end": 1551916800,
-	"description": "Bali Hindu New Year"
-}, {
-	"id": 4,
-	"date_start": 1554249600,
-	"date_end": 1554249600,
-	"description": "Isra Mi'raj"
-}, {
-	"id": 5,
-	"date_start": 1555632000,
-	"date_end": 1555632000,
-	"description": "Good Friday"
-}, {
-	"id": 6,
-	"date_start": 1556668800,
-	"date_end": 1556668800,
-	"description": "Labour Day"
-}, {
-	"id": 7,
-	"date_start": 1558224000,
-	"date_end": 1558224000,
-	"description": "Waisak Day"
-}, {
-	"id": 8,
-	"date_start": 1559174400,
-	"date_end": 1559174400,
-	"description": "Ascension Day of Jesus Christ"
-}, {
-	"id": 9,
-	"date_start": 1559347200,
-	"date_end": 1559347200,
-	"description": "Pancasila Day"
-}, {
-	"id": 10,
-	"date_start": 1559520000,
-	"date_end": 1559606400,
-	"description": "Lebaran Holiday"
-}, {
-	"id": 11,
-	"date_start": 1559692800,
-	"date_end": 1559779200,
-	"description": "Hari Raya Idul Fitri"
-}, {
-	"id": 12,
-	"date_start": 1559865600,
-	"date_end": 1559865600,
-	"description": "Lebaran Holiday"
-}, {
-	"id": 13,
-	"date_start": 1565481600,
-	"date_end": 1565481600,
-	"description": "Idul Adha"
-}, {
-	"id": 14,
-	"date_start": 1566000000,
-	"date_end": 1566000000,
-	"description": "Independence Day"
-}, {
-	"id": 15,
-	"date_start": 1567296000,
-	"date_end": 1567296000,
-	"description": "Islamic New Year"
-}, {
-	"id": 16,
-	"date_start": 1573257600,
-	"date_end": 1573257600,
-	"description": "Prophet Muhammad's Birthday"
-}, {
-	"id": 17,
-	"date_start": 1577145600,
-	"date_end": 1577145600,
-	"description": "Christmas Holiday"
-}, {
-	"id": 18,
-	"date_start": 1577232000,
-	"date_end": 1577232000,
-	"description": "Christmas Day"
-}]
+[
+	{
+		"id": 1,
+		"date_start": "01-01-2019",
+		"date_end": "01-01-2019",
+		"description": "New Year's Day"
+	},
+	{
+		"id": 2,
+		"date_start": "05-02-2019",
+		"date_end": "05-02-2019",
+		"description": "Chinese New Year"
+	},
+	{
+		"id": 3,
+		"date_start": "07-03-2019",
+		"date_end": "07-03-2019",
+		"description": "Bali Hindu New Year"
+	},
+	{
+		"id": 4,
+		"date_start": "03-04-2019",
+		"date_end": "03-04-2019",
+		"description": "Isra Mi'raj"
+	},
+	{
+		"id": 5,
+		"date_start": "19-04-2019",
+		"date_end": "19-04-2019",
+		"description": "Good Friday"
+	},
+	{
+		"id": 6,
+		"date_start": "01-05-2019",
+		"date_end": "01-05-2019",
+		"description": "Labour Day"
+	},
+	{
+		"id": 7,
+		"date_start": "19-05-2019",
+		"date_end": "19-05-2019",
+		"description": "Waisak Day"
+	},
+	{
+		"id": 8,
+		"date_start": "30-05-2019",
+		"date_end": "30-05-2019",
+		"description": "Ascension Day of Jesus Christ"
+	},
+	{
+		"id": 9,
+		"date_start": "01-06-2019",
+		"date_end": "01-06-2019",
+		"description": "Pancasila Day"
+	},
+	{
+		"id": 10,
+		"date_start": "03-06-2019",
+		"date_end": "04-06-2019",
+		"description": "Lebaran Holiday"
+	},
+	{
+		"id": 11,
+		"date_start": "05-06-2019",
+		"date_end": "06-06-2019",
+		"description": "Hari Raya Idul Fitri"
+	},
+	{
+		"id": 12,
+		"date_start": "07-06-2019",
+		"date_end": "07-06-2019",
+		"description": "Lebaran Holiday"
+	},
+	{
+		"id": 13,
+		"date_start": "11-08-2019",
+		"date_end": "11-08-2019",
+		"description": "Idul Adha"
+	},
+	{
+		"id": 14,
+		"date_start": "17-08-2019",
+		"date_end": "17-08-2019",
+		"description": "Independence Day"
+	},
+	{
+		"id": 15,
+		"date_start": "01-09-2019",
+		"date_end": "01-09-2019",
+		"description": "Islamic New Year"
+	},
+	{
+		"id": 16,
+		"date_start": "09-11-2019",
+		"date_end": "09-11-2019",
+		"description": "Prophet Muhammad's Birthday"
+	},
+	{
+		"id": 17,
+		"date_start": "24-12-2019",
+		"date_end": "24-12-2019",
+		"description": "Christmas Holiday"
+	},
+	{
+		"id": 18,
+		"date_start": "25-12-2019",
+		"date_end": "25-12-2019",
+		"description": "Christmas Day"
+	}
+]
