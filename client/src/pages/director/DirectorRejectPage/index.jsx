@@ -73,8 +73,8 @@ class DirectorRejectPage extends Component {
                       text.toLowerCase() === searchText.toLowerCase() ? (
                         <span key={i}>{text}</span>
                       ) : (
-                        text
-                      ) // eslint-disable-line
+                          text
+                        ) // eslint-disable-line
                   )}
               </span>
             )
@@ -107,8 +107,8 @@ class DirectorRejectPage extends Component {
                         {text}
                       </span>
                     ) : (
-                      text
-                    ) // eslint-disable-line
+                        text
+                      ) // eslint-disable-line
                 )}
                 }
               </span>
@@ -333,7 +333,7 @@ class DirectorRejectPage extends Component {
                 Reason : {this.state.user && this.state.user.reason} <br />
                 From : {this.state.user && this.state.user.date_from} <br />
                 To : {this.state.user && this.state.user.date_to} <br />
-                Half Day : {this.state.user && this.state.user.half_dates !== "" ? ( this.state.user.half_dates ):("none")} <br />
+                Half Day : {this.state.user && this.state.user.half_dates !== "" ? (this.state.user.half_dates) : ("none")} <br />
                 Back On : {this.state.user && this.state.user.back_on} <br />
                 Total Leave : {this.state.user &&
                   this.state.user.total} day <br />
@@ -344,6 +344,7 @@ class DirectorRejectPage extends Component {
                 Contact Number :{" "}
                 {this.state.user && this.state.user.contact_number}
                 <br />
+                Notes : {this.state.user && this.state.user.notes !== "{}" ? (this.state.user.notes) : ("")} <br />
                 Reject Reason :{" "}
                 {this.state.user && this.state.user.reject_reason}
               </div>

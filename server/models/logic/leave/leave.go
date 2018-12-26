@@ -1,11 +1,12 @@
 package leave
 
 import (
+	"errors"
 	"server/helpers"
 	"server/models/logic/user"
-
 	structAPI "server/structs/api"
 	structLogic "server/structs/logic"
+	"time"
 )
 
 // CreateLeaveRequestEmployee ...
@@ -21,10 +22,33 @@ func CreateLeaveRequestEmployee(
 	address string,
 	contactLeave string,
 	status string,
+	notes string,
 ) error {
 
 	getEmployee, errGetEmployee := DBUser.GetEmployee(employeeNumber)
-	helpers.CheckErr("Error get employee @CreateLeaveRequestEmployee", errGetEmployee)
+	if errGetEmployee != nil {
+		helpers.CheckErr("Error get employee @CreateLeaveRequestEmployee", errGetEmployee)
+		return errGetEmployee
+	}
+
+	// Check Working date must < 1 year for annual leave = 11
+	if typeLeaveID == 11 {
+		startWorkingDate, err := time.Parse("02-01-2006", getEmployee.StartWorkingDate)
+		helpers.CheckErr("Error parse startWorkingDate @CreateLeaveRequestEmployee", err)
+		after1YearWorkingDate := startWorkingDate.AddDate(1, 0, 0)
+
+		dateFromCheck, err := time.Parse("02-01-2006", dateFrom)
+		helpers.CheckErr("Error parse dateFrom @CreateLeaveRequestEmployee", err)
+
+		dateToCheck, err := time.Parse("02-01-2006", dateTo)
+		helpers.CheckErr("Error parse dateTo @CreateLeaveRequestEmployee", err)
+
+		if ((after1YearWorkingDate.Equal(dateFromCheck) || after1YearWorkingDate.After(dateFromCheck)) &&
+			(after1YearWorkingDate.Equal(dateToCheck) || after1YearWorkingDate.Before(dateToCheck))) ||
+			after1YearWorkingDate.After(dateToCheck) {
+			return errors.New("Employee not working > 1 year")
+		}
+	}
 
 	getSupervisorID, errGetSupervisorID := DBUser.GetSupervisor(employeeNumber)
 	helpers.CheckErr("Error get supervisor id @CreateLeaveRequestEmployee", errGetSupervisorID)
@@ -32,7 +56,7 @@ func CreateLeaveRequestEmployee(
 	getSupervisor, errGetSupervisor := DBUser.GetEmployee(getSupervisorID.SupervisorID)
 	helpers.CheckErr("Error get supervisor @CreateLeaveRequestEmployee", errGetSupervisor)
 
-	errInsert := DBLeave.CreateLeaveRequestEmployee(employeeNumber, typeLeaveID, reason, dateFrom, dateTo, halfDates, backOn, total, address, contactLeave, status)
+	errInsert := DBLeave.CreateLeaveRequestEmployee(employeeNumber, typeLeaveID, reason, dateFrom, dateTo, halfDates, backOn, total, address, contactLeave, status, notes)
 	if errInsert != nil {
 		helpers.CheckErr("Error delete leave request @CreateLeaveRequestEmployee - logicLeave", errInsert)
 		return errInsert
@@ -58,17 +82,59 @@ func CreateLeaveRequestSupervisor(
 	address string,
 	contactLeave string,
 	status string,
+	notes string,
 ) error {
 
 	getEmployee, errGetEmployee := DBUser.GetEmployee(employeeNumber)
-	helpers.CheckErr("Error get employee @CreateLeaveRequestSupervisor", errGetEmployee)
+	if errGetEmployee != nil {
+		helpers.CheckErr("Error get employee @CreateLeaveRequestSupervisor - logicLeave", errGetEmployee)
+		return errGetEmployee
+	}
 
 	getDirector, errGetDirector := user.GetDirector()
 	helpers.CheckErr("Error get employee @CreateLeaveRequestSupervisor", errGetDirector)
 
-	errInsert := DBLeave.CreateLeaveRequestSupervisor(employeeNumber, typeLeaveID, reason, dateFrom, dateTo, halfDates, backOn, total, address, contactLeave, status)
+	errInsert := DBLeave.CreateLeaveRequestSupervisor(employeeNumber, typeLeaveID, reason, dateFrom, dateTo, halfDates, backOn, total, address, contactLeave, status, notes)
 	if errInsert != nil {
 		helpers.CheckErr("Error delete leave request @CreateLeaveRequestSupervisor - logicLeave", errInsert)
+		return errInsert
+	}
+
+	go func() {
+		helpers.GoMailDirectorFromSupervisor(getDirector.Email, getEmployee.Name, getDirector.Name)
+	}()
+
+	return errInsert
+}
+
+// CreateLeaveRequestAdmin ...
+func CreateLeaveRequestAdmin(
+	employeeNumber int64,
+	typeLeaveID int64,
+	reason string,
+	dateFrom string,
+	dateTo string,
+	halfDates []string,
+	backOn string,
+	total float64,
+	address string,
+	contactLeave string,
+	status string,
+	notes string,
+) error {
+
+	getEmployee, errGetEmployee := DBUser.GetEmployeeByEmployeeNumber(employeeNumber)
+	if errGetEmployee != nil {
+		helpers.CheckErr("Error get employee @CreateLeaveRequestAdmin - logicLeave", errGetEmployee)
+		return errGetEmployee
+	}
+
+	getDirector, errGetDirector := user.GetDirector()
+	helpers.CheckErr("Error get employee @CreateLeaveRequestAdmin", errGetDirector)
+
+	errInsert := DBLeave.CreateLeaveRequestSupervisor(getEmployee.ID, typeLeaveID, reason, dateFrom, dateTo, halfDates, backOn, total, address, contactLeave, status, notes)
+	if errInsert != nil {
+		helpers.CheckErr("Error delete leave request @CreateLeaveRequestAdmin - logicLeave", errInsert)
 		return errInsert
 	}
 

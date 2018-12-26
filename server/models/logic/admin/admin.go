@@ -14,7 +14,7 @@ import (
 )
 
 // CreateUser ...
-func CreateUser(user structDB.User) error {
+func CreateUser(user structDB.User) (int64, error) {
 
 	resCountEmployee, errCountEmployee := DBUser.CountUserEmployeeNumber(user.EmployeeNumber)
 	helpers.CheckErr("Error get users @GetUsers - logicAdmin", errCountEmployee)
@@ -29,19 +29,19 @@ func CreateUser(user structDB.User) error {
 	employeeNumberStr := strconv.FormatInt(user.EmployeeNumber, 10)
 
 	if employeeNumberStr == "" || user.Name == "" || user.Gender == "" || user.Position == "" || user.StartWorkingDate == "" || user.MobilePhone == "" || user.Email == "" || user.Password == "" || user.Role == "" {
-		return errors.New("Error empty field ")
+		return 0, errors.New("Error empty field ")
 	}
 	if len(bsEmployeeNumber) != 5 {
-		return errors.New("Employee number must length must be 5")
+		return 0, errors.New("Employee number must length must be 5")
 	}
 	if resCountEmployee > 0 {
-		return errors.New("Employee number already register")
+		return 0, errors.New("Employee number already register")
 	}
 	if resCountEmail > 0 {
-		return errors.New("Email already register")
+		return 0, errors.New("Email already register")
 	}
 	if len(arrPassword) < 7 {
-		return errors.New("Password length must be 7")
+		return 0, errors.New("Password length must be 7")
 	}
 
 	hashedBytes, errHash := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
@@ -50,17 +50,17 @@ func CreateUser(user structDB.User) error {
 	user.Email = strings.ToLower(user.Email)
 	user.Password = base64.StdEncoding.EncodeToString(hashedBytes)
 
-	errInsert := DBAdmin.AddUser(user)
+	lastRowID, errInsert := DBAdmin.AddUser(user)
 	if errInsert != nil {
 		helpers.CheckErr("Error insert @CreateUser", errInsert)
-		return errInsert
+		return 0, errInsert
 	}
 
 	go func() {
 		helpers.GoMailRegisterPassword(user.Email, passwordString)
 	}()
 
-	return errInsert
+	return lastRowID, errInsert
 }
 
 // GetUsers ...

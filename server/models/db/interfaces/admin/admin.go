@@ -8,7 +8,7 @@ import (
 // IBaseAdmin ...
 type IBaseAdmin interface {
 	// AddUser
-	AddUser(user structDB.User) error
+	AddUser(user structDB.User) (int64, error)
 	// GetUsers
 	GetUsers() (
 		users []structDB.User,

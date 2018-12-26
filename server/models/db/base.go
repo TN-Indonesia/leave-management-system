@@ -134,6 +134,7 @@ func CreateTableLeaveRequest() {
 		"status text NOT NULL,",
 		"action_by text,",
 		"reject_reason text,",
+		"notes text,",
 		"created_at timestamp NOT NULL default CURRENT_TIMESTAMP,",
 		"updated_at timestamp with time zone,",
 		"FOREIGN KEY (employee_number) REFERENCES users (employee_number) ON DELETE CASCADE ON UPDATE CASCADE);",

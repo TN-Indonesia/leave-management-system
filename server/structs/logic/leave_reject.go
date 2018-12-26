@@ -23,4 +23,5 @@ type LeaveReject struct {
 	Status           string  `json:"status" orm:"column(status)"`
 	ActionBy         string  `json:"action_by" orm:"column(action_by)"`
 	RejectReason     string  `json:"reject_reason" orm:"column(reject_reason)"`
+	Notes            string  `json:"notes" orm:"column(notes)"`
 }

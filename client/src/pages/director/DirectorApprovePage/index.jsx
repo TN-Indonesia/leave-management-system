@@ -342,7 +342,8 @@ class DirectorApprovePage extends Component {
                 Contact Address :{" "}
                 {this.state.user && this.state.user.contact_address} <br />
                 Contact Number :{" "}
-                {this.state.user && this.state.user.contact_number}
+                {this.state.user && this.state.user.contact_number} <br/>
+                Notes : {this.state.user && this.state.user.notes !== "" ? (this.state.user.notes) : ("none")}
               </div>
             </Modal>
           </Content>

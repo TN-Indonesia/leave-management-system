@@ -2,8 +2,8 @@ package helpers
 
 import (
 	"encoding/base64"
-	"fmt"
 
+	"github.com/astaxie/beego"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -24,7 +24,7 @@ func ComparePassword(hashBase64, testPassword string) bool {
 
 	hashBytes, err := base64.StdEncoding.DecodeString(hashBase64)
 	if err != nil {
-		fmt.Println("Error, we were given invalid base64 string", err)
+		beego.Warning("Error, we were given invalid base64 string", err)
 		return false
 	}
 

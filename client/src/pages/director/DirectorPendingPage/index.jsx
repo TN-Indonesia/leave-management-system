@@ -80,8 +80,8 @@ class DirectorPendingPage extends Component {
                       text.toLowerCase() === searchText.toLowerCase() ? (
                         <span key={i}>{text}</span>
                       ) : (
-                        text
-                      ) // eslint-disable-line
+                          text
+                        ) // eslint-disable-line
                   )}
               </span>
             )
@@ -115,8 +115,8 @@ class DirectorPendingPage extends Component {
                         {text}
                       </span>
                     ) : (
-                      text
-                    ) // eslint-disable-line
+                        text
+                      ) // eslint-disable-line
                 )}
                 }
               </span>
@@ -152,7 +152,7 @@ class DirectorPendingPage extends Component {
 
   handleOk = () => {
     const id = this.state.user && this.state.user.id;
-    const employeeNumber = this.state.user && this.state.user.employee_number;
+    const employeeNumber = this.state.user && this.state.user.employee_id;
 
     this.setState({ loadingA: true });
     this.directorApproveRequest(this.props.leaves, id, employeeNumber);
@@ -163,7 +163,7 @@ class DirectorPendingPage extends Component {
 
   handleReject = () => {
     const id = this.state.user && this.state.user.id;
-    const employeeNumber = this.state.user && this.state.user.employee_number;
+    const employeeNumber = this.state.user && this.state.user.employee_id;
 
     this.setState({ loadingR: true });
     this.directorRejectRequest(
@@ -432,7 +432,7 @@ class DirectorPendingPage extends Component {
                 Reason : {this.state.user && this.state.user.reason} <br />
                 From : {this.state.user && this.state.user.date_from} <br />
                 To : {this.state.user && this.state.user.date_to} <br />
-                Half Day : {this.state.user && this.state.user.half_dates !== "" ? ( this.state.user.half_dates ):("none")} <br />
+                Half Day : {this.state.user && this.state.user.half_dates !== "{}" ? (this.state.user.half_dates) : ("none")} <br />
                 Back On : {this.state.user && this.state.user.back_on} <br />
                 Total Leave : {this.state.user &&
                   this.state.user.total} day <br />
@@ -441,7 +441,8 @@ class DirectorPendingPage extends Component {
                 Contact Address :{" "}
                 {this.state.user && this.state.user.contact_address} <br />
                 Contact Number :{" "}
-                {this.state.user && this.state.user.contact_number}
+                {this.state.user && this.state.user.contact_number} <br />
+                Notes : {this.state.user && this.state.user.notes !== "" ? (this.state.user.notes) : ("none")}
               </div>
             </Modal>
           </Content>

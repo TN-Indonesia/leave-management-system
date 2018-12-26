@@ -160,7 +160,7 @@ class SupervisorPendingPage extends Component {
 
   handleOk = () => {
     const id = this.state.user && this.state.user.id;
-    const employeeNumber = this.state.user && this.state.user.employee_number;
+    const employeeNumber = this.state.user && this.state.user.employee_id;
 
     this.setState({ loadingA: true });
     this.supervisorApproveRequest(this.props.leaves, id, employeeNumber);
@@ -175,7 +175,7 @@ class SupervisorPendingPage extends Component {
 
   handleReject = () => {
     const id = this.state.user && this.state.user.id;
-    const employeeNumber = this.state.user && this.state.user.employee_number;
+    const employeeNumber = this.state.user && this.state.user.employee_id;
 
     this.setState({ loadingR: true });
     this.supervisorRejectRequest(

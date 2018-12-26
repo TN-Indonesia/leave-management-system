@@ -166,7 +166,7 @@ class AdminApprovePage extends Component {
 
   handleOk = () => {
     const id = this.state.user && this.state.user.id;
-    const employeeNumber = this.state.user && this.state.user.employee_number;
+    const employeeNumber = this.state.user && this.state.user.employee_id;
 
     this.setState({ loading: true });
     this.cancelRequestLeave(this.props.leave, id, employeeNumber);

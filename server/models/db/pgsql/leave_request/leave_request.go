@@ -29,6 +29,7 @@ func (l *LeaveRequest) CreateLeaveRequestEmployee(
 	address string,
 	contactLeave string,
 	status string,
+	notes string,
 ) error {
 	var dbLeave structDB.LeaveRequest
 
@@ -52,9 +53,9 @@ func (l *LeaveRequest) CreateLeaveRequestEmployee(
 		"back_on",
 		"total",
 		"contact_address",
-		"contact_number",
-		"status").
-		Values("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?")
+		"status",
+		"notes").
+		Values("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?")
 	sql := qb.String()
 
 	values := []interface{}{
@@ -69,6 +70,7 @@ func (l *LeaveRequest) CreateLeaveRequestEmployee(
 		address,
 		contactLeave,
 		status,
+		notes,
 	}
 
 	_, err := o.Raw(sql, values).Exec()
@@ -93,6 +95,7 @@ func (l *LeaveRequest) CreateLeaveRequestSupervisor(
 	address string,
 	contactLeave string,
 	status string,
+	notes string,
 ) error {
 	var dbLeave structDB.LeaveRequest
 
@@ -117,8 +120,9 @@ func (l *LeaveRequest) CreateLeaveRequestSupervisor(
 		"total",
 		"contact_address",
 		"contact_number",
-		"status").
-		Values("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?")
+		"status",
+		"notes").
+		Values("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?")
 	sql := qb.String()
 
 	values := []interface{}{
@@ -133,6 +137,7 @@ func (l *LeaveRequest) CreateLeaveRequestSupervisor(
 		address,
 		contactLeave,
 		status,
+		notes,
 	}
 
 	_, err := o.Raw(sql, values).Exec()
@@ -347,7 +352,7 @@ func (l *LeaveRequest) DownloadReportCSV(
 		leave.TableName()+".contact_number").
 		From(leave.TableName()).
 		InnerJoin(user.TableName()).
-		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
@@ -470,7 +475,7 @@ func (l *LeaveRequest) ReportLeaveRequest(fromDate string, toDate string) (
 		leave.TableName()+".contact_number").
 		From(leave.TableName()).
 		InnerJoin(user.TableName()).
-		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
@@ -537,7 +542,7 @@ func (l *LeaveRequest) ReportLeaveRequestTypeLeave(
 		leave.TableName()+".contact_number").
 		From(leave.TableName()).
 		InnerJoin(user.TableName()).
-		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).

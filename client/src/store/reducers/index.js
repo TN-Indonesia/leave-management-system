@@ -1,5 +1,5 @@
-import {	
-	combineReducers,		
+import {
+	combineReducers,
 } from 'redux';
 
 import loginReducer from './loginReducer';
@@ -10,6 +10,7 @@ import registerReducer from './registerReducer';
 import editUserReducer from './editUserReducer';
 
 import leaveRequestReducer from './leaveRequestReducer';
+import adminLeaveRequestReducer from './adminLeaveRequestReducer';
 import editRequestReducer from './editRequestReducer';
 
 import fetchDirectorReducer from './fetchDirectorReducer';
@@ -21,6 +22,7 @@ import profileReducer from './profileReducer';
 import passwordReducer from './passwordReducer';
 
 import fetchTypeLeaveReducer from './fetchTypeLeaveReducer';
+import fetchUserLoginReducer from './fetchUserLoginReducer';
 import AddSupervisorReducer from './AddSupervisorReducer';
 
 
@@ -33,6 +35,7 @@ const appStore = combineReducers({
 	editUserReducer,
 
 	leaveRequestReducer,
+	adminLeaveRequestReducer,
 	editRequestReducer,
 
 	fetchDirectorReducer,
@@ -44,6 +47,8 @@ const appStore = combineReducers({
 	passwordReducer,
 
 	fetchTypeLeaveReducer,
+	fetchUserLoginReducer,
+
 	AddSupervisorReducer,
 });
 
