@@ -347,7 +347,7 @@ func (l *LeaveRequest) DownloadReportCSV(
 		leave.TableName()+".contact_number").
 		From(leave.TableName()).
 		InnerJoin(user.TableName()).
-		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
@@ -470,7 +470,7 @@ func (l *LeaveRequest) ReportLeaveRequest(fromDate string, toDate string) (
 		leave.TableName()+".contact_number").
 		From(leave.TableName()).
 		InnerJoin(user.TableName()).
-		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
@@ -537,7 +537,7 @@ func (l *LeaveRequest) ReportLeaveRequestTypeLeave(
 		leave.TableName()+".contact_number").
 		From(leave.TableName()).
 		InnerJoin(user.TableName()).
-		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).

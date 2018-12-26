@@ -1,11 +1,12 @@
 package leave
 
 import (
+	"errors"
 	"server/helpers"
 	"server/models/logic/user"
-
 	structAPI "server/structs/api"
 	structLogic "server/structs/logic"
+	"time"
 )
 
 // CreateLeaveRequestEmployee ...
@@ -25,6 +26,25 @@ func CreateLeaveRequestEmployee(
 
 	getEmployee, errGetEmployee := DBUser.GetEmployee(employeeNumber)
 	helpers.CheckErr("Error get employee @CreateLeaveRequestEmployee", errGetEmployee)
+
+	// Check Working date must < 1 year for annual leave = 11
+	if typeLeaveID == 11 {
+		startWorkingDate, err := time.Parse("02-01-2006", getEmployee.StartWorkingDate)
+		helpers.CheckErr("Error parse startWorkingDate @CreateLeaveRequestEmployee", err)
+		after1YearWorkingDate := startWorkingDate.AddDate(1, 0, 0)
+
+		dateFromCheck, err := time.Parse("02-01-2006", dateFrom)
+		helpers.CheckErr("Error parse dateFrom @CreateLeaveRequestEmployee", err)
+
+		dateToCheck, err := time.Parse("02-01-2006", dateTo)
+		helpers.CheckErr("Error parse dateTo @CreateLeaveRequestEmployee", err)
+
+		if ((after1YearWorkingDate.Equal(dateFromCheck) || after1YearWorkingDate.After(dateFromCheck)) &&
+			(after1YearWorkingDate.Equal(dateToCheck) || after1YearWorkingDate.Before(dateToCheck))) ||
+			after1YearWorkingDate.After(dateToCheck) {
+			return errors.New("Employee not working > 1 year")
+		}
+	}
 
 	getSupervisorID, errGetSupervisorID := DBUser.GetSupervisor(employeeNumber)
 	helpers.CheckErr("Error get supervisor id @CreateLeaveRequestEmployee", errGetSupervisorID)

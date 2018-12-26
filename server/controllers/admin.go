@@ -52,7 +52,7 @@ func (c *AdminController) CreateUser() {
 		SupervisorID:     reqUser.SupervisorID,
 	}
 
-	errAddUser := logicAdmin.CreateUser(user)
+	lastRowID, errAddUser := logicAdmin.CreateUser(user)
 	if errAddUser != nil {
 		resp.Error = errAddUser.Error()
 		c.Ctx.Output.SetStatus(400)
@@ -62,31 +62,31 @@ func (c *AdminController) CreateUser() {
 
 	go func() {
 		if reqUser.Gender == "Male" && reqUser.Role == "employee" {
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 11, 12)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 22, 3)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 33, 30)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 44, 2)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 66, 2)
+			logicUser.CreateUserTypeLeave(lastRowID, 11, 12)
+			logicUser.CreateUserTypeLeave(lastRowID, 22, 3)
+			logicUser.CreateUserTypeLeave(lastRowID, 33, 30)
+			logicUser.CreateUserTypeLeave(lastRowID, 44, 2)
+			logicUser.CreateUserTypeLeave(lastRowID, 66, 2)
 		} else if reqUser.Gender == "Male" && reqUser.Role == "supervisor" {
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 11, 12)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 22, 3)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 33, 30)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 44, 2)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 66, 2)
+			logicUser.CreateUserTypeLeave(lastRowID, 11, 12)
+			logicUser.CreateUserTypeLeave(lastRowID, 22, 3)
+			logicUser.CreateUserTypeLeave(lastRowID, 33, 30)
+			logicUser.CreateUserTypeLeave(lastRowID, 44, 2)
+			logicUser.CreateUserTypeLeave(lastRowID, 66, 2)
 		} else if reqUser.Gender == "Female" && reqUser.Role == "employee" {
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 11, 12)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 22, 3)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 33, 30)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 44, 2)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 55, 90)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 66, 2)
+			logicUser.CreateUserTypeLeave(lastRowID, 11, 12)
+			logicUser.CreateUserTypeLeave(lastRowID, 22, 3)
+			logicUser.CreateUserTypeLeave(lastRowID, 33, 30)
+			logicUser.CreateUserTypeLeave(lastRowID, 44, 2)
+			logicUser.CreateUserTypeLeave(lastRowID, 55, 90)
+			logicUser.CreateUserTypeLeave(lastRowID, 66, 2)
 		} else if reqUser.Gender == "Female" && reqUser.Role == "supervisor" {
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 11, 12)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 22, 3)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 33, 30)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 44, 2)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 55, 90)
-			logicUser.CreateUserTypeLeave(user.EmployeeNumber, 66, 2)
+			logicUser.CreateUserTypeLeave(lastRowID, 11, 12)
+			logicUser.CreateUserTypeLeave(lastRowID, 22, 3)
+			logicUser.CreateUserTypeLeave(lastRowID, 33, 30)
+			logicUser.CreateUserTypeLeave(lastRowID, 44, 2)
+			logicUser.CreateUserTypeLeave(lastRowID, 55, 90)
+			logicUser.CreateUserTypeLeave(lastRowID, 66, 2)
 		}
 	}()
 

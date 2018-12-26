@@ -16,7 +16,7 @@ import (
 type Admin struct{}
 
 // AddUser ...
-func (u *Admin) AddUser(user structDB.User) error {
+func (u *Admin) AddUser(user structDB.User) (int64, error) {
 	o := orm.NewOrm()
 
 	// _, err := o.Insert(&user)
@@ -28,7 +28,7 @@ func (u *Admin) AddUser(user structDB.User) error {
 	qb, err := orm.NewQueryBuilder("mysql")
 	if err != nil {
 		helpers.CheckErr("Query builder failed @AddUser", err)
-		return err
+		return 0, err
 	}
 
 	qb.InsertInto(user.TableName(),
@@ -62,16 +62,22 @@ func (u *Admin) AddUser(user structDB.User) error {
 
 	if err != nil {
 		helpers.CheckErr("Error insert data User @AddUser", err)
-		return errors.New("Insert users failed")
+		return 0, errors.New("Insert users failed")
 	}
 
 	_, err = res.RowsAffected()
 	if err != nil {
 		helpers.CheckErr("Error get rows affected @AddUser", err)
-		return err
+		return 0, err
 	}
 
-	return err
+	lastRowID, err := res.LastInsertId()
+	if err != nil {
+		helpers.CheckErr("Error get last Insert ID", err)
+		return 0, err
+	}
+
+	return lastRowID, err
 }
 
 // GetUsers ...
@@ -103,7 +109,7 @@ func (u *Admin) GetUser(employeeNumber int64) (user structDB.User, err error) {
 	}
 
 	qb.Select("*").From(user.TableName()).
-		Where(`employee_number = ? `)
+		Where(`id = ? `)
 	qb.Limit(1)
 	sql := qb.String()
 
@@ -261,6 +267,7 @@ func (u *Admin) GetLeaveRequestPending() (reqPending []structLogic.RequestPendin
 
 	qb.Select(
 		leave.TableName()+".id",
+		user.TableName()+".id as employee_id",
 		user.TableName()+".employee_number",
 		user.TableName()+".name",
 		user.TableName()+".gender",
@@ -283,7 +290,7 @@ func (u *Admin) GetLeaveRequestPending() (reqPending []structLogic.RequestPendin
 		leave.TableName()+".action_by").
 		From(user.TableName()).
 		InnerJoin(leave.TableName()).
-		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
@@ -346,7 +353,7 @@ func (u *Admin) GetLeaveRequestApproved() (reqApprove []structLogic.RequestAccep
 		leave.TableName()+".action_by").
 		From(user.TableName()).
 		InnerJoin(leave.TableName()).
-		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
@@ -409,7 +416,7 @@ func (u *Admin) GetLeaveRequestRejected() (reqReject []structLogic.RequestReject
 		leave.TableName()+".action_by").
 		From(user.TableName()).
 		InnerJoin(leave.TableName()).
-		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).

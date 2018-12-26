@@ -4,12 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"server/helpers"
-	"strconv"
-
 	logic "server/models/logic/user"
 	logicUser "server/models/logic/user"
 	structAPI "server/structs/api"
 	structLogic "server/structs/logic"
+	"strconv"
 
 	"github.com/astaxie/beego"
 )

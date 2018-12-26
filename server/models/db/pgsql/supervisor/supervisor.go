@@ -32,6 +32,7 @@ func (u *Supervisor) GetEmployeePending(supervisorID int64) (reqPending []struct
 
 	qb.Select(
 		leave.TableName()+".id",
+		user.TableName()+".id as employee_id",
 		user.TableName()+".employee_number",
 		user.TableName()+".name",
 		user.TableName()+".gender",
@@ -54,7 +55,7 @@ func (u *Supervisor) GetEmployeePending(supervisorID int64) (reqPending []struct
 		leave.TableName()+".action_by").
 		From(user.TableName()).
 		InnerJoin(leave.TableName()).
-		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
@@ -116,7 +117,7 @@ func (u *Supervisor) GetEmployeeApproved(supervisorID int64) (reqApprove []struc
 		leave.TableName()+".action_by").
 		From(user.TableName()).
 		InnerJoin(leave.TableName()).
-		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
@@ -181,7 +182,7 @@ func (u *Supervisor) GetEmployeeRejected(supervisorID int64) (reqReject []struct
 		leave.TableName()+".action_by").
 		From(user.TableName()).
 		InnerJoin(leave.TableName()).
-		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).

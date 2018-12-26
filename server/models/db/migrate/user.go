@@ -48,6 +48,7 @@ func AlterUserAddID() {
 	//Migrate data from user to temp table
 	qb = []string{
 		"INSERT INTO temp_table (",
+		"id,",
 		"employee_number,",
 		"name, gender,",
 		"position,",
@@ -58,6 +59,7 @@ func AlterUserAddID() {
 		"created_at,",
 		"updated_at)",
 		"SELECT",
+		"id,",
 		"employee_number,",
 		"name, gender,",
 		"position,",
