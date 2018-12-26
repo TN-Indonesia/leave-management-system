@@ -52,7 +52,8 @@ func (u *Director) GetEmployeePending() (reqPending []structLogic.RequestPending
 		leave.TableName()+".contact_address",
 		leave.TableName()+".contact_number",
 		leave.TableName()+".status",
-		leave.TableName()+".action_by").
+		leave.TableName()+".action_by",
+		leave.TableName()+".notes").
 		From(user.TableName()).
 		InnerJoin(leave.TableName()).
 		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
@@ -114,7 +115,8 @@ func (u *Director) GetEmployeeApproved() (reqApprove []structLogic.RequestAccept
 		leave.TableName()+".contact_address",
 		leave.TableName()+".contact_number",
 		leave.TableName()+".status",
-		leave.TableName()+".action_by").
+		leave.TableName()+".action_by",
+		leave.TableName()+".notes").
 		From(user.TableName()).
 		InnerJoin(leave.TableName()).
 		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
@@ -177,7 +179,8 @@ func (u *Director) GetEmployeeRejected() (reqReject []structLogic.RequestReject,
 		leave.TableName()+".contact_number",
 		leave.TableName()+".status",
 		leave.TableName()+".reject_reason",
-		leave.TableName()+".action_by").
+		leave.TableName()+".action_by",
+		leave.TableName()+".notes").
 		From(user.TableName()).
 		InnerJoin(leave.TableName()).
 		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").

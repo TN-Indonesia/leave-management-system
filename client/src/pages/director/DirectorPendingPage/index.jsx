@@ -432,7 +432,7 @@ class DirectorPendingPage extends Component {
                 Reason : {this.state.user && this.state.user.reason} <br />
                 From : {this.state.user && this.state.user.date_from} <br />
                 To : {this.state.user && this.state.user.date_to} <br />
-                Half Day : {this.state.user && this.state.user.half_dates !== "" ? (this.state.user.half_dates) : ("none")} <br />
+                Half Day : {this.state.user && this.state.user.half_dates !== "{}" ? (this.state.user.half_dates) : ("none")} <br />
                 Back On : {this.state.user && this.state.user.back_on} <br />
                 Total Leave : {this.state.user &&
                   this.state.user.total} day <br />

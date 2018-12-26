@@ -22,6 +22,7 @@ type RequestAccept struct {
 	ContactNumber    string  `json:"contact_number" orm:"column(contact_number)"`
 	Status           string  `json:"status" orm:"column(status)"`
 	ActionBy         string  `json:"action_by" orm:"column(action_by)"`
+	Notes            string  `json:"notes" orm:"column(notes)"`
 }
 
 // ReportLeaveRequest ...
@@ -43,4 +44,5 @@ type ReportLeaveRequest struct {
 	LeaveRemaining   float64 `json:"Leave Balance" orm:"column(leave_remaining)"`
 	ContactAddress   string  `json:"Contact Address" orm:"column(contact_address)"`
 	ContactNumber    string  `json:"Contact Number" orm:"column(contact_number)"`
+	Notes            string  `json:"notes" orm:"column(notes)"`
 }

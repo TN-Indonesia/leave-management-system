@@ -344,7 +344,7 @@ class DirectorRejectPage extends Component {
                 Contact Number :{" "}
                 {this.state.user && this.state.user.contact_number}
                 <br />
-                Notes : {this.state.user && this.state.user.notes !== "" ? (this.state.user.notes) : ("none")} <br />
+                Notes : {this.state.user && this.state.user.notes !== "{}" ? (this.state.user.notes) : ("")} <br />
                 Reject Reason :{" "}
                 {this.state.user && this.state.user.reject_reason}
               </div>

@@ -22,4 +22,5 @@ type LeaveAccept struct {
 	ContactNumber    string  `json:"contact_number" orm:"column(contact_number)"`
 	Status           string  `json:"status" orm:"column(status)"`
 	ActionBy         string  `json:"action_by" orm:"column(action_by)"`
+	Notes            string  `json:"notes" orm:"column(notes)"`
 }
