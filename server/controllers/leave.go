@@ -265,7 +265,7 @@ func (c *LeaveController) PostLeaveRequestAdmin() {
 		resp.Error = errors.New("Error empty field").Error()
 
 	} else {
-		errAddLeave := logicLeave.CreateLeaveRequestSupervisor(
+		errAddLeave := logicLeave.CreateLeaveRequestAdmin(
 			leave.EmployeeNumber,
 			leave.TypeLeaveID,
 			leave.Reason,

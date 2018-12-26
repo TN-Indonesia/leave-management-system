@@ -244,7 +244,7 @@ func (u *User) GetSupervisor(employeeNumber int64) (supervisor structLogic.GetSu
 }
 
 // GetEmployee ...
-func (u *User) GetEmployee(employeeNumber int64) (employee structLogic.GetEmployee, err error) {
+func (u *User) GetEmployee(employeeID int64) (employee structLogic.GetEmployee, err error) {
 	var dbUser structDB.User
 
 	o := orm.NewOrm()
@@ -263,7 +263,38 @@ func (u *User) GetEmployee(employeeNumber int64) (employee structLogic.GetEmploy
 	qb.Limit(1)
 	sql := qb.String()
 
-	errRaw := o.Raw(sql, employeeNumber).QueryRow(&employee)
+	errRaw := o.Raw(sql, employeeID).QueryRow(&employee)
+	if errRaw != nil {
+		helpers.CheckErr("Failed query select @GetEmployee", errRaw)
+		return employee, errors.New("Employee id not exist")
+	}
+
+	return employee, err
+}
+
+// GetEmployeeByEmployeeNumber ...
+func (u *User) GetEmployeeByEmployeeNumber(employeeID int64) (employee structLogic.GetEmployeeByNumber, err error) {
+	var dbUser structDB.User
+
+	o := orm.NewOrm()
+	qb, errQB := orm.NewQueryBuilder("mysql")
+	if errQB != nil {
+		helpers.CheckErr("Query builder failed @GetEmployee", errQB)
+		return employee, errQB
+	}
+
+	qb.Select(
+		dbUser.TableName()+".id",
+		dbUser.TableName()+".employee_number",
+		dbUser.TableName()+".name",
+		dbUser.TableName()+".email",
+		dbUser.TableName()+".start_working_date").
+		From(dbUser.TableName()).
+		Where(dbUser.TableName() + `.employee_number = ? `)
+	qb.Limit(1)
+	sql := qb.String()
+
+	errRaw := o.Raw(sql, employeeID).QueryRow(&employee)
 	if errRaw != nil {
 		helpers.CheckErr("Failed query select @GetEmployee", errRaw)
 		return employee, errors.New("Employee number not exist")

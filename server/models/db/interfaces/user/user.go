@@ -48,6 +48,11 @@ type IBaseUser interface {
 		employee structLogic.GetEmployee,
 		err error,
 	)
+	// GetEmployee
+	GetEmployeeByEmployeeNumber(employeeID int64) (
+		employee structLogic.GetEmployeeByNumber,
+		err error,
+	)
 
 	// GetTypeLeave
 	GetTypeLeave() (
