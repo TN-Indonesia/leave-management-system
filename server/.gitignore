@@ -17,6 +17,8 @@ database/migrations/m
 logs/*
 swagger
 pkg
+server
+database/sqlite/db_leave_request.db
 
 # editor ignore
 .idea
