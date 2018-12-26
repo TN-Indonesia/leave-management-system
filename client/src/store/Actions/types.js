@@ -4,6 +4,7 @@ export const ROOT_API = 'http://localhost:8080'; // local
 export const CLEAR_FIELD = "CLEAR_FIELD"
 
 export const FETCH_USER = "FETCH_USER"
+export const GET_USER = "GET_USER"
 export const REGISTER_USER = "REGISTER_USER"
 export const DELETE_USER = "DELETE_USER"
 export const FETCH_EDIT_USER = "FETCH_EDIT_USER"
@@ -44,9 +45,10 @@ export const CREATE_LEAVE_REQUEST = "CREATE_LEAVE_REQUEST"
 export const FETCH_LEAVE_BALANCES = "FETCH_LEAVE_BALANCES"
 
 
-export const  REJECT_REASON = " REJECT_REASON"
+export const REJECT_REASON = "REJECT_REASON"
+export const FETCH_USER_LOGIN = "FETCH_USER_LOGIN"
 
 
-export const  FETCH_EDIT_LEAVE = " FETCH_EDIT_LEAVE"
-export const  EDIT_LEAVE = " EDIT_LEAVE"
-export const  UPDATE_REQUEST_PENDING = " UPDATE_REQUEST_PENDING"
+export const FETCH_EDIT_LEAVE = " FETCH_EDIT_LEAVE"
+export const EDIT_LEAVE = " EDIT_LEAVE"
+export const UPDATE_REQUEST_PENDING = " UPDATE_REQUEST_PENDING"

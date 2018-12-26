@@ -22,6 +22,7 @@ func CreateLeaveRequestEmployee(
 	address string,
 	contactLeave string,
 	status string,
+	notes string,
 ) error {
 
 	getEmployee, errGetEmployee := DBUser.GetEmployee(employeeNumber)
@@ -52,7 +53,7 @@ func CreateLeaveRequestEmployee(
 	getSupervisor, errGetSupervisor := DBUser.GetEmployee(getSupervisorID.SupervisorID)
 	helpers.CheckErr("Error get supervisor @CreateLeaveRequestEmployee", errGetSupervisor)
 
-	errInsert := DBLeave.CreateLeaveRequestEmployee(employeeNumber, typeLeaveID, reason, dateFrom, dateTo, halfDates, backOn, total, address, contactLeave, status)
+	errInsert := DBLeave.CreateLeaveRequestEmployee(employeeNumber, typeLeaveID, reason, dateFrom, dateTo, halfDates, backOn, total, address, contactLeave, status, notes)
 	if errInsert != nil {
 		helpers.CheckErr("Error delete leave request @CreateLeaveRequestEmployee - logicLeave", errInsert)
 		return errInsert
@@ -78,15 +79,19 @@ func CreateLeaveRequestSupervisor(
 	address string,
 	contactLeave string,
 	status string,
+	notes string,
 ) error {
 
 	getEmployee, errGetEmployee := DBUser.GetEmployee(employeeNumber)
-	helpers.CheckErr("Error get employee @CreateLeaveRequestSupervisor", errGetEmployee)
+	if errGetEmployee != nil {
+		helpers.CheckErr("Error delete leave request @CreateLeaveRequestSupervisor - logicLeave", errGetEmployee)
+		return errGetEmployee
+	}
 
 	getDirector, errGetDirector := user.GetDirector()
 	helpers.CheckErr("Error get employee @CreateLeaveRequestSupervisor", errGetDirector)
 
-	errInsert := DBLeave.CreateLeaveRequestSupervisor(employeeNumber, typeLeaveID, reason, dateFrom, dateTo, halfDates, backOn, total, address, contactLeave, status)
+	errInsert := DBLeave.CreateLeaveRequestSupervisor(employeeNumber, typeLeaveID, reason, dateFrom, dateTo, halfDates, backOn, total, address, contactLeave, status, notes)
 	if errInsert != nil {
 		helpers.CheckErr("Error delete leave request @CreateLeaveRequestSupervisor - logicLeave", errInsert)
 		return errInsert

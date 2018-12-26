@@ -9,6 +9,7 @@ import {
   SumbitLeaveSupervisor
 } from "../../../store/Actions/leaveRequestAction";
 import { typeLeaveFetchData } from "../../../store/Actions/typeLeaveAction";
+import { userLoginFetchData } from "../../../store/Actions/userLoginAction";
 import HeaderNav from "../../../pages/menu/HeaderNav";
 import Footer from "../../../components/Footer";
 import "./style.css";
@@ -58,8 +59,21 @@ class LeaveRequestPage extends Component {
     ) {
       this.props.history.push("/");
     }
+
     this.props.typeLeaveFetchData();
+    this.props.userLoginFetchData();
   }
+
+  onChange = (field, value) => {
+    this.setState({
+      [field]: value
+    });
+  };
+
+  handleOnChangeNumber = (value, field) => {
+    this.onChange(field, Number(value));
+    console.log("input=======>", value);
+  };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -135,12 +149,6 @@ class LeaveRequestPage extends Component {
     return endValue.valueOf() <= startValue.valueOf();
   };
 
-  onChange = (field, value) => {
-    this.setState({
-      [field]: value
-    });
-  };
-
   onStartChange = value => {
     if (value !== null) {
       const date = new Date(value._d),
@@ -185,9 +193,9 @@ class LeaveRequestPage extends Component {
     return (
       current &&
       current <
-        moment()
-          .subtract(7, "days")
-          .startOf("day")
+      moment()
+        .subtract(7, "days")
+        .startOf("day")
     );
   }
 
@@ -206,17 +214,17 @@ class LeaveRequestPage extends Component {
   };
 
   getDates(start, end) {
-    var startDate = new Date(start);
-    var endDate = new Date(end);
-    let dates = [];    
+    let startDate = new Date(start);
+    let endDate = new Date(end);
+    let dates = [];
     while (startDate <= endDate) {
-      var weekDay = startDate.getDay();
+      let weekDay = startDate.getDay();
       if (weekDay < 6 && weekDay > 0) {
-        var month = startDate.getMonth() + 1;
+        let month = startDate.getMonth() + 1;
         if (month <= 9) {
           month = "0" + month;
         }
-        var day = startDate.getDate();
+        let day = startDate.getDate();
         if (day <= 9) {
           day = "0" + day;
         }
@@ -290,6 +298,27 @@ class LeaveRequestPage extends Component {
     this.props.formOnChange(newLeave);
   };
 
+  getWorkingDate(startWorkingDate) {
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1;
+    let yyyy = today.getFullYear();
+
+    if (dd < 10) {
+      dd = '0' + dd
+    }
+    if (mm < 10) {
+      mm = '0' + mm
+    }
+
+    let dateNow = `${dd}-${mm}-${yyyy}`
+    let start = moment(`${startWorkingDate}`, "DD-MM-YYYY");
+    let end = moment(`${dateNow}`, "DD-MM-YYYY");
+    let diffrent = end.diff(start, 'days')
+
+    return diffrent
+  }
+
   handleBlur() {
     console.log("blur");
   }
@@ -317,6 +346,8 @@ class LeaveRequestPage extends Component {
       },
       style: {}
     };
+
+    let result = this.getWorkingDate("02-05-2018")
 
     const formStyle = {
       width: "100%"
@@ -346,6 +377,11 @@ class LeaveRequestPage extends Component {
       );
     }
 
+    const reactRoot = document.getElementById('Progress2');
+    // const restUrl = reactRoot.getAttribute('data-rest-url');
+
+    console.log("========>", reactRoot)
+
     return (
       <Layout>
         <HeaderNav />
@@ -371,7 +407,7 @@ class LeaveRequestPage extends Component {
 
             <Form onSubmit={this.handleSubmit} className="login-form">
               <FormItem {...formItemLayout} label="Type Of Leave">
-                {getFieldDecorator("type of leave", {
+                {getFieldDecorator("type_leave_id", {
                   rules: [
                     {
                       required: true
@@ -388,85 +424,92 @@ class LeaveRequestPage extends Component {
                       this.handleChangeSelect(value, event)
                     }
                     showSearch
-                    onFocus={this.handleFocus}
-                    onBlur={this.handleBlur}
                     filterOption={(input, option) =>
                       option.props.children
                         .toLowerCase()
                         .indexOf(input.toLowerCase()) >= 0
                     }
+                    onFocus={this.handleFocus}
+                    onBlur={this.handleBlur}
                     style={formStyle}
                   >
-                    {this.props.typeLeave.map(d => (
-                      <Option key={d.id}>{d.type_name}</Option>
-                    ))}
+                    {result < 365 ?
+                      this.props.typeLeave.map(d => (
+                        <Option key={d.id} value={d.id}>{d.type_name}</Option>
+                      ))
+                      :
+                      this.props.typeLeave.map(d => (
+                        <Option key={d.id} value={d.id}>{d.type_name}</Option>
+                      ))
+                    }
+
                   </Select>
                 )}
               </FormItem>
 
               {this.props.leaveForm.type_leave_id === 22 ||
-              this.props.leaveForm.type_leave_id === 33 ||
-              this.props.leaveForm.type_leave_id === 66 ? (
-                <FormItem {...formItemLayout} label="Reason">
-                  <Input
-                    type="text"
-                    id="reason"
-                    name="reason"
-                    placeholder="reason"
-                    onChange={this.handleOnChange}
-                    style={formStyle}
-                  />
-                </FormItem>
-              ) : (
-                ""
-              )}
+                this.props.leaveForm.type_leave_id === 33 ||
+                this.props.leaveForm.type_leave_id === 66 ? (
+                  <FormItem {...formItemLayout} label="Reason">
+                    <Input
+                      type="text"
+                      id="reason"
+                      name="reason"
+                      placeholder="reason"
+                      onChange={this.handleOnChange}
+                      style={formStyle}
+                    />
+                  </FormItem>
+                ) : (
+                  ""
+                )}
 
               {this.props.leaveForm.type_leave_id === 22 ||
-              this.props.leaveForm.type_leave_id === 33 ? (
-                <FormItem {...formItemLayout} label="From">
-                  {getFieldDecorator("start date", {
-                    rules: [
-                      {
-                        required: true
-                      }
-                    ]
-                  })(
-                    <DatePicker
-                      id="date_from"
-                      name="date_from"
-                      disabledDate={this.disabledDateSick}
-                      format={dateFormat}
-                      value={from}
-                      placeholder="Start"
-                      onChange={this.onStartChange}
-                      onOpenChange={this.handleStartOpenChange}
-                      style={formStyle}
-                    />
-                  )}
-                </FormItem>
-              ) : (
-                <FormItem {...formItemLayout} label="From">
-                  {getFieldDecorator("start date", {
-                    rules: [
-                      {
-                        required: true
-                      }
-                    ]
-                  })(
-                    <DatePicker
-                      id="date_from"
-                      name="date_from"
-                      disabledDate={this.disabledDate}
-                      format={dateFormat}
-                      value={from}
-                      placeholder="Start"
-                      onChange={this.onStartChange}
-                      onOpenChange={this.handleStartOpenChange}
-                      style={formStyle}
-                    />
-                  )}
-                </FormItem>
-              )}
+                this.props.leaveForm.type_leave_id === 33 ? (
+                  <FormItem {...formItemLayout} label="From">
+                    {getFieldDecorator("start date", {
+                      rules: [
+                        {
+                          required: true
+                        }
+                      ]
+                    })(
+                      <DatePicker
+                        id="date_from"
+                        name="date_from"
+                        disabledDate={this.disabledDateSick}
+                        format={dateFormat}
+                        value={from}
+                        placeholder="Start"
+                        onChange={this.onStartChange}
+                        onOpenChange={this.handleStartOpenChange}
+                        style={formStyle}
+                      />
+                    )}
+                  </FormItem>
+                ) : (
+                  <FormItem {...formItemLayout} label="From">
+                    {getFieldDecorator("start date", {
+                      rules: [
+                        {
+                          required: true
+                        }
+                      ]
+                    })(
+                      <DatePicker
+                        id="date_from"
+                        name="date_from"
+                        disabledDate={this.disabledDate}
+                        format={dateFormat}
+                        value={from}
+                        placeholder="Start"
+                        onChange={this.onStartChange}
+                        onOpenChange={this.handleStartOpenChange}
+                        style={formStyle}
+                      />
+                    )}
+                  </FormItem>
+                )}
 
               <FormItem {...formItemLayout} label="To">
                 {getFieldDecorator("end date", {
@@ -581,19 +624,19 @@ class LeaveRequestPage extends Component {
                   </Button>
                 </FormItem>
               ) : (
-                <FormItem>
-                  <Button
-                    onClick={this.handleSubmitSupervisor}
-                    htmlType="submit"
-                    type="primary"
-                    style={{
-                      width: "35%"
-                    }}
-                  >
-                    CREATE
+                  <FormItem>
+                    <Button
+                      onClick={this.handleSubmitSupervisor}
+                      htmlType="submit"
+                      type="primary"
+                      style={{
+                        width: "35%"
+                      }}
+                    >
+                      CREATE
                   </Button>
-                </FormItem>
-              )}
+                  </FormItem>
+                )}
             </Form>
           </div>
         </Content>
@@ -606,7 +649,8 @@ class LeaveRequestPage extends Component {
 
 const mapStateToProps = state => ({
   leaveForm: state.leaveRequestReducer,
-  typeLeave: state.fetchTypeLeaveReducer.typeLeave
+  typeLeave: state.fetchTypeLeaveReducer.typeLeave,
+  user: state.fetchUserLoginReducer.user
 });
 
 const WrappedLeaveForm = Form.create()(LeaveRequestPage);
@@ -617,7 +661,8 @@ const mapDispatchToProps = dispatch =>
       formOnChange,
       SumbitLeave,
       SumbitLeaveSupervisor,
-      typeLeaveFetchData
+      typeLeaveFetchData,
+      userLoginFetchData
     },
     dispatch
   );

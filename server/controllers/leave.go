@@ -68,6 +68,7 @@ func (c *LeaveController) PostLeaveRequestEmployee() {
 		ContactAddress: req.ContactAddress,
 		ContactNumber:  req.ContactNumber,
 		Status:         constant.StatusPendingInSupervisor,
+		Notes:          req.Notes,
 	}
 
 	strBalance := strconv.FormatFloat(resGet.LeaveRemaining, 'f', 1, 64)
@@ -101,6 +102,7 @@ func (c *LeaveController) PostLeaveRequestEmployee() {
 			leave.ContactAddress,
 			leave.ContactNumber,
 			leave.Status,
+			leave.Notes,
 		)
 		if errAddLeave != nil {
 			resp.Error = errAddLeave.Error()
@@ -163,6 +165,7 @@ func (c *LeaveController) PostLeaveRequestSupervisor() {
 		ContactAddress: req.ContactAddress,
 		ContactNumber:  req.ContactNumber,
 		Status:         constant.StatusPendingInDirector,
+		Notes:          req.Notes,
 	}
 
 	strBalance := strconv.FormatFloat(resGet.LeaveRemaining, 'f', 1, 64)
@@ -196,6 +199,7 @@ func (c *LeaveController) PostLeaveRequestSupervisor() {
 			leave.ContactAddress,
 			leave.ContactNumber,
 			leave.Status,
+			leave.Notes,
 		)
 		if errAddLeave != nil {
 			resp.Error = errAddLeave.Error()
@@ -208,6 +212,84 @@ func (c *LeaveController) PostLeaveRequestSupervisor() {
 	err := c.Ctx.Output.JSON(resp, false, false)
 	if err != nil {
 		helpers.CheckErr("Failed giving output @PostLeaveRequestSupervisor - controller", err)
+	}
+}
+
+// PostLeaveRequestAdmin ...
+func (c *LeaveController) PostLeaveRequestAdmin() {
+	var (
+		req  structAPI.ReqLeaveAdmin
+		resp structAPI.RespData
+	)
+
+	body := c.Ctx.Input.RequestBody
+	fmt.Println("CREATE-LEAVE-REQUEST=======>", string(body))
+
+	errMarshal := json.Unmarshal(body, &req)
+	if errMarshal != nil {
+		helpers.CheckErr("Failed unmarshall req body @PostLeaveRequestAdmin - controller", errMarshal)
+		resp.Error = errors.New("Type request malform").Error()
+		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.JSON(resp, false, false)
+		return
+	}
+
+	totalDay := float64(helpers.GetTotalDay(req.DateFrom, req.DateTo))
+	reqHalfDay := float64(len(req.HalfDates))
+	valueHalfDay := float64(0.5)
+	result := helpers.Multiply(totalDay, reqHalfDay, valueHalfDay)
+
+	leave := structAPI.CreateLeaveRequest{
+		EmployeeNumber: req.EmployeeNumber,
+		TypeLeaveID:    req.TypeLeaveID,
+		Reason:         req.Reason,
+		DateFrom:       req.DateFrom,
+		DateTo:         req.DateTo,
+		HalfDates:      req.HalfDates,
+		Total:          result,
+		BackOn:         req.BackOn,
+		ContactAddress: req.ContactAddress,
+		ContactNumber:  req.ContactNumber,
+		Status:         constant.StatusPendingInDirector,
+		Notes:          req.Notes,
+	}
+
+	if req.TypeLeaveID != 11 && req.TypeLeaveID != 22 && req.TypeLeaveID != 33 && req.TypeLeaveID != 44 && req.TypeLeaveID != 55 && req.TypeLeaveID != 66 {
+		beego.Warning("Error empty field type leave @PostLeaveRequestAdmin - controller")
+		c.Ctx.Output.SetStatus(400)
+		resp.Error = errors.New("Error empty field").Error()
+
+	} else if req.DateFrom == "" || req.DateTo == "" || req.BackOn == "" || req.ContactAddress == "" || req.ContactNumber == "" {
+		beego.Warning("Error empty field @PostLeaveRequestAdmin - controller")
+		c.Ctx.Output.SetStatus(400)
+		resp.Error = errors.New("Error empty field").Error()
+
+	} else {
+		errAddLeave := logicLeave.CreateLeaveRequestSupervisor(
+			leave.EmployeeNumber,
+			leave.TypeLeaveID,
+			leave.Reason,
+			leave.DateFrom,
+			leave.DateTo,
+			leave.HalfDates,
+			leave.BackOn,
+			leave.Total,
+			leave.ContactAddress,
+			leave.ContactNumber,
+			leave.Status,
+			leave.Notes,
+		)
+		if errAddLeave != nil {
+			resp.Error = errAddLeave.Error()
+			c.Ctx.Output.SetStatus(400)
+		} else {
+			resp.Body = leave
+		}
+	}
+
+	err := c.Ctx.Output.JSON(resp, false, false)
+	if err != nil {
+		helpers.CheckErr("Failed giving output @PostLeaveRequestAdmin - controller", err)
 	}
 }
 

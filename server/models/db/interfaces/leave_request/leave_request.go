@@ -20,6 +20,7 @@ type IBaseLeaveRequest interface {
 		address string,
 		contactLeave string,
 		status string,
+		notes string,
 	) error
 	// CreateLeaveRequestSupervisor
 	CreateLeaveRequestSupervisor(
@@ -34,6 +35,7 @@ type IBaseLeaveRequest interface {
 		address string,
 		contactLeave string,
 		status string,
+		notes string,
 	) error
 	// UpdateRequest
 	UpdateRequest(

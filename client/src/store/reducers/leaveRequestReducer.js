@@ -11,7 +11,8 @@ const leaveState = {
 	half_dates: [],
 	back_on: null,
 	contact_address: '',
-	contact_number: ''
+	contact_number: '',
+	notes: '',
 }
 
 export default function leaveRequestReducer(state = leaveState, action) {

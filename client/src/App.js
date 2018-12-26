@@ -12,7 +12,8 @@ import ResetPasswordPage from './pages/password/ResetPasswordPage';
 import PasswordPage from './pages/password/PasswordPage';
 
 import LeaveRequestPage from './pages/Leave/LeaveRequestPage';
-import LeaveEditPage from './pages/Leave/LeaveEditPage';
+import AdminLeaveRequestPage from './pages/Leave/AdminLeaveRequestPage';
+import LeaveEditPage from './pages/Leave/LeaveEditPage'; //todo:not finish
 
 import AdminLandingPage from './pages/admin/AdminLandingPage';
 import AdminRegisterPage from './pages/admin/AdminRegisterPage';
@@ -65,7 +66,8 @@ class App extends Component {
               <Route exact path="/profile" component={ProfilePage} />
               <Route path={`/profile/:id`} component={PasswordPage}/>
 
-              <Route exact path="/employee/leave-request" component={LeaveRequestPage} />                          
+              <Route exact path="/employee/leave-request" component={LeaveRequestPage} />
+              <Route exact path="/admin/leave-request" component={AdminLeaveRequestPage} />
               <Route exact path={`/editrequest/:id`} component={LeaveEditPage}/>
               <Route exact path="/employee/list-pending-request" component={EmployeePendingPage} />
               <Route exact path="/employee/list-approve-request" component={EmployeeApprovePage} />
