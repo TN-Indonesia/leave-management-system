@@ -206,7 +206,7 @@ func init() {
 		),
 		// ========================= public holiday ========================= //
 		// get list of public holiday
-		beego.NSRouter("/holiday/getAll",
+		beego.NSRouter("/holidays/public",
 			&controllers.PublicHolidayController{},
 			"get:GetAllPublicHoliday",
 		),
