@@ -15,13 +15,11 @@ export function publicHolidayFetchData() {
 		fetch(`${ROOT_API}/api/holidays/public`, {
 				method: 'GET',
 			})
-			.then((resp) => resp.json())
+			.then((resp) => resp.json())  
 			.then(({
 				body,
 				error
 			}) => {
-				console.log("body")
-				console.log(body)
 				let payload = {
 					publicHoliday: body
 				}
@@ -29,7 +27,7 @@ export function publicHolidayFetchData() {
 
 				if (error !== null) {
 					console.error("error not null @publicHolidayFetchData: ", error)
-				}
+				}  
 			})
 			.catch(error => {
 				console.error("error @publicHolidayFetchData: ", error)

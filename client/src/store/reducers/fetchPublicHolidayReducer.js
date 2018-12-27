@@ -6,7 +6,7 @@ let publicHolidayState = {
     publicHoliday: [],
 }
 
-export default function fetchTypeLeaveReducer(state = publicHolidayState, action) {
+export default function fetchPublicHolidayReducer(state = publicHolidayState, action) {
     switch (action.type) {
         case FETCH_PUBLIC_HOLIDAY:
             return {
