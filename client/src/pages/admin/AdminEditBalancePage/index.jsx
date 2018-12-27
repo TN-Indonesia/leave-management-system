@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { adminEditLeaveBalances } from "../../../store/Actions/adminActions";
+import { adminEditLeaveBalances, handleEditBalance, saveEditBalanceUser } from "../../../store/Actions/adminActions";
 import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
 import Loading from "../../../components/Loading";
 import Footer from "../../../components/Footer";
@@ -17,7 +17,7 @@ class AdminEditBalancePage extends Component {
       date: ""
     };
 
-    // this.saveEdit = this.saveEdit.bind(this);
+    this.saveEditBalanceUser = this.saveEditBalanceUser.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
   }
 
@@ -31,27 +31,35 @@ class AdminEditBalancePage extends Component {
     if (localStorage.getItem("role") !== "admin") {
       this.props.history.push("/");
     }
-    let employee_number = Number(
+    let employee_id = Number(
       this.props.history.location.pathname.split("/").pop()
     );
-    this.props.adminEditLeaveBalances(employee_number);
+
+    this.props.adminEditLeaveBalances(employee_id);
   }
 
-  // saveEdit = () => {
-  //   console.log(this.props.user);
-  //   this.props.saveEditUser(this.props.user, url => {
-  //     this.props.history.push(url);
-  //   });
-  // };
+  saveEditBalanceUser = () => {
+    console.log(this.props.balance)
+    let employee_id = Number(
+      this.props.history.location.pathname.split("/").pop()
+    );
+    
+    this.props.saveEditBalanceUser(this.props.balance, employee_id, url => {
+      this.props.history.push(url);
+    });
+  };
 
   handleOnChange = e => {
-    let edit = {
-      ...this.props.balances,
-      [e.target.name]: e.target.value
+    let editEl = {
+      ...this.props.balance[e.target.id],
+      leave_remaining: Number(e.target.value)
     };
+    let edit = [
+      ...this.props.balance
+    ]
+    edit[e.target.id] = editEl
     console.log(edit)
-    // this.props.handleEdit(edit);
-    console.log(e.target.name, e.target.value);
+    this.props.handleEditBalance(edit);
   };
 
   handleBlur() {
@@ -75,9 +83,9 @@ class AdminEditBalancePage extends Component {
     };
 
     let elements = [];
-
-    if (this.props.balance) {
-      this.props.balance.map((el, id) => {
+    console.log(this.props.balance)
+    {
+      this.props.balance && this.props.balance.map((el, id) => {
         elements.push(
           <FormItem {...formItemLayout} label={el.type_name}>
             <Input
@@ -122,11 +130,10 @@ class AdminEditBalancePage extends Component {
                 <div>
                   <Form onSubmit={this.handleSubmit} className="login-form">
                     {elements}
-
                     <FormItem>
                       <Button
                         onClick={() => {
-                          this.saveEdit();
+                          this.saveEditBalanceUser();
                         }}
                         htmlType="submit"
                         type="primary"
@@ -157,7 +164,9 @@ const WrappedEditUserForm = Form.create()(AdminEditBalancePage);
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      adminEditLeaveBalances
+      adminEditLeaveBalances,
+      handleEditBalance,
+      saveEditBalanceUser
     },
     dispatch
   );

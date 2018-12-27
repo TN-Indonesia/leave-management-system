@@ -5,14 +5,21 @@ import {
 	FETCH_LEAVE_APPROVE,
 	FETCH_LEAVE_REJECT,
 	CANCEL_LEAVE_REQUEST,
-	FETCH_LEAVE_BALANCES
+	FETCH_LEAVE_BALANCES,
+	EDIT_BALANCES
 } from "../Actions/types"
 
 let adminState = {
 	loading: true,
 	users: [],
 	leaves: [],
-	balances: [],
+	balances: [
+		{ type_name: "Annual Leave", leave_remaining: 12 },
+		{ type_name: "Errand Leave", leave_remaining: 3 },
+		{ type_name: "Sick Leave", leave_remaining: 30 },
+		{ type_name: "Marriage Leave", leave_remaining: 2 },
+		{ type_name: "Other Leave", leave_remaining: 2 }
+	],
 }
 
 export default function adminReducer(state = adminState, action) {
@@ -42,6 +49,10 @@ export default function adminReducer(state = adminState, action) {
 				...action.payload
 			}
 		case FETCH_LEAVE_BALANCES:
+			return {
+				...action.payload
+			}
+		case EDIT_BALANCES:
 			return {
 				...action.payload
 			}

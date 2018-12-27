@@ -171,6 +171,53 @@ func (c *UserController) GetUserTypeLeave() {
 	}
 }
 
+// PostUserTypeLeave ...
+func (c *UserController) PostUserTypeLeave() {
+	var (
+		resp            structAPI.RespData
+		reqLeaveBalance []structAPI.UpdateLeaveBalance
+	)
+
+	body := c.Ctx.Input.RequestBody
+
+	err := json.Unmarshal(body, &reqLeaveBalance)
+	if err != nil {
+		helpers.CheckErr("Failed unmarshall req body @PostUserTypeLeave - controller", err)
+		resp.Error = errors.New("Type request malform").Error()
+		c.Ctx.Output.JSON(resp, false, false)
+		return
+	}
+
+	idStr := c.Ctx.Input.Param(":id")
+	ID, errCon := strconv.ParseInt(idStr, 0, 64)
+	if errCon != nil {
+		helpers.CheckErr("Convert id failed @PostUserTypeLeave - controller", errCon)
+		resp.Error = errors.New("Convert id failed").Error()
+		return
+	}
+
+	var leaveBalance []structLogic.UserTypeLeave
+	for _, val := range reqLeaveBalance {
+		leaveBalance = append(leaveBalance, structLogic.UserTypeLeave{
+			LeaveRemaining: val.LeaveRemaining,
+			TypeID:         val.TypeID,
+			TypeName:       val.TypeName,
+		})
+	}
+
+	errUpdate := logic.DBPostAdmin.UpdateLeaveBalance(leaveBalance, ID)
+	if errUpdate != nil {
+		resp.Error = errUpdate.Error()
+	} else {
+		resp.Body = "Update leave balance success"
+	}
+
+	err = c.Ctx.Output.JSON(resp, false, false)
+	if err != nil {
+		helpers.CheckErr("Failed giving output @PostUserTypeLeave - controller", err)
+	}
+}
+
 // GetSupervisors ...
 func (c *UserController) GetSupervisors() {
 	var resp structAPI.RespData
