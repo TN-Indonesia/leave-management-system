@@ -318,8 +318,7 @@ class EmployeePendingPage extends Component {
                 {this.state.user && this.state.user.contact_address} <br />
                 Contact Number :{" "}
                 {this.state.user && this.state.user.contact_number} <br />
-                Status : {this.state.user && this.state.user.status}
-                <br />
+                Status : {this.state.user && this.state.user.status}                
               </div>
             </Modal>
           </Content>

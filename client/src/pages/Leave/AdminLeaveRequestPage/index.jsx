@@ -9,6 +9,7 @@ import {
 } from "../../../store/Actions/adminLeaveRequestAction";
 import { typeLeaveFetchData } from "../../../store/Actions/typeLeaveAction";
 import { userLoginFetchData } from "../../../store/Actions/userLoginAction";
+import { publicHolidayFetchData } from "../../../store/Actions/publicHolidayAction";
 import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
 import Footer from "../../../components/Footer";
 import "./style.css";
@@ -36,7 +37,8 @@ class LeaveRequestPage extends Component {
       end: null,
       endOpen: false,
       contactID: "+62",
-      halfDate: []
+      halfDate: [],
+      publicHolidayDates: [],
     };
 
     this.handleOnChange = this.handleOnChange.bind(this);
@@ -50,7 +52,7 @@ class LeaveRequestPage extends Component {
   }
 
   componentWillMount() {
-    console.log(" ----------------- Form-Leave-Request ----------------- ");
+    console.log(" ----------------- Form-Leave-Requessssssssssst ----------------- ");
     if (!localStorage.getItem("token")) {
       this.props.history.push("/");
     } else if (
@@ -61,6 +63,10 @@ class LeaveRequestPage extends Component {
 
     this.props.typeLeaveFetchData();
     this.props.userLoginFetchData();
+    this.props.publicHolidayFetchData();
+  }
+
+  componentDidMount(){
   }
 
   onChange = (field, value) => {
@@ -173,7 +179,10 @@ class LeaveRequestPage extends Component {
   };
 
   disabledDate(current) {
-    return current && current < moment().startOf("day");
+    //gimana ambil state ini disini: this.state.publicHolidayDates
+    var publicHolidayDates = this.state.publicHolidayDates;
+    // var publicHolidayDates = ['2018-12-29', '2018-12-30', '2018-12-31'];
+    return current < moment().startOf("day") || publicHolidayDates.find( d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
   }
 
   disabledDateSick(current) {
@@ -362,6 +371,48 @@ class LeaveRequestPage extends Component {
     }
 
     console.log("========>", this.state)
+    
+    console.log("this.props.publicHoliday")
+    console.log(this.props.publicHoliday)
+
+    function pad(num, size) {
+      var s = num+"";
+      while (s.length < size) s = "0" + s;
+      return s;
+    }
+
+    for (let i = 0; i < this.props.publicHoliday.length; i++) {
+      var holidayDateToAppend = []
+      var dateStart = this.props.publicHoliday[i].date_start.split("-").reverse().join("-")
+      var dateEnd = this.props.publicHoliday[i].date_end.split("-").reverse().join("-")
+      holidayDateToAppend.push(dateStart)
+      if (dateStart!=dateEnd) { //if date_start and date_end is different
+        var dateStartInt = parseInt(dateStart.substring(dateStart.length-2, dateStart.length))
+        var dateEndInt = parseInt(dateEnd.substring(dateEnd.length-2, dateEnd.length))
+        if (dateStartInt>dateEndInt) { //if date_start is higher than dateEnd, holiday dates is within 2 month
+          if (dateStartInt+1==dateEndInt) {
+            holidayDateToAppend.push(dateEnd)
+          }else{
+            var dateStartMoment = moment(dateStart);
+            var dateEndMoment = moment(dateEnd);
+            var diffDays = dateEndMoment.diff(dateStartMoment, 'days');
+            
+            for (let j = 1; j <= diffDays; j++) {
+              holidayDateToAppend.push(moment().add(j, 'd').format('YYYY-MM-DD'))
+            }
+          }
+        }else{ //both date in the same month
+          var suffixMonthYear = dateStart.substring(0, dateStart.length-2)
+          for (let j = dateStartInt+1; j <= dateEndInt; j++) {
+            holidayDateToAppend.push(suffixMonthYear+pad(j,2))
+          }
+        }
+      }
+      for (let k = 0; k < holidayDateToAppend.length; k++) {
+        this.state.publicHolidayDates.push(holidayDateToAppend[k])
+      }
+      console.log(this.state.publicHolidayDates)
+    }
 
     return (
       <Layout>
@@ -654,7 +705,8 @@ class LeaveRequestPage extends Component {
 const mapStateToProps = state => ({
   leaveForm: state.adminLeaveRequestReducer,
   typeLeave: state.fetchTypeLeaveReducer.typeLeave,
-  user: state.fetchUserLoginReducer.user
+  user: state.fetchUserLoginReducer.user,
+  publicHoliday: state.fetchPublicHolidayReducer.publicHoliday,
 });
 
 const WrappedLeaveForm = Form.create()(LeaveRequestPage);
@@ -665,7 +717,8 @@ const mapDispatchToProps = dispatch =>
       formOnChange,      
       AdminSumbitLeave,
       typeLeaveFetchData,
-      userLoginFetchData
+      userLoginFetchData,
+      publicHolidayFetchData
     },
     dispatch
   );

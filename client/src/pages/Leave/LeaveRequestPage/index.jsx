@@ -10,6 +10,7 @@ import {
 } from "../../../store/Actions/leaveRequestAction";
 import { typeLeaveFetchData } from "../../../store/Actions/typeLeaveAction";
 import { userLoginFetchData } from "../../../store/Actions/userLoginAction";
+import { publicHolidayFetchData } from "../../../store/Actions/publicHolidayAction";
 import HeaderNav from "../../../pages/menu/HeaderNav";
 import Footer from "../../../components/Footer";
 import "./style.css";
@@ -62,6 +63,7 @@ class LeaveRequestPage extends Component {
 
     this.props.typeLeaveFetchData();
     this.props.userLoginFetchData();
+    this.props.publicHolidayFetchData();
   }
 
   onChange = (field, value) => {
@@ -650,7 +652,8 @@ class LeaveRequestPage extends Component {
 const mapStateToProps = state => ({
   leaveForm: state.leaveRequestReducer,
   typeLeave: state.fetchTypeLeaveReducer.typeLeave,
-  user: state.fetchUserLoginReducer.user
+  user: state.fetchUserLoginReducer.user,
+  publicHoliday: state.fetchPublicHolidayReducer.publicHoliday
 });
 
 const WrappedLeaveForm = Form.create()(LeaveRequestPage);
@@ -662,7 +665,8 @@ const mapDispatchToProps = dispatch =>
       SumbitLeave,
       SumbitLeaveSupervisor,
       typeLeaveFetchData,
-      userLoginFetchData
+      userLoginFetchData,
+      publicHolidayFetchData
     },
     dispatch
   );
