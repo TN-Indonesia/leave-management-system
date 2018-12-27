@@ -204,6 +204,12 @@ func init() {
 			&controllers.EmployeeController{},
 			"get:GetRequestReject",
 		),
+		// ========================= public holiday ========================= //
+		// get list of public holiday
+		beego.NSRouter("/holiday/getAll",
+			&controllers.PublicHolidayController{},
+			"get:GetAllPublicHoliday",
+		),
 	)
 	beego.AddNamespace(ns)
 }
