@@ -527,10 +527,9 @@ class AdminApprovePage extends Component {
                 Reason : {this.state.user && this.state.user.reason} <br />
                 From : {this.state.user && this.state.user.date_from} <br />
                 To : {this.state.user && this.state.user.date_to} <br />
-                Half Day :{" "}
-                {this.state.user && this.state.user.half_dates !== ""
+                Half Day :{this.state.user && this.state.user.half_dates !== ""
                   ? this.state.user.half_dates
-                  : "none"}{" "}
+                  : ""}
                 <br />
                 Back On : {this.state.user && this.state.user.back_on} <br />
                 Total Leave : {this.state.user &&
@@ -540,7 +539,8 @@ class AdminApprovePage extends Component {
                 Contact Address :{" "}
                 {this.state.user && this.state.user.contact_address} <br />
                 Contact Number :{" "}
-                {this.state.user && this.state.user.contact_number}
+                {this.state.user && this.state.user.contact_number} <br />
+                Notes : {this.state.user && this.state.user.notes !== "{}" ? (this.state.user.notes) : ("")}
               </div>
             </Modal>
           </Content>
