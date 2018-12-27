@@ -134,7 +134,7 @@ func CreateLeaveRequestAdmin(
 
 	errInsert := DBLeave.CreateLeaveRequestSupervisor(getEmployee.ID, typeLeaveID, reason, dateFrom, dateTo, halfDates, backOn, total, address, contactLeave, status, notes)
 	if errInsert != nil {
-		helpers.CheckErr("Error delete leave request @CreateLeaveRequestAdmin - logicLeave", errInsert)
+		helpers.CheckErr("Error insert leave request @CreateLeaveRequestAdmin - logicLeave", errInsert)
 		return errInsert
 	}
 
