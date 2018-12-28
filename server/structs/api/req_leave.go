@@ -43,4 +43,11 @@ type (
 		ContactNumber  string   `json:"contact_number"`
 		Notes          string   `json:"notes"`
 	}
+
+	// UpdateLeaveBalance ...
+	UpdateLeaveBalance struct {
+		TypeID         string  `json:"type_id"`
+		TypeName       string  `json:"type_name"`
+		LeaveRemaining float64 `json:"leave_remaining"`
+	}
 )

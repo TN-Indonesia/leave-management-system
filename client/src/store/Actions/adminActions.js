@@ -6,7 +6,8 @@ import {
 	FETCH_LEAVE_APPROVE,
 	FETCH_LEAVE_REJECT,
 	CANCEL_LEAVE_REQUEST,
-	FETCH_LEAVE_BALANCES
+	FETCH_LEAVE_BALANCES,
+	EDIT_BALANCES,
 } from "./types"
 import {
 	message
@@ -61,11 +62,30 @@ function fetchLeaveBalance(payload) {
 	}
 }
 
+function balanceEditing(payload) {
+	return {
+		type: EDIT_BALANCES,
+		payload: payload
+	}
+}
+
+export function handleEditBalance(newBalance) {
+	return (dispatch) => {
+		let payload = {
+			loading: false,
+			balances: newBalance
+			
+
+		}
+		dispatch(balanceEditing(payload))
+	}
+}
+
 export function adminGetUsers() {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/admin/user/`, {
-				method: 'GET',
-			})
+			method: 'GET',
+		})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -90,8 +110,8 @@ export function adminGetUsers() {
 export function adminEditLeaveBalances(employeeNumber) {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/user/type-leave/${employeeNumber}`, {
-				method: 'GET',
-			})
+			method: 'GET',
+		})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -113,11 +133,37 @@ export function adminEditLeaveBalances(employeeNumber) {
 	}
 }
 
+export function saveEditBalanceUser(payload, employeeNumber, pusher) {
+	return (dispatch) => {
+		fetch(`${ROOT_API}/api/user/type-leave/${employeeNumber}`, {
+			method: 'POST',
+			body: JSON.stringify(payload)
+		})
+			.then((resp) => resp.json())
+			.then(({
+				body,
+				error
+			}) => {
+				if (body !== null) {
+					message.success(body)
+					pusher('/admin')
+				} else if (error === "Type request malform") {
+					let errMsg = 'Error empty field!'
+					message.error(errMsg)
+				} else {
+					message.error(error)
+				}
+			}).catch(error => {
+				console.error("error @saveEditBalanceUser: ", error)
+			})
+	}
+}
+
 export function adminDeleteUser(users, id) {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/admin/user/${id}`, {
-				method: 'DELETE',
-			})
+			method: 'DELETE',
+		})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -145,8 +191,8 @@ export function adminDeleteUser(users, id) {
 export function fetchAdminLeavePending() {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/admin/leave/pending/`, {
-				method: 'GET',
-			})
+			method: 'GET',
+		})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -171,8 +217,8 @@ export function fetchAdminLeavePending() {
 export function fetchAdminLeaveApprove() {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/admin/leave/accept/`, {
-				method: 'GET',
-			})
+			method: 'GET',
+		})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -198,8 +244,8 @@ export function fetchAdminLeaveApprove() {
 export function fetchAdminLeaveReject() {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/admin/leave/reject/`, {
-				method: 'GET',
-			})
+			method: 'GET',
+		})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -224,8 +270,8 @@ export function fetchAdminLeaveReject() {
 export function cancelRequestLeave(users, id, enumber) {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/admin/leave/cancel/${id}/${enumber}/`, {
-				method: 'PUT',
-			})
+			method: 'PUT',
+		})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -253,8 +299,8 @@ export function cancelRequestLeave(users, id, enumber) {
 export function downloadReport(from, to) {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/leave/reports?fromDate=${from}&toDate=${to}`, {
-				method: 'GET'
-			})
+			method: 'GET'
+		})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -284,8 +330,8 @@ export function downloadReport(from, to) {
 export function downloadReportTypeLeave(from, to, id) {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/leave/report/type?fromDate=${from}&toDate=${to}&typeID=${id}`, {
-				method: 'GET'
-			})
+			method: 'GET'
+		})
 			.then((resp) => resp.json())
 			.then(({
 				body,

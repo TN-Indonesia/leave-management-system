@@ -54,4 +54,10 @@ type IBaseAdmin interface {
 		typeLeaveID int64,
 		employeeNumber int64,
 	) error
+
+	// UpdateLeaveBalance
+	UpdateLeaveBalance(
+		leaveBalance []structLogic.UserTypeLeave,
+		UserID int64,
+	) error
 }

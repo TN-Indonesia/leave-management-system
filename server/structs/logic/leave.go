@@ -22,6 +22,7 @@ type UserSumarry struct {
 
 // UserTypeLeave ...
 type UserTypeLeave struct {
+	TypeID         string  `json:"type_id" orm:"column(type_id)"`
 	TypeName       string  `json:"type_name" orm:"column(type_name)"`
 	LeaveRemaining float64 `json:"leave_remaining" orm:"column(leave_remaining)"`
 }

@@ -506,3 +506,42 @@ func (u *Admin) UpdateUserTypeLeave(
 
 	return errRow
 }
+
+// UpdateLeaveBalance ...
+func (u *Admin) UpdateLeaveBalance(
+	leaveBalance []structLogic.UserTypeLeave,
+	UserID int64,
+) error {
+	var (
+		typeLeave structDB.UserTypeLeave
+		err       error
+	)
+	o := orm.NewOrm()
+
+	for _, val := range leaveBalance {
+		qb, err := orm.NewQueryBuilder("mysql")
+		if err != nil {
+			helpers.CheckErr("Query builder failed @UpdateLeaveBalance", err)
+			return err
+		}
+
+		qb.Update(typeLeave.TableName()).
+			Set(
+				"leave_remaining = ?",
+			).
+			Where("employee_number = ?").
+			And("type_leave_id = ?")
+		sql := qb.String()
+
+		res, err := o.Raw(sql, val.LeaveRemaining, UserID, val.TypeID).Exec()
+		if err != nil {
+			helpers.CheckErr("Error update @UpdateLeaveBalance", err)
+			return errors.New("Update request failed")
+		}
+
+		_, err = res.RowsAffected()
+		helpers.CheckErr("Error get rows affected @UpdateLeaveBalance", err)
+	}
+
+	return err
+}

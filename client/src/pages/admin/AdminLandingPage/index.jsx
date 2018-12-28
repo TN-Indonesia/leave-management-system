@@ -72,11 +72,11 @@ class AdminLandingPage extends Component {
             >
               <Button type="danger">Delete</Button>
             </Popconfirm>
-            {/* <Divider type="vertical" /> */}
-            {/* {record.role === "supervisor" || record.role === "employee" ? (
+            <Divider type="vertical" />
+            {record.role === "supervisor" || record.role === "employee" ? (
               <Button
                 onClick={() => {
-                  this.editBalance(record.employee_number);
+                  this.editBalance(record.id);
                 }}
                 type="primary"
               >
@@ -84,7 +84,7 @@ class AdminLandingPage extends Component {
               </Button>
             ) : (
               ""
-            )} */}
+            )}
           </span>
         )
       }

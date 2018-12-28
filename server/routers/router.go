@@ -38,7 +38,7 @@ func init() {
 		// get employee type leave
 		beego.NSRouter("/user/type-leave/:id:int",
 			&controllers.UserController{},
-			"get:GetUserTypeLeave",
+			"get:GetUserTypeLeave;post:PostUserTypeLeave",
 		),
 
 		// get type leave

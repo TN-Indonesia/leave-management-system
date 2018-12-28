@@ -381,6 +381,7 @@ func (u *User) GetUserTypeLeave(employeeNumber int64) (userTypeLeave []structLog
 	}
 
 	qb.Select(
+		dbType.TableName()+".id as type_id",
 		dbType.TableName()+".type_name",
 		dbUserTypeLeave.TableName()+".leave_remaining").
 		From(dbType.TableName()).
