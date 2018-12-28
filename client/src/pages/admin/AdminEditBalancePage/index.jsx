@@ -43,7 +43,7 @@ class AdminEditBalancePage extends Component {
     let employee_id = Number(
       this.props.history.location.pathname.split("/").pop()
     );
-    
+
     this.props.saveEditBalanceUser(this.props.balance, employee_id, url => {
       this.props.history.push(url);
     });
@@ -82,8 +82,7 @@ class AdminEditBalancePage extends Component {
       }
     };
 
-    let elements = [];
-    console.log(this.props.balance)
+    let elements = [];    
     {
       this.props.balance && this.props.balance.map((el, id) => {
         elements.push(
@@ -98,8 +97,8 @@ class AdminEditBalancePage extends Component {
           </FormItem>
         );
         return el
-      });
-    }
+      })
+    };
 
     if (this.props.loading) {
       return <Loading />;

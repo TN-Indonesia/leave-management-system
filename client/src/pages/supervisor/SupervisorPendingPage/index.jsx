@@ -83,8 +83,8 @@ class SupervisorPendingPage extends Component {
                       text.toLowerCase() === searchText.toLowerCase() ? (
                         <span key={i}>{text}</span>
                       ) : (
-                        text
-                      ) // eslint-disable-line
+                          text
+                        ) // eslint-disable-line
                   )}
               </span>
             )
@@ -117,8 +117,8 @@ class SupervisorPendingPage extends Component {
                         {text}
                       </span>
                     ) : (
-                      text
-                    ) // eslint-disable-line
+                        text
+                      ) // eslint-disable-line
                 )}
                 }
               </span>
@@ -430,7 +430,7 @@ class SupervisorPendingPage extends Component {
                 Reason : {this.state.user && this.state.user.reason} <br />
                 From : {this.state.user && this.state.user.date_from} <br />
                 To : {this.state.user && this.state.user.date_to} <br />
-                Half Day : {this.state.user && this.state.user.half_dates !== "{}" ? ( this.state.user.half_dates ):("")} <br />
+                Half Day : {this.state.user && this.state.user.half_dates !== "{}" ? this.state.user.half_dates.substring(1, this.state.user.half_dates.length - 1) : ""} <br />
                 Back On : {this.state.user && this.state.user.back_on} <br />
                 Total Leave : {this.state.user &&
                   this.state.user.total} day <br />

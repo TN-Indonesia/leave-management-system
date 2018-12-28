@@ -27,7 +27,6 @@ const { Content } = Layout;
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const Option = Select.Option;
-let publicHolidayArr = [];
 let totalDays;
 
 class LeaveRequestPage extends Component {
@@ -41,8 +40,8 @@ class LeaveRequestPage extends Component {
       endOpen: false,
       contactID: "+62",
       halfDate: [],
-      publicHolidayDates: null,
-      totalDays: null
+      publicHolidayDates: null,      
+      totalDays: null,      
     };
 
     this.handleOnChange = this.handleOnChange.bind(this);
@@ -75,19 +74,19 @@ class LeaveRequestPage extends Component {
     this.props.publicHolidayFetchData();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (publicHolidayArr) {
-      if (prevState.publicHolidayDates !== publicHolidayArr) {
-        this.setState({ publicHolidayDates: publicHolidayArr });
-      }
-    }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.publicHoliday !== this.props.publicHoliday) {
+      this.setState({ publicHolidayDates: nextProps.publicHoliday });
+    }    
+  }
 
+  componentDidUpdate(prevProps, prevState) {    
     if (totalDays) {
       if (prevState.totalDays !== totalDays) {
         this.setState({ totalDays: totalDays });
       }
     }
-  };
+  };  
 
   onChange = (field, value) => {
     this.setState({
@@ -119,7 +118,7 @@ class LeaveRequestPage extends Component {
         console.log("Received values of form: ", values);
       }
     });
-    this.props.SumbitLeaveSupervisor(this.props.leaveForm, url => {
+    this.props.AdminSumbitLeave(this.props.leaveForm, url => {
       this.props.history.push(url);
     });
   };
@@ -184,6 +183,32 @@ class LeaveRequestPage extends Component {
     this.props.formOnChange(employee_num);
   };
 
+  onChangeAddHalfDay(e) {
+    let hiddenDiv = document.getElementById("halfDay");
+    if (e.target.checked === true) {
+      hiddenDiv.style.display = "block";
+    } else {
+      hiddenDiv.style.display = "none";
+    }
+    console.log(`checked add hald day = ${e.target.checked}`);
+  }
+
+  onChangeIsHalfDay(e, value) {
+    console.log(`${e.target.value} checked is ${e.target.checked}`);
+
+    if (e.target.checked) {
+      this.setState(prevState => ({
+        halfDate: update(prevState.halfDate, { $push: [e.target.value] })
+      }));
+    } else {
+      let array = this.state.halfDate;
+      let index = array.indexOf(e.target.value);
+      this.setState(prevState => ({
+        halfDate: update(prevState.halfDate, { $splice: [[index, 1]] })
+      }));
+    }
+  }
+
   onStartChange = value => {
     if (value !== null) {
       const date = new Date(value._d),
@@ -225,6 +250,21 @@ class LeaveRequestPage extends Component {
         total: Number(this.state.totalDays)
       };
       this.props.formOnChange(totalDays);
+    }
+  };
+
+  onBackOn = value => {
+    if (value !== null) {
+      const date = new Date(value._d),
+        mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+        day = ("0" + date.getDate()).slice(-2);
+      let newDate = [day, mnth, date.getFullYear()].join("-");
+      let backOn = {
+        ...this.props.leaveForm,
+        back_on: newDate,
+        half_dates: this.state.halfDate
+      };
+      this.props.formOnChange(backOn);
     }
   };
 
@@ -319,87 +359,28 @@ class LeaveRequestPage extends Component {
     return dates;
   }
 
-  calcBusinessDays(dDate1, dDate2) { // input given as Date objects
-    let publicHolidayDates = this.state.publicHolidayDates;
-    let holidays = []
-    let iWeeks, iDateDiff, iAdjust = 0, i;
+  countTotalDay(startDate, endDate) {
+    let disabledDays = this.state.publicHolidayDates;
+    let start = new Date(startDate);
+    let end = new Date(endDate);
+    let weekend_count = 0;
+    for (let i = start.valueOf(); i <= end.valueOf(); i += 86400000) {
+      let temp = new Date(i);
+      let holiday;
+      for (let j = 0; j < disabledDays.length; j++) {
+        holiday = disabledDays[j];
+        if (!(temp < new Date(holiday)) && !(temp > new Date(holiday))) {
+          weekend_count++
+        }
+      }
 
-    if (dDate2 < dDate1) return -1; // error code if dates transposed
-    let iWeekday1 = dDate1.getDay(); // day of week
-    let iWeekday2 = dDate2.getDay();
-    iWeekday1 = (iWeekday1 == 0) ? 7 : iWeekday1; // change Sunday from 0 to 7
-    iWeekday2 = (iWeekday2 == 0) ? 7 : iWeekday2;
-    if ((iWeekday1 > 5) && (iWeekday2 > 5)) iAdjust = 1; // adjustment if both days on weekend
-    iWeekday1 = (iWeekday1 > 5) ? 5 : iWeekday1; // only count weekdays
-    iWeekday2 = (iWeekday2 > 5) ? 5 : iWeekday2;
-
-    // calculate differnece in weeks (1000mS * 60sec * 60min * 24hrs * 7 days = 604800000)
-    iWeeks = Math.floor((dDate2.getTime() - dDate1.getTime()) / 604800000)
-
-    if (iWeekday1 <= iWeekday2) {
-      iDateDiff = (iWeeks * 5) + (iWeekday2 - iWeekday1)
-    } else {
-      iDateDiff = ((iWeeks + 1) * 5) - (iWeekday1 - iWeekday2)
-    }
-
-    iDateDiff -= iAdjust; // take into account both days on weekend
-
-    if (publicHolidayDates) {
-      for (let i = 0; i < publicHolidayDates.length; i++) {
-        let date = publicHolidayDates[i].split("-")
-        holidays.push(new Date(date[0], date[1], date[2]))
+      if (temp.getDay() === 0 || temp.getDay() === 6) {
+        weekend_count++;
       }
     }
-
-    for (i = 0; i < holidays.length; i++) {
-      if (holidays[i] >= dDate1 && holidays[i] <= dDate2 && holidays[i].getDay() != 0 && holidays[i].getDay() != 6) {
-        iDateDiff--;
-      }
-    }
-
-    return (iDateDiff); // add 1 because dates are inclusive
+    let result = ((end - start) / 86400000 - weekend_count);
+    return result
   }
-
-  onChangeAddHalfDay(e) {
-    let hiddenDiv = document.getElementById("halfDay");
-    if (e.target.checked === true) {
-      hiddenDiv.style.display = "block";
-    } else {
-      hiddenDiv.style.display = "none";
-    }
-    console.log(`checked add hald day = ${e.target.checked}`);
-  }
-
-  onChangeIsHalfDay(e, value) {
-    console.log(`${e.target.value} checked is ${e.target.checked}`);
-
-    if (e.target.checked) {
-      this.setState(prevState => ({
-        halfDate: update(prevState.halfDate, { $push: [e.target.value] })
-      }));
-    } else {
-      let array = this.state.halfDate;
-      let index = array.indexOf(e.target.value);
-      this.setState(prevState => ({
-        halfDate: update(prevState.halfDate, { $splice: [[index, 1]] })
-      }));
-    }
-  }
-
-  onBackOn = value => {
-    if (value !== null) {
-      const date = new Date(value._d),
-        mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-        day = ("0" + date.getDate()).slice(-2);
-      let newDate = [day, mnth, date.getFullYear()].join("-");
-      let backOn = {
-        ...this.props.leaveForm,
-        back_on: newDate,
-        half_dates: this.state.halfDate
-      };
-      this.props.formOnChange(backOn);
-    }
-  };
 
   getWorkingDate(startWorkingDate) {
     let today = new Date();
@@ -482,36 +463,8 @@ class LeaveRequestPage extends Component {
     if (this.state.start !== null && this.state.end) {
       let dateStart = new Date(this.state.start);
       let dateEnd = new Date(this.state.end);
-      totalDays = this.calcBusinessDays(dateStart, dateEnd)
+      totalDays = this.countTotalDay(dateStart, dateEnd)
     }
-
-    function pad(num, size) {
-      let s = num + "";
-      while (s.length < size) s = "0" + s;
-      return s;
-    }
-
-    this.props.publicHoliday && this.props.publicHoliday.map((val, idx) => {
-      let dateStart = val.date_start.split("-").reverse().join("-")
-      let dateEnd = val.date_end.split("-").reverse().join("-")
-      publicHolidayArr.push(dateStart)
-
-      if (dateStart !== dateEnd) { //if date_start and date_end is different
-        let dateStartInt = parseInt(dateStart.substring(dateStart.length - 2, dateStart.length))
-        let dateEndInt = parseInt(dateEnd.substring(dateEnd.length - 2, dateEnd.length))
-        if (dateStartInt > dateEndInt) { //if date_start is higher than dateEnd, holiday dates is within 2 month
-          if (dateStartInt + 1 === dateEndInt) {
-            publicHolidayArr.push(dateEnd)
-          }
-        } else { //both date in the same month
-          let suffixMonthYear = dateStart.substring(0, dateStart.length - 2)
-          for (let j = dateStartInt + 1; j <= dateEndInt; j++) {
-            publicHolidayArr.push(suffixMonthYear + pad(j, 2))
-          }
-        }
-      }
-      return
-    })
 
     console.log("========>", this.state)
 
