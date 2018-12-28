@@ -1,4 +1,4 @@
-function MakeID() {
+export function MakeID() {
     let x = 10;
     let text = "";
     let possible =

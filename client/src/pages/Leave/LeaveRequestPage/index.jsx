@@ -27,6 +27,8 @@ const { Content } = Layout;
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const Option = Select.Option;
+let publicHolidayArr = [];
+let totalDays;
 
 class LeaveRequestPage extends Component {
   constructor(props) {
@@ -38,16 +40,21 @@ class LeaveRequestPage extends Component {
       end: null,
       endOpen: false,
       contactID: "+62",
-      halfDate: []
+      halfDate: [],
+      publicHolidayDates: null,
+      totalDays: null
     };
 
     this.handleOnChange = this.handleOnChange.bind(this);
-    this.handleChangeTypeOfLeave = this.handleChangeTypeOfLeave.bind(this);
-    this.disabledDateBack = this.disabledDateBack.bind(this);
     this.handleOnChangeNumber = this.handleOnChangeNumber.bind(this);
+    this.handleOnChangeEmployeeNumber = this.handleOnChangeEmployeeNumber.bind(this);
+    this.handleChangeTypeOfLeave = this.handleChangeTypeOfLeave.bind(this);
     this.handleOnChangeID = this.handleOnChangeID.bind(this);
     this.onChangeIsHalfDay = this.onChangeIsHalfDay.bind(this);
     this.onChangeAddHalfDay = this.onChangeAddHalfDay.bind(this);
+    this.disabledDate = this.disabledDate.bind(this);
+    this.disabledDateSick = this.disabledDateSick.bind(this);
+    this.disabledDateBack = this.disabledDateBack.bind(this);
   }
 
   componentWillMount() {
@@ -60,11 +67,27 @@ class LeaveRequestPage extends Component {
     ) {
       this.props.history.push("/");
     }
+  }
 
+  componentDidMount() {
     this.props.typeLeaveFetchData();
     this.props.userLoginFetchData();
     this.props.publicHolidayFetchData();
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (publicHolidayArr) {
+      if (prevState.publicHolidayDates !== publicHolidayArr) {
+        this.setState({ publicHolidayDates: publicHolidayArr });
+      }
+    }
+
+    if (totalDays) {
+      if (prevState.totalDays !== totalDays) {
+        this.setState({ totalDays: totalDays });
+      }
+    }
+  };
 
   onChange = (field, value) => {
     this.setState({
@@ -107,10 +130,6 @@ class LeaveRequestPage extends Component {
       [e.target.name]: e.target.value
     };
     this.props.formOnChange(newLeave);
-
-    this.props.form.setFieldsValue({
-      [e.target.name]: e.target.value
-    });
   };
 
   handleChangeTypeOfLeave(value) {
@@ -135,20 +154,34 @@ class LeaveRequestPage extends Component {
     console.log("selected=======>", value);
   }
 
-  disabledStartDate = startValue => {
-    const endValue = this.state.to;
-    if (!startValue || !endValue) {
-      return false;
+  handleStartOpenChange = open => {
+    if (!open) {
+      this.setState({ endOpen: true });
     }
-    return startValue.valueOf() > endValue.valueOf();
   };
 
-  disabledEndDate = endValue => {
-    const startValue = this.state.from;
-    if (!endValue || !startValue) {
-      return false;
-    }
-    return endValue.valueOf() <= startValue.valueOf();
+  handleEndOpenChange = open => {
+    this.setState({ endOpen: open });
+  };
+
+  handleOnChangeID = value => {
+    this.onChange("contactID", value);
+  };
+
+  handleOnChangeNumber = e => {
+    let newLeave = {
+      ...this.props.leaveForm,
+      contact_number: `${this.state.contactID}${e.target.value}`
+    };
+    this.props.formOnChange(newLeave);
+  };
+
+  handleOnChangeEmployeeNumber = e => {
+    let employee_num = {
+      ...this.props.leaveForm,
+      employee_number: Number(e.target.value)
+    };
+    this.props.formOnChange(employee_num);
   };
 
   onStartChange = value => {
@@ -185,37 +218,69 @@ class LeaveRequestPage extends Component {
       this.onChange("end", newEnd);
     }
     this.onChange("to", value);
+
+    if (this.state.totalDays !== null) {
+      let totalDays = {
+        ...this.props.leaveForm,
+        total: Number(this.state.totalDays)
+      };
+      this.props.formOnChange(totalDays);
+    }
+  };
+
+  disabledStartDate = startValue => {
+    const endValue = this.state.to;
+    if (!startValue || !endValue) {
+      return false;
+    }
+    return startValue.valueOf() > endValue.valueOf();
+  };
+
+  disabledEndDate = endValue => {
+    const publicHolidayDates = this.state.publicHolidayDates;
+    const startValue = this.state.from;
+    if (!endValue || !startValue) {
+      return false;
+    }
+
+    return endValue.valueOf() <= startValue.valueOf()
+      || publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(endValue).format("DDMMYYYY"))
+      || moment(endValue).format("dddd") === "Saturday"
+      || moment(endValue).format("dddd") === "Sunday";
   };
 
   disabledDate(current) {
-    return current && current < moment().startOf("day");
+    const publicHolidayDates = this.state.publicHolidayDates;
+    return current < moment().startOf("day")
+      || publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
+      || moment(current._d).format("dddd") === "Saturday"
+      || moment(current._d).format("dddd") === "Sunday";
   }
 
   disabledDateSick(current) {
+    const publicHolidayDates = this.state.publicHolidayDates;
     return (
       current &&
       current <
       moment()
         .subtract(7, "days")
         .startOf("day")
-    );
+    )
+      || publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
+      || moment(current._d).format("dddd") === "Saturday"
+      || moment(current._d).format("dddd") === "Sunday";
   }
 
   disabledDateBack(current) {
-    return this.state.to && this.state.to > current;
+    const publicHolidayDates = this.state.publicHolidayDates;
+    return this.state.to > current
+      || publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
+      || moment(current._d).format("dddd") === "Saturday"
+      || moment(current._d).format("dddd") === "Sunday";
   }
 
-  handleStartOpenChange = open => {
-    if (!open) {
-      this.setState({ endOpen: true });
-    }
-  };
-
-  handleEndOpenChange = open => {
-    this.setState({ endOpen: open });
-  };
-
   getDates(start, end) {
+    let publicHolidayDates = this.state.publicHolidayDates;
     let startDate = new Date(start);
     let endDate = new Date(end);
     let dates = [];
@@ -234,7 +299,65 @@ class LeaveRequestPage extends Component {
       }
       startDate.setDate(startDate.getDate() + 1);
     }
+
+    if (publicHolidayDates) {
+      let newDate = []
+      for (let i = 0; i < publicHolidayDates.length; i++) {
+        let date = publicHolidayDates[i].split("-").reverse().join("-")
+        newDate.push(date)
+      }
+
+      for (let i = 0; i < dates.length; i++) {
+        for (let j = 0; j < newDate.length; j++) {
+          if (dates[i] === newDate[j]) {
+            dates.splice(i, 1);
+          }
+        }
+      }
+    }
+
     return dates;
+  }
+
+  calcBusinessDays(dDate1, dDate2) { // input given as Date objects
+    let publicHolidayDates = this.state.publicHolidayDates;
+    let holidays = []
+    let iWeeks, iDateDiff, iAdjust = 0, i;
+
+    if (dDate2 < dDate1) return -1; // error code if dates transposed
+    let iWeekday1 = dDate1.getDay(); // day of week
+    let iWeekday2 = dDate2.getDay();
+    iWeekday1 = (iWeekday1 == 0) ? 7 : iWeekday1; // change Sunday from 0 to 7
+    iWeekday2 = (iWeekday2 == 0) ? 7 : iWeekday2;
+    if ((iWeekday1 > 5) && (iWeekday2 > 5)) iAdjust = 1; // adjustment if both days on weekend
+    iWeekday1 = (iWeekday1 > 5) ? 5 : iWeekday1; // only count weekdays
+    iWeekday2 = (iWeekday2 > 5) ? 5 : iWeekday2;
+
+    // calculate differnece in weeks (1000mS * 60sec * 60min * 24hrs * 7 days = 604800000)
+    iWeeks = Math.floor((dDate2.getTime() - dDate1.getTime()) / 604800000)
+
+    if (iWeekday1 <= iWeekday2) {
+      iDateDiff = (iWeeks * 5) + (iWeekday2 - iWeekday1)
+    } else {
+      iDateDiff = ((iWeeks + 1) * 5) - (iWeekday1 - iWeekday2)
+    }
+
+    iDateDiff -= iAdjust; // take into account both days on weekend
+
+    if (publicHolidayDates) {
+      for (let i = 0; i < publicHolidayDates.length; i++) {
+        let date = publicHolidayDates[i].split("-")
+        holidays.push(new Date(date[0], date[1], date[2]))
+      }
+    }
+
+    for (i = 0; i < holidays.length; i++) {
+      if (holidays[i] >= dDate1 && holidays[i] <= dDate2 && holidays[i].getDay() != 0 && holidays[i].getDay() != 6) {
+        iDateDiff--;
+      }
+    }
+
+    return (iDateDiff); // add 1 because dates are inclusive
   }
 
   onChangeAddHalfDay(e) {
@@ -251,9 +374,6 @@ class LeaveRequestPage extends Component {
     console.log(`${e.target.value} checked is ${e.target.checked}`);
 
     if (e.target.checked) {
-      // this.setState(prevState => ({
-      //   halfDate: [...prevState.halfDate, e.target.value]
-      // }));
       this.setState(prevState => ({
         halfDate: update(prevState.halfDate, { $push: [e.target.value] })
       }));
@@ -264,13 +384,6 @@ class LeaveRequestPage extends Component {
         halfDate: update(prevState.halfDate, { $splice: [[index, 1]] })
       }));
     }
-
-    // let halfDay = {
-    //   ...this.props.leaveForm,
-    //   half_dates: this.state.halfDate
-    // };
-    // this.props.formOnChange(halfDay);
-    // console.log("halfday==========>", halfDay);
   }
 
   onBackOn = value => {
@@ -286,18 +399,6 @@ class LeaveRequestPage extends Component {
       };
       this.props.formOnChange(backOn);
     }
-  };
-
-  handleOnChangeID = value => {
-    this.onChange("contactID", value);
-  };
-
-  handleOnChangeNumber = e => {
-    let newLeave = {
-      ...this.props.leaveForm,
-      contact_number: `${this.state.contactID}${e.target.value}`
-    };
-    this.props.formOnChange(newLeave);
   };
 
   getWorkingDate(startWorkingDate) {
@@ -329,6 +430,7 @@ class LeaveRequestPage extends Component {
     console.log("focus");
   }
 
+
   render() {
     const { from, to, start, end, endOpen } = this.state;
     const { getFieldDecorator } = this.props.form;
@@ -336,6 +438,7 @@ class LeaveRequestPage extends Component {
     const elements = [];
     const dateFormat = "DD-MM-YYYY";
     const role = localStorage.getItem("role");
+    // let result = this.getWorkingDate("02-05-2018")
 
     const formItemLayout = {
       labelCol: {
@@ -348,9 +451,6 @@ class LeaveRequestPage extends Component {
       },
       style: {}
     };
-
-    let result = this.getWorkingDate("02-05-2018")
-
     const formStyle = {
       width: "100%"
     };
@@ -379,10 +479,41 @@ class LeaveRequestPage extends Component {
       );
     }
 
-    const reactRoot = document.getElementById('Progress2');
-    // const restUrl = reactRoot.getAttribute('data-rest-url');
+    if (this.state.start !== null && this.state.end) {
+      let dateStart = new Date(this.state.start);
+      let dateEnd = new Date(this.state.end);
+      totalDays = this.calcBusinessDays(dateStart, dateEnd)
+    }
 
-    console.log("========>", reactRoot)
+    function pad(num, size) {
+      let s = num + "";
+      while (s.length < size) s = "0" + s;
+      return s;
+    }
+
+    this.props.publicHoliday && this.props.publicHoliday.map((val, idx) => {
+      let dateStart = val.date_start.split("-").reverse().join("-")
+      let dateEnd = val.date_end.split("-").reverse().join("-")
+      publicHolidayArr.push(dateStart)
+
+      if (dateStart !== dateEnd) { //if date_start and date_end is different
+        let dateStartInt = parseInt(dateStart.substring(dateStart.length - 2, dateStart.length))
+        let dateEndInt = parseInt(dateEnd.substring(dateEnd.length - 2, dateEnd.length))
+        if (dateStartInt > dateEndInt) { //if date_start is higher than dateEnd, holiday dates is within 2 month
+          if (dateStartInt + 1 === dateEndInt) {
+            publicHolidayArr.push(dateEnd)
+          }
+        } else { //both date in the same month
+          let suffixMonthYear = dateStart.substring(0, dateStart.length - 2)
+          for (let j = dateStartInt + 1; j <= dateEndInt; j++) {
+            publicHolidayArr.push(suffixMonthYear + pad(j, 2))
+          }
+        }
+      }
+      return
+    })
+
+    console.log("========>", this.state)
 
     return (
       <Layout>
@@ -435,15 +566,9 @@ class LeaveRequestPage extends Component {
                     onBlur={this.handleBlur}
                     style={formStyle}
                   >
-                    {result < 365 ?
-                      this.props.typeLeave.map(d => (
-                        <Option key={d.id} value={d.id}>{d.type_name}</Option>
-                      ))
-                      :
-                      this.props.typeLeave.map(d => (
-                        <Option key={d.id} value={d.id}>{d.type_name}</Option>
-                      ))
-                    }
+                    {this.props.typeLeave.map(d => (
+                      <Option key={d.id} value={d.id}>{d.type_name}</Option>
+                    ))}
 
                   </Select>
                 )}

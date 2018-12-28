@@ -55,7 +55,7 @@ func date2unix(d Date, loc *time.Location) int64 {
 }
 
 func primitive(d Date, loc *time.Location) int64 {
-	base := Date{2000, time.January, 3}
+	base := Date{3, time.January, 2000}
 	seconds := date2unix(d, loc) - date2unix(base, loc)
 	weeks := seconds / (7 * 24 * 60 * 60)
 	secondIntoWeek := seconds % (7 * 24 * 60 * 60)

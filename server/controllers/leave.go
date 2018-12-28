@@ -48,10 +48,10 @@ func (c *LeaveController) PostLeaveRequestEmployee() {
 		return
 	}
 
-	totalDay := float64(helpers.GetTotalDay(req.DateFrom, req.DateTo))
+	// totalDay := float64(helpers.GetTotalDay(req.DateFrom, req.DateTo))
 	reqHalfDay := float64(len(req.HalfDates))
 	valueHalfDay := float64(0.5)
-	result := helpers.Multiply(totalDay, reqHalfDay, valueHalfDay)
+	result := helpers.Multiply(req.Total, reqHalfDay, valueHalfDay)
 
 	resGet, errGet := logicUser.GetUserLeaveRemaining(req.TypeLeaveID, employeeNumber)
 	helpers.CheckErr("Error get leave balance @PostLeaveRequestEmployee - controller", errGet)
@@ -145,10 +145,9 @@ func (c *LeaveController) PostLeaveRequestSupervisor() {
 		return
 	}
 
-	totalDay := float64(helpers.GetTotalDay(req.DateFrom, req.DateTo))
 	reqHalfDay := float64(len(req.HalfDates))
 	valueHalfDay := float64(0.5)
-	result := helpers.Multiply(totalDay, reqHalfDay, valueHalfDay)
+	result := helpers.Multiply(req.Total, reqHalfDay, valueHalfDay)
 
 	resGet, errGet := logicUser.GetUserLeaveRemaining(req.TypeLeaveID, employeeNumber)
 	helpers.CheckErr("Error get leave balance @PostLeaveRequestSupervisor - controller", errGet)
@@ -234,10 +233,9 @@ func (c *LeaveController) PostLeaveRequestAdmin() {
 		return
 	}
 
-	totalDay := float64(helpers.GetTotalDay(req.DateFrom, req.DateTo))
 	reqHalfDay := float64(len(req.HalfDates))
 	valueHalfDay := float64(0.5)
-	result := helpers.Multiply(totalDay, reqHalfDay, valueHalfDay)
+	result := helpers.Multiply(req.Total, reqHalfDay, valueHalfDay)
 
 	leave := structAPI.CreateLeaveRequest{
 		EmployeeNumber: req.EmployeeNumber,
