@@ -10,7 +10,7 @@ import {
 import { typeLeaveFetchData } from "../../../store/Actions/typeLeaveAction";
 import { userLoginFetchData } from "../../../store/Actions/userLoginAction";
 import { publicHolidayFetchData } from "../../../store/Actions/publicHolidayAction";
-import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
+import HeaderAdmin from "../../menu/HeaderAdmin";
 import Footer from "../../../components/Footer";
 import "./style.css";
 import {
@@ -28,7 +28,7 @@ const { TextArea } = Input;
 const Option = Select.Option;
 let totalDays;
 
-class LeaveRequestPage extends Component {
+class AdminLeaveRequestPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,6 +64,12 @@ class LeaveRequestPage extends Component {
     ) {
       this.props.history.push("/");
     }
+  }
+
+  componentDidMount() {
+    this.props.typeLeaveFetchData();
+    this.props.userLoginFetchData();
+    this.props.publicHolidayFetchData();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -734,7 +740,7 @@ const mapStateToProps = state => ({
   publicHoliday: state.fetchPublicHolidayReducer.publicHoliday,
 });
 
-const WrappedLeaveForm = Form.create()(LeaveRequestPage);
+const WrappedAdminLeaveRequestPage = Form.create()(AdminLeaveRequestPage);
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
@@ -751,4 +757,4 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(WrappedLeaveForm);
+)(WrappedAdminLeaveRequestPage);
