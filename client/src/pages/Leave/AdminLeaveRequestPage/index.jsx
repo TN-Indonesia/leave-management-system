@@ -692,11 +692,11 @@ class AdminLeaveRequestPage extends Component {
 
               <FormItem {...formItemLayout} label="Notes">
                 {getFieldDecorator("notes", {
-                  rules: [
-                    {
-                      required: true
-                    }
-                  ]
+                  // rules: [
+                  //   {
+                  //     required: true
+                  //   }
+                  // ]
                 })(
                   <TextArea
                     type="text"
