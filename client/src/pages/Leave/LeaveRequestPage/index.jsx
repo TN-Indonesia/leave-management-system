@@ -118,7 +118,7 @@ class LeaveRequestPage extends Component {
         console.log("Received values of form: ", values);
       }
     });
-    this.props.AdminSumbitLeave(this.props.leaveForm, url => {
+    this.props.SumbitLeaveSupervisor(this.props.leaveForm, url => {
       this.props.history.push(url);
     });
   };
