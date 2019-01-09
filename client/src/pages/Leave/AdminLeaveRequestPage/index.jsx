@@ -236,7 +236,13 @@ class AdminLeaveRequestPage extends Component {
 
   disabledDate(current) {
     const publicHolidayDates = this.state.publicHolidayDates;
-    return current < moment().startOf("day")
+    return (
+      current &&
+      current <
+      moment()
+        .subtract(14, "days")
+        .startOf("day")
+    )
       || publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
       || moment(current._d).format("dddd") === "Saturday"
       || moment(current._d).format("dddd") === "Sunday";
@@ -248,7 +254,7 @@ class AdminLeaveRequestPage extends Component {
       current &&
       current <
       moment()
-        .subtract(7, "days")
+        .subtract(14, "days")
         .startOf("day")
     )
       || publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
@@ -692,11 +698,11 @@ class AdminLeaveRequestPage extends Component {
 
               <FormItem {...formItemLayout} label="Notes">
                 {getFieldDecorator("notes", {
-                  rules: [
-                    {
-                      required: true
-                    }
-                  ]
+                  // rules: [
+                  //   {
+                  //     required: true
+                  //   }
+                  // ]
                 })(
                   <TextArea
                     type="text"
