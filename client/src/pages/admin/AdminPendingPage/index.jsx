@@ -9,7 +9,9 @@ import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
 import Loading from "../../../components/Loading";
 import Footer from "../../../components/Footer";
 import "./style.css";
-import { Layout, Table, Modal, Button, Input, Icon } from "antd";
+import {
+  Layout, Table, Modal, Button, Input, Icon, Divider, Popconfirm, message
+} from "antd";
 const { Content } = Layout;
 let data;
 
