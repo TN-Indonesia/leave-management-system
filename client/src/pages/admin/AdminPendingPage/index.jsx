@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { fetchAdminLeavePending } from "../../../store/Actions/adminActions";
+import {
+  employeeDeleteRequest
+} from "../../../store/Actions/employeeAction";
 import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
 import Loading from "../../../components/Loading";
 import Footer from "../../../components/Footer";
@@ -150,6 +153,10 @@ class AdminPendingPage extends Component {
     console.log(current, pageSize);
   }
 
+  employeeDeleteRequest = (leaves, id) => {
+    this.props.employeeDeleteRequest(leaves, id);
+  };
+
   render() {
     const { visible, loading } = this.state;
     const columns = [
@@ -270,6 +277,19 @@ class AdminPendingPage extends Component {
             <Button type="primary" onClick={() => this.showDetail(record)}>
               Detail
             </Button>
+            <Divider type="vertical" />
+            <Popconfirm
+              placement="top"
+              title={"Are you sure delete this leave request?"}
+              onConfirm={() => {
+                this.employeeDeleteRequest(this.props.leave, record.id);
+                message.success("Leave request has been delete!");
+              }}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="danger">Delete</Button>
+            </Popconfirm>
           </span>
         )
       }
@@ -333,7 +353,7 @@ class AdminPendingPage extends Component {
                 Reason : {this.state.user && this.state.user.reason} <br />
                 From : {this.state.user && this.state.user.date_from} <br />
                 To : {this.state.user && this.state.user.date_to} <br />
-                Half Day : {this.state.user && this.state.user.half_dates !== "{}" ? this.state.user.half_dates.substring(1, this.state.user.half_dates.length - 1) : ""} <br/>
+                Half Day : {this.state.user && this.state.user.half_dates !== "{}" ? this.state.user.half_dates.substring(1, this.state.user.half_dates.length - 1) : ""} <br />
                 Back On : {this.state.user && this.state.user.back_on} <br />
                 Total Leave : {this.state.user &&
                   this.state.user.total} day <br />
@@ -343,7 +363,7 @@ class AdminPendingPage extends Component {
                 {this.state.user && this.state.user.contact_address} <br />
                 Contact Number :{" "}
                 {this.state.user && this.state.user.contact_number} <br />
-                Status : {this.state.user && this.state.user.status} <br/>
+                Status : {this.state.user && this.state.user.status} <br />
                 Notes : {this.state.user && this.state.user.notes !== "" ? (this.state.user.notes) : ("")}
               </div>
             </Modal>
@@ -363,7 +383,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      fetchAdminLeavePending
+      fetchAdminLeavePending,
+      employeeDeleteRequest
     },
     dispatch
   );
