@@ -53,6 +53,7 @@ func (l *LeaveRequest) CreateLeaveRequestEmployee(
 		"back_on",
 		"total",
 		"contact_address",
+		"contact_number",
 		"status",
 		"notes").
 		Values("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?")
