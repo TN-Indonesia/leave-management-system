@@ -460,7 +460,7 @@ class LeaveRequestPage extends Component {
       );
     }
 
-    if (this.state.start !== null && this.state.end) {
+    if (this.state.start !== null && this.state.end !== null) {
       let dateStart = new Date(this.state.start);
       let dateEnd = new Date(this.state.end);
       totalDays = this.countTotalDay(dateStart, dateEnd)
