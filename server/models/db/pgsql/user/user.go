@@ -421,6 +421,7 @@ func (u *User) GetSumarry(employeeNumber int64) (sumarry []structLogic.UserSumar
 		On(dbTypeLeave.TableName() + ".id" + " = " + dbLeave.TableName() + ".type_leave_id").
 		Where(dbLeave.TableName() + `.employee_number = ? `).
 		And(dbLeave.TableName() + `.status = ?`).
+                And(`strftime('%Y',`+dbLeave.TableName()+`.created_at) = strftime('%Y','now') `).
 		GroupBy(dbTypeLeave.TableName() + `.type_name`)
 	sql := qb.String()
 
