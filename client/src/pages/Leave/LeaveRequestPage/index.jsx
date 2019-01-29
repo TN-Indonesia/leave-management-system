@@ -40,8 +40,8 @@ class LeaveRequestPage extends Component {
       endOpen: false,
       contactID: "+62",
       halfDate: [],
-      publicHolidayDates: null,      
-      totalDays: null,      
+      publicHolidayDates: null,
+      totalDays: null,
     };
 
     this.handleOnChange = this.handleOnChange.bind(this);
@@ -77,16 +77,16 @@ class LeaveRequestPage extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.publicHoliday !== this.props.publicHoliday) {
       this.setState({ publicHolidayDates: nextProps.publicHoliday });
-    }    
+    }
   }
 
-  componentDidUpdate(prevProps, prevState) {    
+  componentDidUpdate(prevProps, prevState) {
     if (totalDays) {
       if (prevState.totalDays !== totalDays) {
         this.setState({ totalDays: totalDays });
       }
     }
-  };  
+  };
 
   onChange = (field, value) => {
     this.setState({
@@ -97,6 +97,14 @@ class LeaveRequestPage extends Component {
   handleOnChangeNumber = (value, field) => {
     this.onChange(field, Number(value));
     console.log("input=======>", value);
+  };
+
+  handleOnChange = e => {
+    let newLeave = {
+      ...this.props.leaveForm,
+      [e.target.name]: e.target.value
+    };
+    this.props.formOnChange(newLeave);
   };
 
   handleSubmit = e => {
@@ -121,14 +129,6 @@ class LeaveRequestPage extends Component {
     this.props.SumbitLeaveSupervisor(this.props.leaveForm, url => {
       this.props.history.push(url);
     });
-  };
-
-  handleOnChange = e => {
-    let newLeave = {
-      ...this.props.leaveForm,
-      [e.target.name]: e.target.value
-    };
-    this.props.formOnChange(newLeave);
   };
 
   handleChangeTypeOfLeave(value) {
@@ -382,26 +382,7 @@ class LeaveRequestPage extends Component {
     return result
   }
 
-  getWorkingDate(startWorkingDate) {
-    let today = new Date();
-    let dd = today.getDate();
-    let mm = today.getMonth() + 1;
-    let yyyy = today.getFullYear();
 
-    if (dd < 10) {
-      dd = '0' + dd
-    }
-    if (mm < 10) {
-      mm = '0' + mm
-    }
-
-    let dateNow = `${dd}-${mm}-${yyyy}`
-    let start = moment(`${startWorkingDate}`, "DD-MM-YYYY");
-    let end = moment(`${dateNow}`, "DD-MM-YYYY");
-    let diffrent = end.diff(start, 'days')
-
-    return diffrent
-  }
 
   handleBlur() {
     console.log("blur");
@@ -419,7 +400,6 @@ class LeaveRequestPage extends Component {
     const elements = [];
     const dateFormat = "DD-MM-YYYY";
     const role = localStorage.getItem("role");
-    // let result = this.getWorkingDate("02-05-2018")
 
     const formItemLayout = {
       labelCol: {

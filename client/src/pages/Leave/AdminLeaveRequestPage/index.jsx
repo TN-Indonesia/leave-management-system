@@ -374,27 +374,6 @@ class AdminLeaveRequestPage extends Component {
     }
   };
 
-  getWorkingDate(startWorkingDate) {
-    let today = new Date();
-    let dd = today.getDate();
-    let mm = today.getMonth() + 1;
-    let yyyy = today.getFullYear();
-
-    if (dd < 10) {
-      dd = '0' + dd
-    }
-    if (mm < 10) {
-      mm = '0' + mm
-    }
-
-    let dateNow = `${dd}-${mm}-${yyyy}`
-    let start = moment(`${startWorkingDate}`, "DD-MM-YYYY");
-    let end = moment(`${dateNow}`, "DD-MM-YYYY");
-    let diffrent = end.diff(start, 'days')
-
-    return diffrent
-  }
-
   handleBlur() {
     console.log("blur");
   }
@@ -409,7 +388,6 @@ class AdminLeaveRequestPage extends Component {
     const dates = this.getDates(start, end);
     const elements = [];
     const dateFormat = "DD-MM-YYYY";
-    // const result = this.getWorkingDate("02-05-2018")
 
     const formItemLayout = {
       labelCol: {
