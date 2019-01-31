@@ -163,7 +163,7 @@ class AdminPendingPage extends Component {
         title: "Request ID",
         dataIndex: "id",
         key: "id",
-        width: 90,
+        width: 100,
         filterDropdown: (
           <div className="custom-filter-dropdown-id">
             <Input
@@ -205,7 +205,7 @@ class AdminPendingPage extends Component {
         title: "Name",
         dataIndex: "name",
         key: "name",
-        width: 150,
+        width: 200,
         filterDropdown: (
           <div className="custom-filter-dropdown-name">
             <Input
@@ -270,7 +270,7 @@ class AdminPendingPage extends Component {
       {
         title: "Action",
         key: "action",
-        width: 100,
+        width: 200,
         render: (value, record) => (
           <span>
             <Button type="primary" onClick={() => this.showDetail(record)}>
@@ -309,7 +309,7 @@ class AdminPendingPage extends Component {
               paddingBottom: "606px"
             }}
           >
-            <div style={{ padding: 20, background: "#fff" }}>
+            <div style={{ padding: "20px", backgroundColor: "#fff", width: "1700px" }}>
               <Table
                 columns={columns}
                 dataSource={this.state.data}
@@ -319,8 +319,8 @@ class AdminPendingPage extends Component {
                   className: "my-pagination",
                   defaultCurrent: 1,
                   defaultPageSize: 5,
-                  total: 50,
-                  showSizeChanger: this.onShowSizeChange
+                  total: `${this.state.data && this.state.data.length}`,
+                  // showSizeChanger: this.onShowSizeChange
                 }}
               />
             </div>

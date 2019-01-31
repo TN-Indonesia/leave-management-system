@@ -4,10 +4,10 @@ import { connect } from "react-redux";
 import { adminGetUsers, adminDeleteUser } from "../../../store/Actions/adminActions";
 import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
 import Loading from "../../../components/Loading";
-import Footer from "../../../components/Footer";
+// import Footer from "../../../components/Footer";
 import "./style.css";
 import { Layout, Table, Button, Divider, Popconfirm, message } from "antd";
-const { Content } = Layout;
+const { Content, Footer } = Layout;
 
 class AdminLandingPage extends Component {
   constructor(props) {
@@ -46,7 +46,7 @@ class AdminLandingPage extends Component {
       {
         title: "Action",
         key: "action",
-        width: "15%",
+        width: "25%",
         render: (text, record) => (
           //  (record.employee_number))
           <span>
@@ -83,8 +83,8 @@ class AdminLandingPage extends Component {
                 Edit Leave Balance
               </Button>
             ) : (
-              ""
-            )}
+                ""
+              )}
           </span>
         )
       }
@@ -128,35 +128,41 @@ class AdminLandingPage extends Component {
       return <Loading />;
     } else {
       return (
-        <Layout>
-          <HeaderAdmin />
-
-          <Content
-            className="container"
-            style={{
-              display: "flex",
-              margin: "20px 16px 0",
-              justifyContent: "center",
-              paddingBottom: "356px"
-            }}
-          >
-            <div style={{ padding: 20, background: "#fff" }}>
-              <Table
-                columns={this.columns}
-                dataSource={this.props.users}
-                rowKey={record => record.id}
-                pagination={{
-                  className: "my-pagination",
-                  defaultCurrent: 1,
-                  defaultPageSize: 5,
-                  total: 50,
-                  showSizeChanger: this.onShowSizeChange
-                }}
-              />
-            </div>
-          </Content>
-          <Footer />
-        </Layout>
+        <div>
+          <Layout className="layout" >
+            <HeaderAdmin />
+            <Content
+              className="container"
+              style={{
+                display: "flex",
+                margin: "20px 15px 0",
+                justifyContent: "center",
+                paddingBottom: 70,
+              }}
+            >
+              <div style={{ padding: "20px", backgroundColor: "#fff", width: "1700px" }}>
+                <Table
+                  columns={this.columns}
+                  dataSource={this.props.users}
+                  rowKey={record => record.id}
+                  pagination={{
+                    className: "my-pagination",
+                    defaultCurrent: 1,
+                    defaultPageSize: 10,
+                    total: `${this.props.users && this.props.users.length}`,
+                    // showSizeChanger: this.onShowSizeChange
+                  }}
+                />
+              </div>
+            </Content>
+            <Footer className="App-footer-s">
+              <p>
+                <a href="http://www.tnis.com">PT. TNIS Service Indonesia</a> &copy; 2018. All
+                Right Reserved.
+              </p>
+            </Footer>
+          </Layout>
+        </div>
       );
     }
   }

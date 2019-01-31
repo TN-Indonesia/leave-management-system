@@ -403,7 +403,7 @@ class AdminApprovePage extends Component {
               paddingBottom: "186px"
             }}
           >
-            <div style={{ padding: 20, background: "#fff" }}>
+          <div style={{ padding: "20px", backgroundColor: "#fff" }}>
               <Form
                 id="myForm"
                 layout="inline"
@@ -492,8 +492,8 @@ class AdminApprovePage extends Component {
                   className: "my-pagination",
                   defaultCurrent: 1,
                   defaultPageSize: 5,
-                  total: 50,
-                  showSizeChanger: this.onShowSizeChange
+                  total: `${this.state.data && this.state.data.length}`,
+                  // showSizeChanger: this.onShowSizeChange
                 }}
               />
             </div>
