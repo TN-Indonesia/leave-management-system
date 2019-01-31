@@ -43,11 +43,13 @@
 
 .Login-footer {
   background-color: #4abdcf;
-  height: 100px;  
-  color: white;
-  justify-content: center;
-  align-items: center;
-  align-self: auto;
+  height: 100px;    
+  display: block;
+  position: absolute;
+  clear: both;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 
 .Login-footer p {
