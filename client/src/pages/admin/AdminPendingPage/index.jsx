@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { fetchAdminLeavePending } from "../../../store/Actions/adminActions";
-import {
-  employeeDeleteRequest
-} from "../../../store/Actions/employeeAction";
+import { fetchAdminLeavePending, deleteRequestLeave } from "../../../store/Actions/adminActions";
 import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
 import Loading from "../../../components/Loading";
 import Footer from "../../../components/Footer";
@@ -155,8 +152,8 @@ class AdminPendingPage extends Component {
     console.log(current, pageSize);
   }
 
-  employeeDeleteRequest = (leaves, id) => {
-    this.props.employeeDeleteRequest(leaves, id);
+  deleteRequestLeave = (leaves, id) => {
+    this.props.deleteRequestLeave(leaves, id);
   };
 
   render() {
@@ -284,7 +281,7 @@ class AdminPendingPage extends Component {
               placement="top"
               title={"Are you sure delete this leave request?"}
               onConfirm={() => {
-                this.employeeDeleteRequest(this.props.leave, record.id);
+                this.deleteRequestLeave(this.props.leave, record.id);
                 message.success("Leave request has been delete!");
               }}
               okText="Yes"
@@ -386,7 +383,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       fetchAdminLeavePending,
-      employeeDeleteRequest
+      deleteRequestLeave
     },
     dispatch
   );

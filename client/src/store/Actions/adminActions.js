@@ -5,6 +5,7 @@ import {
 	FETCH_LEAVE_PENDING,
 	FETCH_LEAVE_APPROVE,
 	FETCH_LEAVE_REJECT,
+	DELETE_REQUEST_PENDING,
 	CANCEL_LEAVE_REQUEST,
 	FETCH_LEAVE_BALANCES,
 	EDIT_BALANCES,
@@ -48,6 +49,13 @@ function rejectFetch(payload) {
 	}
 }
 
+function deleteRequestPending(payload) {
+	return {
+		type: DELETE_REQUEST_PENDING,
+		payload: payload
+	}
+}
+
 function cancelRequest(payload) {
 	return {
 		type: CANCEL_LEAVE_REQUEST,
@@ -74,7 +82,7 @@ export function handleEditBalance(newBalance) {
 		let payload = {
 			loading: false,
 			balances: newBalance
-			
+
 
 		}
 		dispatch(balanceEditing(payload))
@@ -84,8 +92,8 @@ export function handleEditBalance(newBalance) {
 export function adminGetUsers() {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/admin/user/`, {
-			method: 'GET',
-		})
+				method: 'GET',
+			})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -110,8 +118,8 @@ export function adminGetUsers() {
 export function adminEditLeaveBalances(employeeNumber) {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/user/type-leave/${employeeNumber}`, {
-			method: 'GET',
-		})
+				method: 'GET',
+			})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -136,9 +144,9 @@ export function adminEditLeaveBalances(employeeNumber) {
 export function saveEditBalanceUser(payload, employeeNumber, pusher) {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/user/type-leave/${employeeNumber}`, {
-			method: 'POST',
-			body: JSON.stringify(payload)
-		})
+				method: 'POST',
+				body: JSON.stringify(payload)
+			})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -162,8 +170,8 @@ export function saveEditBalanceUser(payload, employeeNumber, pusher) {
 export function adminDeleteUser(users, id) {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/admin/user/${id}`, {
-			method: 'DELETE',
-		})
+				method: 'DELETE',
+			})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -191,8 +199,8 @@ export function adminDeleteUser(users, id) {
 export function fetchAdminLeavePending() {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/admin/leave/pending/`, {
-			method: 'GET',
-		})
+				method: 'GET',
+			})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -217,8 +225,8 @@ export function fetchAdminLeavePending() {
 export function fetchAdminLeaveApprove() {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/admin/leave/accept/`, {
-			method: 'GET',
-		})
+				method: 'GET',
+			})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -244,8 +252,8 @@ export function fetchAdminLeaveApprove() {
 export function fetchAdminLeaveReject() {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/admin/leave/reject/`, {
-			method: 'GET',
-		})
+				method: 'GET',
+			})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -267,11 +275,40 @@ export function fetchAdminLeaveReject() {
 	}
 }
 
+export function deleteRequestLeave(leaves, id) {
+	return (dispatch) => {
+		fetch(`${ROOT_API}/api/employee/leave/${id}`, {
+				method: 'DELETE',
+			})
+			.then((resp) => resp.json())
+			.then(({
+				body,
+				error
+			}) => {
+				let newUserlist = leaves.filter(el => el.id !== id)
+				let payload = {
+					loading: false,
+					leaves: [
+						...newUserlist
+					]
+				}
+				dispatch(deleteRequestPending(payload))
+
+				if (error !== null) {
+					console.error("error not null @deleteRequestLeave: ", error)
+				}
+			})
+			.catch(error => {
+				console.error("error @deleteRequestLeave: ", error)
+			})
+	}
+}
+
 export function cancelRequestLeave(users, id, enumber) {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/admin/leave/cancel/${id}/${enumber}/`, {
-			method: 'PUT',
-		})
+				method: 'PUT',
+			})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -299,8 +336,8 @@ export function cancelRequestLeave(users, id, enumber) {
 export function downloadReport(from, to) {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/leave/reports?fromDate=${from}&toDate=${to}`, {
-			method: 'GET'
-		})
+				method: 'GET'
+			})
 			.then((resp) => resp.json())
 			.then(({
 				body,
@@ -330,8 +367,8 @@ export function downloadReport(from, to) {
 export function downloadReportTypeLeave(from, to, id) {
 	return (dispatch) => {
 		fetch(`${ROOT_API}/api/leave/report/type?fromDate=${from}&toDate=${to}&typeID=${id}`, {
-			method: 'GET'
-		})
+				method: 'GET'
+			})
 			.then((resp) => resp.json())
 			.then(({
 				body,
