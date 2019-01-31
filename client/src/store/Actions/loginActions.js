@@ -1,14 +1,11 @@
 // import jwtDecode from 'jwt-decode';
+import swal from 'sweetalert';
 import {
 	ROOT_API,
 	LOGIN_FORM_ONCHANGE,
 	CLEAR_FIELD
 } from "./types"
 
-import {
-	message
-} from "antd";
-import swal from 'sweetalert';
 
 export function handleFormInput(payload) {
 	return {
