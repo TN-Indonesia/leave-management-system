@@ -9,7 +9,7 @@ const leaveState = {
 	date_from: '',
 	date_to: '',
 	half_dates: [],
-	total: null,
+	total: 0,
 	back_on: null,
 	contact_address: '',
 	contact_number: '',

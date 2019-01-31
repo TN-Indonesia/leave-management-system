@@ -8,7 +8,7 @@ import {
 import {
 	message
 } from "antd";
-
+import swal from 'sweetalert';
 
 export function handleFormInput(payload) {
 	return {
@@ -35,44 +35,74 @@ export function submitLogin(payload, pusher) {
 				error
 			}) => {
 				if (error !== null) {
-					message.error(error);
+					swal({
+						title: "Sorry",
+						text: `${error}`,
+						icon: "error",
+						button: false,
+					});
 				} else {
 					const token = body['Token']
 					const id = body['ID']
 					const role = body['Role']
-										
+
 					if (role === 'admin') {
 						localStorage.setItem('token', token)
 						localStorage.setItem('role', role)
 						localStorage.setItem('id', id)
 						pusher('/admin')
 						dispatch(clearField())
-						message.success('Login success!')
+						swal({
+							title: "Welcome",
+							text: "Login success!",
+							icon: "success",
+							button: false,
+						});
 					} else if (role === 'director') {
 						localStorage.setItem('token', token)
 						localStorage.setItem('role', role)
 						localStorage.setItem('id', id)
 						pusher('/director')
 						dispatch(clearField())
-						message.success('Login success!')
+						swal({
+							title: "Welcome",
+							text: "Login success!",
+							icon: "success",
+							button: false,
+						});
 					} else if (role === 'supervisor') {
 						localStorage.setItem('token', token)
 						localStorage.setItem('role', role)
 						localStorage.setItem('id', id)
 						pusher('/supervisor')
 						dispatch(clearField())
-						message.success('Login success!')
+						swal({
+							title: "Welcome",
+							text: "Login success!",
+							icon: "success",
+							button: false,
+						});
 					} else if (role === 'employee') {
 						localStorage.setItem('token', token)
 						localStorage.setItem('role', role)
 						localStorage.setItem('id', id)
 						pusher('/employee')
 						dispatch(clearField())
-						message.success('Login success!')
+						swal({
+							title: "Welcome",
+							text: "Login success!",
+							icon: "success",
+							button: false,
+						});
 					} else if (role !== 'admin' || role !== 'director' || role !== 'supervisor' || role !== 'employee') {
 						pusher('/')
 						dispatch(clearField())
-						message.error('Login failed!');
+						swal({
+							title: "Sorry",
+							text: `Login failed!`,
+							icon: "error",
+							button: false,
+						});
 					}
 				}
 			})

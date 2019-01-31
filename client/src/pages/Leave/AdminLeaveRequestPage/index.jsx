@@ -203,14 +203,6 @@ class AdminLeaveRequestPage extends Component {
       this.onChange("end", newEnd);
     }
     this.onChange("to", value);
-
-    if (this.state.totalDays !== null) {
-      let totalDays = {
-        ...this.props.leaveForm,
-        total: Number(this.state.totalDays)
-      };
-      this.props.formOnChange(totalDays);
-    }
   };
 
   disabledStartDate = startValue => {
@@ -329,7 +321,7 @@ class AdminLeaveRequestPage extends Component {
         weekend_count++;
       }
     }
-    let result = ((end - start) / 86400000 - weekend_count);
+    let result = ((end - start) / 86400000 - weekend_count) + 1;
     return result
   }
 
@@ -368,7 +360,8 @@ class AdminLeaveRequestPage extends Component {
       let backOn = {
         ...this.props.leaveForm,
         back_on: newDate,
-        half_dates: this.state.halfDate
+        half_dates: this.state.halfDate,
+        total: Number(this.state.totalDays)
       };
       this.props.formOnChange(backOn);
     }

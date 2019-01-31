@@ -41,7 +41,7 @@ class LeaveRequestPage extends Component {
       contactID: "+62",
       halfDate: [],
       publicHolidayDates: null,
-      totalDays: null,
+      totalDays: 0,
     };
 
     this.handleOnChange = this.handleOnChange.bind(this);
@@ -237,20 +237,13 @@ class LeaveRequestPage extends Component {
       let newEnd = [mnth, day, date.getFullYear()].join("-");
       let dateTo = {
         ...this.props.leaveForm,
-        date_to: newDate
+        date_to: newDate,
+
       };
       this.props.formOnChange(dateTo);
       this.onChange("end", newEnd);
     }
     this.onChange("to", value);
-
-    if (this.state.totalDays !== null) {
-      let totalDays = {
-        ...this.props.leaveForm,
-        total: Number(this.state.totalDays)
-      };
-      this.props.formOnChange(totalDays);
-    }
   };
 
   onBackOn = value => {
@@ -262,7 +255,8 @@ class LeaveRequestPage extends Component {
       let backOn = {
         ...this.props.leaveForm,
         back_on: newDate,
-        half_dates: this.state.halfDate
+        half_dates: this.state.halfDate,
+        total: Number(this.state.totalDays)
       };
       this.props.formOnChange(backOn);
     }
@@ -378,11 +372,10 @@ class LeaveRequestPage extends Component {
         weekend_count++;
       }
     }
-    let result = ((end - start) / 86400000 - weekend_count);
+
+    let result = ((end - start) / 86400000 - weekend_count) + 1;
     return result
   }
-
-
 
   handleBlur() {
     console.log("blur");
