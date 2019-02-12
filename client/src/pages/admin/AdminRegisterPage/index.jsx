@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import { helpers } from '../../../utils'
 import { formOnchange, registerUser } from "../../../store/Actions/registerAction";
 import { getSupervisors } from "../../../store/Actions/AddSupervisorAction";
 import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
@@ -71,7 +72,7 @@ class RegisterPage extends Component {
     let employee_num = {
       ...this.props.signupForm,
       employee_number: Number(e.target.value),
-      password: this.makeid()
+      password: helpers.MakeID()
     };
     this.props.formOnchange(employee_num);
   };
@@ -413,13 +414,13 @@ class RegisterPage extends Component {
                         {!this.props.supervisor
                           ? ""
                           : this.props.supervisor.map(d => (
-                              <Option key={d.supervisor_id}>{d.name}</Option>
-                            ))}
+                            <Option key={d.supervisor_id}>{d.name}</Option>
+                          ))}
                       </Select>
                     </FormItem>
                   ) : (
-                    ""
-                  )}
+                      ""
+                    )}
 
                   <Input
                     type="password"
