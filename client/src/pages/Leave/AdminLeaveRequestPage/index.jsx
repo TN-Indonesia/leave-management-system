@@ -534,7 +534,7 @@ class AdminLeaveRequestPage extends Component {
                       <DatePicker
                         id="date_from"
                         name="date_from"
-                        disabledDate={this.disabledDateSick}
+                        // disabledDate={this.disabledDateSick}
                         format={dateFormat}
                         value={from}
                         placeholder="Start"
@@ -556,7 +556,7 @@ class AdminLeaveRequestPage extends Component {
                       <DatePicker
                         id="date_from"
                         name="date_from"
-                        disabledDate={this.disabledDate}
+                        // disabledDate={this.disabledDate}
                         format={dateFormat}
                         value={from}
                         placeholder="Start"
