@@ -344,7 +344,7 @@ class AdminRejectPage extends Component {
                 Contact Number :{" "}
                 {this.state.user && this.state.user.contact_number} <br />
                 Reject Reason :{" "}
-                {this.state.user && this.state.user.reject_reason}
+                {this.state.user && this.state.user.reject_reason} <br />
                 Notes : {this.state.user && this.state.user.notes !== "" ? (this.state.user.notes) : ("")}
               </div>
             </Modal>
