@@ -242,6 +242,7 @@ class EmployeeApprovePage extends Component {
               onCancel={this.handleCancel}
               style={{ top: "20" }}
               bodyStyle={{ padding: "0" }}
+              width="600px"
               footer={[
                 <Button
                   key="cancel"
@@ -253,27 +254,108 @@ class EmployeeApprovePage extends Component {
               ]}
             >
               <div style={{ padding: 10, background: "#fff" }}>
-                ID : {this.state.user && this.state.user.id} <br />
-                Name : {this.state.user && this.state.user.name} <br />
-                Gender : {this.state.user && this.state.user.gender} <br />
-                Email : {this.state.user && this.state.user.email} <br />
-                Type Of Leave : {this.state.user &&
-                  this.state.user.type_name}{" "}
-                <br />
-                Reason : {this.state.user && this.state.user.reason} <br />
-                From : {this.state.user && this.state.user.date_from} <br />
-                To : {this.state.user && this.state.user.date_to} <br />
-                Half Day : {this.state.user && this.state.user.half_dates !== "{}" ? this.state.user.half_dates.substring(1, this.state.user.half_dates.length - 1) : ""} <br/>
-                Back On : {this.state.user && this.state.user.back_on} <br />
-                Total Leave : {this.state.user &&
-                  this.state.user.total} day <br />
-                Leave Balance :{" "}
-                {this.state.user && this.state.user.leave_remaining} day <br />
-                Contact Address :{" "}
-                {this.state.user && this.state.user.contact_address} <br />
-                Contact Number :{" "}
-                {this.state.user && this.state.user.contact_number} <br />
-                Status : {this.state.user && this.state.user.status}
+                <table>
+                  <thead></thead>
+                  <tbody>
+                    <tr>
+                      <td>ID</td>
+                      <td>&nbsp;:</td>
+                      <td>&nbsp;{this.state.user && this.state.user.id}</td>
+                    </tr>
+                    <tr>
+                      <td>Name</td>
+                      <td>&nbsp;:</td>
+                      <td>&nbsp;{this.state.user && this.state.user.name}</td>
+                    </tr>
+                    <tr>
+                      <td>Gender</td>
+                      <td>&nbsp;:</td>
+                      <td>&nbsp;{this.state.user && this.state.user.gender}</td>
+                    </tr>
+                    <tr>
+                      <td>Email</td>
+                      <td>&nbsp;:</td>
+                      <td>&nbsp;{this.state.user && this.state.user.email}</td>
+                    </tr>
+                    <tr>
+                      <td>Type Of Leave</td>
+                      <td>&nbsp;:</td>
+                      <td>&nbsp;{this.state.user && this.state.user.type_name}</td>
+                    </tr>
+                    {this.state.user && this.state.user.reason !== "" ?
+                      (
+                        <tr>
+                          <td>Reason</td>
+                          <td>&nbsp;:</td>
+                          <td>&nbsp;{this.state.user && this.state.user.reason}</td>
+                        </tr>
+                      ) :
+                      (
+                        <tr>
+                          <td>Reason</td>
+                          <td>&nbsp;:</td>
+                          <td>&nbsp;-</td>
+                        </tr>
+                      )
+                    }
+                    <tr>
+                      <td>From</td>
+                      <td>&nbsp;:</td>
+                      <td>&nbsp;{this.state.user && this.state.user.date_from}</td>
+                    </tr>
+                    <tr>
+                      <td>To</td>
+                      <td>&nbsp;:</td>
+                      <td>&nbsp;{this.state.user && this.state.user.date_to}</td>
+                    </tr>
+                    {this.state.user && this.state.user.half_dates !== "{}" ?
+                      (
+                        <tr>
+                          <td>Half Day</td>
+                          <td>&nbsp;:</td>
+                          <td>&nbsp;{this.state.user && this.state.user.half_dates.substring(1, this.state.user.half_dates.length - 1)}</td>
+                        </tr>
+                      ) :
+                      (
+                        <tr>
+                          <td>Half Day</td>
+                          <td>&nbsp;:</td>
+                          <td>&nbsp;-</td>
+                        </tr>
+                      )
+                    }
+                    <tr>
+                      <td>Back On</td>
+                      <td>&nbsp;:</td>
+                      <td>&nbsp;{this.state.user && this.state.user.back_on}</td>
+                    </tr>
+                    <tr>
+                      <td>Total Leave</td>
+                      <td>&nbsp;:</td>
+                      <td>&nbsp;{this.state.user && this.state.user.total} day(s)</td>
+                    </tr>
+                    <tr>
+                      <td>Leave Balance</td>
+                      <td>&nbsp;:</td>
+                      <td>&nbsp;{this.state.user && this.state.user.leave_remaining} days</td>
+                    </tr>
+                    <tr>
+                      <td>Contact Address</td>
+                      <td>&nbsp;:</td>
+                      <td>&nbsp;{this.state.user && this.state.user.contact_address}</td>
+                    </tr>
+                    <tr>
+                      <td>Contact Number</td>
+                      <td>&nbsp;:</td>
+                      <td>&nbsp;{this.state.user && this.state.user.contact_number}</td>
+                    </tr>
+                    <tr>
+                      <td>Status</td>
+                      <td>&nbsp;:</td>
+                      <td>&nbsp;{this.state.user && this.state.user.status}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </Modal>
           </Content>
