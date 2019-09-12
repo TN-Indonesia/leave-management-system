@@ -22,13 +22,13 @@ func init() {
 // Run the migrations
 func (m *CreateTableLeaveRequest_20190912_120625) Up() {
 	// use m.SQL("CREATE TABLE ...") to make schema update
-	dt := "20180607"
+	dt := "20190912"
 	m.SQL(GetQuery(tablename.LeaveRequest, dt, "create_table"))
 }
 
 // Reverse the migrations
 func (m *CreateTableLeaveRequest_20190912_120625) Down() {
 	// use m.SQL("DROP TABLE ...") to reverse schema update
-	dt := "20180607"
+	dt := "20190912"
 	m.SQL(GetQuery(tablename.LeaveRequest, dt, "drop_table"))
 }
