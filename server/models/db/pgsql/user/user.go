@@ -69,7 +69,7 @@ func (u *User) CountUserEmployeeNumber(employeeNumber int64) (int, error) {
 	)
 
 	o := orm.NewOrm()
-	errGet := o.Raw(`SELECT count(*) as Count FROM `+dbUser.TableName()+` WHERE employee_number = ?`, employeeNumber).QueryRow(&count)
+	errGet := o.Raw(`SELECT count(*) as Count FROM "`+dbUser.TableName()+`" WHERE employee_number = ?`, employeeNumber).QueryRow(&count)
 	if errGet != nil {
 		helpers.CheckErr("Failed query select @CountUserEmployeeNumber", errGet)
 		return count, errors.New("Error count user by email")
@@ -421,7 +421,7 @@ func (u *User) GetSumarry(employeeNumber int64) (sumarry []structLogic.UserSumar
 		On(dbTypeLeave.TableName() + ".id" + " = " + dbLeave.TableName() + ".type_leave_id").
 		Where(dbLeave.TableName() + `.employee_number = ? `).
 		And(dbLeave.TableName() + `.status = ?`).
-                And(`strftime('%Y',`+dbLeave.TableName()+`.created_at) = strftime('%Y','now') `).
+		And(`strftime('%Y',` + dbLeave.TableName() + `.created_at) = strftime('%Y','now') `).
 		GroupBy(dbTypeLeave.TableName() + `.type_name`)
 	sql := qb.String()
 

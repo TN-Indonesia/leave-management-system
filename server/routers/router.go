@@ -23,13 +23,13 @@ func init() {
 			"put:PasswordReset",
 		),
 
-		// upadate new password
+		// update new password
 		beego.NSRouter("/user/update/:id:int ",
 			&controllers.UserController{},
 			"put:UpdateNewPassword",
 		),
 
-		// get employee sumarry
+		// get employee summary
 		beego.NSRouter("/user/summary/:id:int",
 			&controllers.UserController{},
 			"get:GetUserSummary",

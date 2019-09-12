@@ -71,11 +71,13 @@ func (u *Admin) AddUser(user structDB.User) (int64, error) {
 		return 0, err
 	}
 
-	lastRowID, err := res.LastInsertId()
-	if err != nil {
-		helpers.CheckErr("Error get last Insert ID", err)
-		return 0, err
-	}
+	// lastRowID, err := res.LastInsertId()
+	// if err != nil {
+	// 	helpers.CheckErr("Error get last Insert ID", err)
+	// 	return 0, err
+	// }
+	
+	lastRowID := user.EmployeeNumber
 
 	return lastRowID, err
 }

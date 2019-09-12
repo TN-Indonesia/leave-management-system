@@ -1,10 +1,19 @@
 package adapter
 
-import "server/helpers/constant"
+import (
+	"os"
+	"server/helpers/constant"
+)
 
 // CallPGSQL ...
 func CallPGSQL() string {
-	return "user=postgres password=root host=172.17.0.1 port=5432 dbname=db_leave_request sslmode=disable"
+	dbUser := os.Getenv("db_user")
+	dbPwd := os.Getenv("db_password")
+	dbName := os.Getenv("db_name")
+	dbHost := os.Getenv("db_host")
+	dbPort := os.Getenv("db_port")
+	dbString := "user=" + dbUser + " password=" + dbPwd + " host=" + dbHost + " port=" + dbPort + " dbname=" + dbName + " sslmode=disable"
+	return dbString
 }
 
 // CallSQLITE ...

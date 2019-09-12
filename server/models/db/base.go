@@ -11,29 +11,30 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/orm" // _ "github.com/lib/pq"
+	"github.com/astaxie/beego/orm"
+	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 )
 
-// RegisterPGSQL ...
-// func RegisterPGSQL() {
-// 	maxIdle := 30
-// 	maxConn := 30
+//RegisterPGSQL ...
+func RegisterPGSQL() {
+	maxIdle := 30
+	maxConn := 30
 
-// 	errRegisterDriver := orm.RegisterDriver("postgres", orm.DRPostgres)
-// 	if errRegisterDriver != nil {
-// 		helpers.CheckErr("error while register driver @RegisterPGSQL", errRegisterDriver)
-// 	}
+	errRegisterDriver := orm.RegisterDriver("postgres", orm.DRPostgres)
+	if errRegisterDriver != nil {
+		helpers.CheckErr("error while register driver @RegisterPGSQL", errRegisterDriver)
+	}
 
-// 	errRegisterDataBase := orm.RegisterDataBase("default", "postgres",
-// 		adapter.CallPGSQL(),
-// 		maxIdle, maxConn)
-// 	if errRegisterDataBase != nil {
-// 		helpers.CheckErr("error while register DB @RegisterPGSQL", errRegisterDataBase)
-// 	}
+	errRegisterDataBase := orm.RegisterDataBase("default", "postgres",
+		adapter.CallPGSQL(),
+		maxIdle, maxConn)
+	if errRegisterDataBase != nil {
+		helpers.CheckErr("error while register DB @RegisterPGSQL", errRegisterDataBase)
+	}
 
-// 	RegisterModel()
-// }
+	RegisterModel()
+}
 
 // RegisterSQLite ...
 func RegisterSQLite() {

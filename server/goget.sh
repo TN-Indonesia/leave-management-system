@@ -9,6 +9,7 @@ Package=(
 		"github.com/astaxie/beego"
 		"github.com/beego/bee"
 		"github.com/lib/pq"
+		"github.com/joho/godotenv"
 		"github.com/mattn/go-sqlite3"		
 		"golang.org/x/crypto/bcrypt"
 		"gopkg.in/gomail.v2"		
