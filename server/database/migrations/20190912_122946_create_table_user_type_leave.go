@@ -28,5 +28,5 @@ func (m *CreateTableUserTypeLeave_20190912_122946) Up() {
 // Reverse the migrations
 func (m *CreateTableUserTypeLeave_20190912_122946) Down() {
 	dt := "20190912"
-	m.SQL(GetQuery(tablename.UserTypeLeave, dt, "create_table"))
+	m.SQL(GetQuery(tablename.UserTypeLeave, dt, "drop_table"))
 }
