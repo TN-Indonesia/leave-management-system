@@ -125,7 +125,7 @@ func GetLeaveRequestRejected() ([]structLogic.RequestReject, error) {
 }
 
 // CancelRequestLeave ...
-func CancelRequestLeave(id int64, employeeNumber int64) (err error) {
+func CancelRequestLeave(id int64) (err error) {
 
 	o := orm.NewOrm()
 	err = o.Begin()
@@ -138,13 +138,13 @@ func CancelRequestLeave(id int64, employeeNumber int64) (err error) {
 	getDirector, errGetDirector := DBUser.GetDirector()
 	helpers.CheckErr("Error get director @CancelRequestLeave - logicAdmin", errGetDirector)
 
-	getEmployee, errGetEmployee := DBUser.GetEmployee(employeeNumber)
+	getEmployee, errGetEmployee := DBUser.GetEmployee(id)
 	helpers.CheckErr("Error get employee @CancelRequestLeave - logicAdmin", errGetEmployee)
 
 	getLeave, errGetLeave := DBLeave.GetLeave(id)
 	helpers.CheckErr("Error get leave @CancelRequestLeave - logicAdmin", errGetLeave)
 
-	errUp := DBLeave.UpdateLeaveRemaningCancel(getLeave.Total, employeeNumber, getLeave.TypeLeaveID)
+	errUp := DBLeave.UpdateLeaveRemaningCancel(getLeave.Total, id, getLeave.TypeLeaveID)
 	if errUp != nil {
 		helpers.CheckErr("Error update cancel leave request @CancelRequestLeave - logicAdmin", errUp)
 		o.Rollback()

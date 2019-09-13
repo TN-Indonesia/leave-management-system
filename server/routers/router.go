@@ -124,7 +124,7 @@ func init() {
 		),
 
 		// canceled leave request by admin
-		beego.NSRouter("/admin/leave/cancel/:id:int/:enumber:int",
+		beego.NSRouter("/admin/leave/cancel/:id:int",
 			&controllers.AdminController{},
 			"put:CancelRequestLeave",
 		),

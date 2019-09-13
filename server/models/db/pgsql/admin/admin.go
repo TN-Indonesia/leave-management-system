@@ -76,7 +76,7 @@ func (u *Admin) AddUser(user structDB.User) (int64, error) {
 	// 	helpers.CheckErr("Error get last Insert ID", err)
 	// 	return 0, err
 	// }
-	
+
 	lastRowID := user.EmployeeNumber
 
 	return lastRowID, err
@@ -111,7 +111,7 @@ func (u *Admin) GetUser(employeeNumber int64) (user structDB.User, err error) {
 	}
 
 	qb.Select("*").From(user.TableName()).
-		Where(`id = ? `)
+		Where(`employee_number = ? `)
 	qb.Limit(1)
 	sql := qb.String()
 
@@ -125,14 +125,14 @@ func (u *Admin) GetUser(employeeNumber int64) (user structDB.User, err error) {
 }
 
 // DeleteUser ...
-func (u *Admin) DeleteUser(ID int64) (err error) {
+func (u *Admin) DeleteUser(EmployeeNumber int64) (err error) {
 	o := orm.NewOrm()
-	v := structDB.User{ID: ID}
+	v := structDB.User{EmployeeNumber: EmployeeNumber}
 
 	err = o.Read(&v)
 	if err == nil {
 		var num int64
-		if num, err = o.Delete(&structDB.User{ID: ID}); err == nil {
+		if num, err = o.Delete(&structDB.User{EmployeeNumber: EmployeeNumber}); err == nil {
 			beego.Debug("Number of records deleted in database:", num)
 		} else if err != nil {
 			helpers.CheckErr("Error delete user @DeleteUser", err)
@@ -141,14 +141,14 @@ func (u *Admin) DeleteUser(ID int64) (err error) {
 	}
 	if err != nil {
 		helpers.CheckErr("Error delete user @DeleteUser", err)
-		return errors.New("Delete failed, id not exist")
+		return errors.New("Delete failed, EmployeeNumber not exist")
 	}
 
 	return err
 }
 
 // UpdateUser ...
-func (u *Admin) UpdateUser(e *structDB.User, ID int64) (err error) {
+func (u *Admin) UpdateUser(e *structDB.User, EmployeeNumber int64) (err error) {
 	var (
 		user  structLogic.GetEmployee
 		count int
@@ -161,7 +161,7 @@ func (u *Admin) UpdateUser(e *structDB.User, ID int64) (err error) {
 		return errQB
 	}
 
-	o.Raw(`SELECT name, email FROM `+e.TableName()+` WHERE id = ?`, ID).QueryRow(&user)
+	o.Raw(`SELECT name, email FROM `+e.TableName()+` WHERE employee_number = ?`, EmployeeNumber).QueryRow(&user)
 
 	if e.Email != user.Email {
 		o.Raw(`SELECT count(*) as Count FROM `+e.TableName()+` WHERE email = ?`, e.Email).QueryRow(&count)
@@ -169,8 +169,7 @@ func (u *Admin) UpdateUser(e *structDB.User, ID int64) (err error) {
 			return errors.New("Email already register")
 		} else {
 			qb.Update(e.TableName()).
-				Set("employee_number = ?",
-					"name = ?",
+				Set("name = ?",
 					"gender = ?",
 					"position = ?",
 					"start_working_date = ?",
@@ -178,13 +177,12 @@ func (u *Admin) UpdateUser(e *structDB.User, ID int64) (err error) {
 					"email= ?",
 					"role = ?",
 					"supervisor_id = ?",
-					"updated_at = ?").Where("id = ? ")
+					"updated_at = ?").Where("employee_number = ? ")
 			sql := qb.String()
 
 			e.Email = strings.ToLower(e.Email)
 
 			res, errRaw := o.Raw(sql,
-				e.EmployeeNumber,
 				e.Name,
 				e.Gender,
 				e.Position,
@@ -194,7 +192,7 @@ func (u *Admin) UpdateUser(e *structDB.User, ID int64) (err error) {
 				e.Role,
 				e.SupervisorID,
 				e.UpdatedAt,
-				ID).Exec()
+				EmployeeNumber).Exec()
 
 			if errRaw != nil {
 				helpers.CheckErr("Error update user @UpdateUser", errRaw)
@@ -209,8 +207,7 @@ func (u *Admin) UpdateUser(e *structDB.User, ID int64) (err error) {
 		}
 	} else {
 		qb.Update(e.TableName()).
-			Set("employee_number = ?",
-				"name = ?",
+			Set("name = ?",
 				"gender = ?",
 				"position = ?",
 				"start_working_date = ?",
@@ -218,13 +215,12 @@ func (u *Admin) UpdateUser(e *structDB.User, ID int64) (err error) {
 				"email= ?",
 				"role = ?",
 				"supervisor_id = ?",
-				"updated_at = ?").Where("id = ? ")
+				"updated_at = ?").Where("employee_number = ? ")
 		sql := qb.String()
 
 		e.Email = strings.ToLower(e.Email)
 
 		res, errRaw := o.Raw(sql,
-			e.EmployeeNumber,
 			e.Name,
 			e.Gender,
 			e.Position,
@@ -234,7 +230,7 @@ func (u *Admin) UpdateUser(e *structDB.User, ID int64) (err error) {
 			e.Role,
 			e.SupervisorID,
 			e.UpdatedAt,
-			ID).Exec()
+			EmployeeNumber).Exec()
 
 		if errRaw != nil {
 			helpers.CheckErr("Error update user @UpdateUser", errRaw)
@@ -269,7 +265,7 @@ func (u *Admin) GetLeaveRequestPending() (reqPending []structLogic.RequestPendin
 
 	qb.Select(
 		leave.TableName()+".id",
-		user.TableName()+".id as employee_id",
+		// user.TableName()+".id as employee_id",
 		user.TableName()+".employee_number",
 		user.TableName()+".name",
 		user.TableName()+".gender",
@@ -293,7 +289,7 @@ func (u *Admin) GetLeaveRequestPending() (reqPending []structLogic.RequestPendin
 		leave.TableName()+".notes").
 		From(user.TableName()).
 		InnerJoin(leave.TableName()).
-		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
@@ -357,7 +353,7 @@ func (u *Admin) GetLeaveRequestApproved() (reqApprove []structLogic.RequestAccep
 		leave.TableName()+".notes").
 		From(user.TableName()).
 		InnerJoin(leave.TableName()).
-		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
@@ -421,7 +417,7 @@ func (u *Admin) GetLeaveRequestRejected() (reqReject []structLogic.RequestReject
 		leave.TableName()+".notes").
 		From(user.TableName()).
 		InnerJoin(leave.TableName()).
-		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).

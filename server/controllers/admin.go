@@ -145,14 +145,14 @@ func (c *AdminController) DeleteUser() {
 	var resp structAPI.RespData
 
 	idStr := c.Ctx.Input.Param(":id")
-	ID, errCon := strconv.ParseInt(idStr, 0, 64)
+	EmployeeNumber, errCon := strconv.ParseInt(idStr, 0, 64)
 	if errCon != nil {
 		helpers.CheckErr("Convert id failed @DeleteUser - controller", errCon)
 		resp.Error = errors.New("Convert id failed").Error()
 		return
 	}
 
-	if err := logicAdmin.DeleteUser(ID); err == nil {
+	if err := logicAdmin.DeleteUser(EmployeeNumber); err == nil {
 		resp.Body = "Deleted success"
 	} else {
 		resp.Error = err.Error()
@@ -184,7 +184,7 @@ func (c *AdminController) UpdateUser() {
 	}
 
 	idStr := c.Ctx.Input.Param(":id")
-	ID, errCon := strconv.ParseInt(idStr, 0, 64)
+	EmployeeNumber, errCon := strconv.ParseInt(idStr, 0, 64)
 	if errCon != nil {
 		helpers.CheckErr("Convert id failed @UpdateUser - controller", errCon)
 		resp.Error = errors.New("Convert id failed").Error()
@@ -208,7 +208,7 @@ func (c *AdminController) UpdateUser() {
 		UpdatedAt:        resTime,
 	}
 
-	errUpdate := logic.DBPostAdmin.UpdateUser(&user, ID)
+	errUpdate := logic.DBPostAdmin.UpdateUser(&user, EmployeeNumber)
 	if errUpdate != nil {
 		resp.Error = errUpdate.Error()
 	} else {
@@ -289,15 +289,7 @@ func (c *AdminController) CancelRequestLeave() {
 		return
 	}
 
-	employeeStr := c.Ctx.Input.Param(":enumber")
-	employeeNumber, errCon := strconv.ParseInt(employeeStr, 0, 64)
-	if errCon != nil {
-		helpers.CheckErr("Convert employee number failed @CancelRequestLeave", errCon)
-		resp.Error = errors.New("Convert employee number failed").Error()
-		return
-	}
-
-	errUpStat := logicAdmin.CancelRequestLeave(id, employeeNumber)
+	errUpStat := logicAdmin.CancelRequestLeave(id)
 	if errUpStat != nil {
 		resp.Error = errUpStat.Error()
 	} else {
@@ -314,12 +306,12 @@ func (c *AdminController) CancelRequestLeave() {
 func (c *AdminController) ResetLeaveBalance() {
 	var resp structAPI.RespData
 
-	errReset := logicAdmin.ResetUserTypeLeave(11, 12)
-	errReset = logicAdmin.ResetUserTypeLeave(22, 3)
-	errReset = logicAdmin.ResetUserTypeLeave(33, 30)
-	errReset = logicAdmin.ResetUserTypeLeave(44, 2)
-	errReset = logicAdmin.ResetUserTypeLeave(55, 90)
-	errReset = logicAdmin.ResetUserTypeLeave(66, 2)
+	errReset := logicAdmin.ResetUserTypeLeave(12, 11)
+	errReset = logicAdmin.ResetUserTypeLeave(3, 22)
+	errReset = logicAdmin.ResetUserTypeLeave(30, 33)
+	errReset = logicAdmin.ResetUserTypeLeave(2, 44)
+	errReset = logicAdmin.ResetUserTypeLeave(90, 55)
+	errReset = logicAdmin.ResetUserTypeLeave(2, 66)
 
 	if errReset != nil {
 		resp.Error = errReset.Error()

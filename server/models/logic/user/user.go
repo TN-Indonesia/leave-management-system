@@ -32,7 +32,6 @@ func UserLogin(loginData *structAPI.ReqLogin) (respLogin structAPI.RespLogin, er
 		}
 
 		ezT := helpers.EzToken{
-			ID:      respGet.ID,
 			Email:   respGet.Email,
 			Expires: time.Now().Unix() + 3600,
 		}
@@ -44,7 +43,6 @@ func UserLogin(loginData *structAPI.ReqLogin) (respLogin structAPI.RespLogin, er
 		}
 
 		respLogin.Token = token
-		respLogin.ID = respGet.ID
 		respLogin.Role = respGet.Role
 	}
 
