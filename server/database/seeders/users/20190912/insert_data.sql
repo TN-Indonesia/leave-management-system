@@ -9,6 +9,6 @@ VALUES (
   'admin@tnis.com',
   'JDJhJDEwJHpCNUpxYXdSRjFVUUVUZS8uRk50bS5RcVExWkI1aldkNzRJV09Ec0JDS3RwbDJ6NTF0N1VL',
   'admin'
-);
+)
 ON CONFLICT (employee_number)
 DO NOTHING;
