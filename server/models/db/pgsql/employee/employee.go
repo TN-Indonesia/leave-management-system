@@ -32,7 +32,7 @@ func (e *Employee) GetPendingRequest(employeeNumber int64) (reqPending []structL
 
 	qb.Select(
 		leave.TableName()+".id",
-		user.TableName()+".id as employee_id",
+		// user.TableName()+".id as employee_id",
 		user.TableName()+".employee_number",
 		user.TableName()+".name",
 		user.TableName()+".gender",
@@ -55,13 +55,13 @@ func (e *Employee) GetPendingRequest(employeeNumber int64) (reqPending []structL
 		leave.TableName()+".action_by").
 		From(user.TableName()).
 		InnerJoin(leave.TableName()).
-		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
-		Where(`(status = ? OR status = ? )`).And(user.TableName() + `.id = ? `).
+		Where(`(status = ? OR status = ? )`).And(user.TableName() + `.employee_number = ? `).
 		OrderBy(leave.TableName() + ".created_at DESC")
 	sql := qb.String()
 
@@ -95,7 +95,7 @@ func (e *Employee) GetApprovedRequest(employeeNumber int64) (reqApprove []struct
 	}
 
 	qb.Select(
-		leave.TableName()+".id",
+		// leave.TableName()+".id",
 		user.TableName()+".employee_number",
 		user.TableName()+".name",
 		user.TableName()+".gender",
@@ -118,13 +118,13 @@ func (e *Employee) GetApprovedRequest(employeeNumber int64) (reqApprove []struct
 		leave.TableName()+".action_by").
 		From(user.TableName()).
 		InnerJoin(leave.TableName()).
-		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
-		Where(`status = ?`).And(user.TableName() + `.id = ? `).
+		Where(`status = ?`).And(user.TableName() + `.employee_number = ? `).
 		OrderBy(leave.TableName() + ".created_at DESC")
 	sql := qb.String()
 
@@ -157,7 +157,7 @@ func (e *Employee) GetRejectedRequest(employeeNumber int64) (reqReject []structL
 	}
 
 	qb.Select(
-		leave.TableName()+".id",
+		// leave.TableName()+".id",
 		user.TableName()+".employee_number",
 		user.TableName()+".name",
 		user.TableName()+".gender",
@@ -181,13 +181,13 @@ func (e *Employee) GetRejectedRequest(employeeNumber int64) (reqReject []structL
 		leave.TableName()+".action_by").
 		From(user.TableName()).
 		InnerJoin(leave.TableName()).
-		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
-		Where(`(status = ? OR status = ? )`).And(user.TableName() + `.id = ? `).
+		Where(`(status = ? OR status = ? )`).And(user.TableName() + `.employee_number = ? `).
 		OrderBy(leave.TableName() + ".created_at DESC")
 	sql := qb.String()
 
