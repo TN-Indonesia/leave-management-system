@@ -353,7 +353,7 @@ func (l *LeaveRequest) DownloadReportCSV(
 		leave.TableName()+".contact_number").
 		From(leave.TableName()).
 		InnerJoin(user.TableName()).
-		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
@@ -476,22 +476,23 @@ func (l *LeaveRequest) ReportLeaveRequest(fromDate string, toDate string) (
 		leave.TableName()+".contact_number").
 		From(leave.TableName()).
 		InnerJoin(user.TableName()).
-		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
-		Where("strftime(" + leave.TableName() + ".date_from) >= strftime(?) ").
-		And("strftime(" + leave.TableName() + ".date_from) <= strftime(?) ").
+		Where("EXTRACT(DAY FROM DATE(" + leave.TableName() + ".date_from)) >= EXTRACT(DAY FROM DATE(?))").
+		And("EXTRACT(DAY FROM DATE(" + leave.TableName() + ".date_from)) <= EXTRACT(DAY FROM DATE(?))").
 		And(leave.TableName() + `.status = ? `).
-		OrderBy("strftime(" + leave.TableName() + ".date_from) ASC ")
+		OrderBy("EXTRACT(DAY FROM DATE(" + leave.TableName() + ".date_from)) ASC ")
 	sql := qb.String()
 
 	statApprovedDirector := constant.StatusSuccessInDirector
 
 	count, errRaw := o.Raw(sql, fromDate, toDate, statApprovedDirector).QueryRows(&report)
 	if errRaw != nil {
+		beego.Warning(toDate)
 		helpers.CheckErr("Failed query select @ReportLeaveRequest", errRaw)
 		return report, errRaw
 	}
@@ -543,17 +544,17 @@ func (l *LeaveRequest) ReportLeaveRequestTypeLeave(
 		leave.TableName()+".contact_number").
 		From(leave.TableName()).
 		InnerJoin(user.TableName()).
-		On(user.TableName() + ".id" + "=" + leave.TableName() + ".employee_number").
+		On(user.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		InnerJoin(typeLeave.TableName()).
 		On(typeLeave.TableName() + ".id" + "=" + leave.TableName() + ".type_leave_id").
 		InnerJoin(userTypeLeave.TableName()).
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
-		Where("strftime(" + leave.TableName() + ".date_from) >= strftime(?) ").
-		And("strftime(" + leave.TableName() + ".date_from) <= strftime(?) ").
+		Where("EXTRACT(DAY FROM DATE(" + leave.TableName() + ".date_from)) >= EXTRACT(DAY FROM DATE(?))").
+		And("EXTRACT(DAY FROM DATE(" + leave.TableName() + ".date_from)) <= EXTRACT(DAY FROM DATE(?))").
 		And(leave.TableName() + `.status = ?`).
 		And(leave.TableName() + `.type_leave_id = ?`).
-		OrderBy("strftime(" + leave.TableName() + ".date_from) ASC ")
+		OrderBy("EXTRACT(DAY FROM DATE(" + leave.TableName() + ".date_from)) ASC ")
 	sql := qb.String()
 
 	// id, errCon := strconv.ParseInt(query.TypeLeaveID, 0, 64)
