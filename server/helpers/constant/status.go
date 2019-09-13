@@ -10,5 +10,5 @@ var (
 
 	StatusRejectInSuperVisor = "Rejected by Supervisor"
 	StatusRejectInDirector   = "Rejected by Director"
-	EmailNoRepply            = "tnis.noreply@gmail.com"
+	EmailNoReply             = "tnis.noreply@gmail.com"
 )

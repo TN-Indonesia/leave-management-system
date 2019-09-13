@@ -86,7 +86,7 @@ func GoMailEmployee(mailTo string, leaveID string, employeeName string, supervis
 	}
 	mailHTML := tpl.String()
 
-	authEmail := constant.EmailNoRepply
+	authEmail := constant.EmailNoReply
 	authPassword := constant.GOPWD
 	authHost := "smtp.gmail.com"
 	port := 587
@@ -124,7 +124,7 @@ func GoMailSupervisor(mailTo string, employeeName string, supervisorName string)
 	}
 	mailHTML := tpl.String()
 
-	authEmail := constant.EmailNoRepply
+	authEmail := constant.EmailNoReply
 	authPassword := constant.GOPWD
 	authHost := "smtp.gmail.com"
 	port := 587
@@ -162,7 +162,7 @@ func GoMailSupervisorReject(mailTo string, leaveID string, employeeName string, 
 	}
 	mailHTML := tpl.String()
 
-	authEmail := constant.EmailNoRepply
+	authEmail := constant.EmailNoReply
 	authPassword := constant.GOPWD
 	authHost := "smtp.gmail.com"
 	port := 587
@@ -200,7 +200,7 @@ func GoMailDirector(mailTo string, leaveID string, employeeName string, supervis
 	}
 	mailHTML := tpl.String()
 
-	authEmail := constant.EmailNoRepply
+	authEmail := constant.EmailNoReply
 	authPassword := constant.GOPWD
 	authHost := "smtp.gmail.com"
 	port := 587
@@ -238,7 +238,7 @@ func GoMailDirectorAccept(mailTo string, leaveID string, employeeName string, di
 	}
 	mailHTML := tpl.String()
 
-	authEmail := constant.EmailNoRepply
+	authEmail := constant.EmailNoReply
 	authPassword := constant.GOPWD
 	authHost := "smtp.gmail.com"
 	port := 587
@@ -275,7 +275,7 @@ func GoMailDirectorReject(mailTo string, leaveID string, employeeName string, di
 	}
 	mailHTML := tpl.String()
 
-	authEmail := constant.EmailNoRepply
+	authEmail := constant.EmailNoReply
 	authPassword := constant.GOPWD
 	authHost := "smtp.gmail.com"
 	port := 587
@@ -313,7 +313,7 @@ func GoMailDirectorCancel(mailTo string, leaveID string, employeeName string, di
 	}
 	mailHTML := tpl.String()
 
-	authEmail := constant.EmailNoRepply
+	authEmail := constant.EmailNoReply
 	authPassword := constant.GOPWD
 	authHost := "smtp.gmail.com"
 	port := 587
@@ -351,7 +351,7 @@ func GoMailEmployeeCancel(mailTo string, leaveID string, employeeName string) {
 	}
 	mailHTML := tpl.String()
 
-	authEmail := constant.EmailNoRepply
+	authEmail := constant.EmailNoReply
 	authPassword := constant.GOPWD
 	authHost := "smtp.gmail.com"
 	port := 587
@@ -389,7 +389,7 @@ func GoMailForgotPassword(mailTo string, employeeName string) {
 	}
 	mailHTML := tpl.String()
 
-	authEmail := constant.EmailNoRepply
+	authEmail := constant.EmailNoReply
 	authPassword := constant.GOPWD
 	authHost := "smtp.gmail.com"
 	port := 587
@@ -426,8 +426,8 @@ func GoMailRegisterPassword(mailTo string, password string) {
 	}
 	mailHTML := tpl.String()
 
-	authEmail := constant.EmailNoRepply
-	authPassword := constant.GOPWD
+	authEmail := constant.EmailNoReply
+	authPassword := constant.GetPass()
 	authHost := "smtp.gmail.com"
 	port := 587
 
@@ -463,7 +463,7 @@ func GoMailDirectorFromSupervisor(mailTo string, employeeName string, directorNa
 	}
 	mailHTML := tpl.String()
 
-	authEmail := constant.EmailNoRepply
+	authEmail := constant.EmailNoReply
 	authPassword := constant.GOPWD
 	authHost := "smtp.gmail.com"
 	port := 587
