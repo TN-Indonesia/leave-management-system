@@ -2,5 +2,6 @@ golang.org
 github.com
 gopkg.in
 
+server/.env
 server/server
 server/database/sqlite/db_leave_request.db
