@@ -360,7 +360,8 @@ func (l *LeaveRequest) DownloadReportCSV(
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		Where(leave.TableName() + `.status = ? `).
-		And(leave.TableName() + `.created_at >= ?`).And(leave.TableName() + `.created_at <= ?`)
+		And(leave.TableName() + `.created_at >= DATE(?)`).
+		And(leave.TableName() + `.created_at <= DATE(?)`)
 	sql := qb.String()
 
 	statApprovedDirector := constant.StatusSuccessInDirector
@@ -482,10 +483,10 @@ func (l *LeaveRequest) ReportLeaveRequest(fromDate string, toDate string) (
 		InnerJoin(userTypeLeave.TableName()).
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
-		Where("EXTRACT(DAY FROM DATE(" + leave.TableName() + ".date_from)) >= EXTRACT(DAY FROM DATE(?))").
-		And("EXTRACT(DAY FROM DATE(" + leave.TableName() + ".date_from)) <= EXTRACT(DAY FROM DATE(?))").
+		Where("DATE(" + leave.TableName() + ".date_from) >= DATE(?)").
+		And("DATE(" + leave.TableName() + ".date_from) <= DATE(?)").
 		And(leave.TableName() + `.status = ? `).
-		OrderBy("EXTRACT(DAY FROM DATE(" + leave.TableName() + ".date_from)) ASC ")
+		OrderBy("DATE(" + leave.TableName() + ".date_from) ASC ")
 	sql := qb.String()
 
 	statApprovedDirector := constant.StatusSuccessInDirector
@@ -550,11 +551,11 @@ func (l *LeaveRequest) ReportLeaveRequestTypeLeave(
 		InnerJoin(userTypeLeave.TableName()).
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
-		Where("EXTRACT(DAY FROM DATE(" + leave.TableName() + ".date_from)) >= EXTRACT(DAY FROM DATE(?))").
-		And("EXTRACT(DAY FROM DATE(" + leave.TableName() + ".date_from)) <= EXTRACT(DAY FROM DATE(?))").
+		Where("DATE(" + leave.TableName() + ".date_from) >= DATE(?)").
+		And("DATE(" + leave.TableName() + ".date_from) <= DATE(?)").
 		And(leave.TableName() + `.status = ?`).
 		And(leave.TableName() + `.type_leave_id = ?`).
-		OrderBy("EXTRACT(DAY FROM DATE(" + leave.TableName() + ".date_from)) ASC ")
+		OrderBy("DATE(" + leave.TableName() + ".date_from) ASC ")
 	sql := qb.String()
 
 	// id, errCon := strconv.ParseInt(query.TypeLeaveID, 0, 64)

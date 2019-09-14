@@ -229,8 +229,8 @@ func (u *User) GetSupervisor(employeeNumber int64) (supervisor structLogic.GetSu
 		dbUser.TableName()+".email").
 		From(dbUser.TableName()).
 		InnerJoin(dbLeave.TableName()).
-		On(dbUser.TableName() + ".id" + "=" + dbLeave.TableName() + ".employee_number").
-		Where(dbUser.TableName() + `.id = ? `)
+		On(dbUser.TableName() + ".employee_number" + "=" + dbLeave.TableName() + ".employee_number").
+		Where(dbUser.TableName() + `.employee_number = ? `)
 	qb.Limit(1)
 	sql := qb.String()
 
@@ -259,7 +259,7 @@ func (u *User) GetEmployee(employeeID int64) (employee structLogic.GetEmployee, 
 		dbUser.TableName()+".email",
 		dbUser.TableName()+".start_working_date").
 		From(dbUser.TableName()).
-		Where(dbUser.TableName() + `.id = ? `)
+		Where(dbUser.TableName() + `.employee_number = ? `)
 	qb.Limit(1)
 	sql := qb.String()
 
@@ -284,7 +284,6 @@ func (u *User) GetEmployeeByEmployeeNumber(employeeID int64) (employee structLog
 	}
 
 	qb.Select(
-		dbUser.TableName()+".id",
 		dbUser.TableName()+".employee_number",
 		dbUser.TableName()+".name",
 		dbUser.TableName()+".email",
