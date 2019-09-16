@@ -14,7 +14,7 @@ const userState = {
 		mobile_phone: '',
 		email: '',
 		role: '',
-		supervisor_id: ''
+		employee_number: ''
 	}
 }
 

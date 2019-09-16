@@ -67,7 +67,7 @@ class ProfilePage extends Component {
     let supervisorName;
     if (this.props.supervisor) {
       this.props.supervisor.map(d => {
-        if (d.supervisor_id === this.props.user.supervisor_id) {
+        if (d.employee_number === this.props.user.employee_number) {
           supervisorName = d.name;
         }
         return d;
@@ -191,15 +191,15 @@ class ProfilePage extends Component {
                   {this.props.user.role === "employee" ? (
                     <FormItem {...formItemLayout} label="Supervisor">
                       <Select
-                        id="supervisor_id"
-                        name="supervisor_id"
+                        id="employee_number"
+                        name="employee_number"
                         optionFilterProp="children"
                         onFocus={this.handleFocus}
                         onBlur={this.handleBlur}
                         value={supervisorName}
                       >
                         {this.props.supervisor.map(d => (
-                          <Option key={d.supervisor_id} disabled>
+                          <Option key={d.employee_number} disabled>
                             {d.name}
                           </Option>
                         ))}

@@ -123,7 +123,7 @@ class RegisterPage extends Component {
       let role = {
         ...this.props.signupForm,
         role: value,
-        supervisor_id: Number()
+        employee_number: Number()
       };
       this.props.formOnchange(role);
     }
@@ -132,7 +132,7 @@ class RegisterPage extends Component {
   handleChangeSupervisor(value) {
     let supervisor = {
       ...this.props.signupForm,
-      supervisor_id: Number(value)
+      employee_number: Number(value)
     };
     this.props.formOnchange(supervisor);
   }
@@ -394,8 +394,8 @@ class RegisterPage extends Component {
                   {this.props.signupForm.role === "employee" ? (
                     <FormItem {...formItemLayout} label="Supervisor">
                       <Select
-                        id="supervisor_id"
-                        name="supervisor_id"
+                        id="employee_number"
+                        name="employee_number"
                         placeholder="Select Supervisor"
                         optionFilterProp="children"
                         onChange={this.handleChangeSupervisor}
@@ -414,7 +414,7 @@ class RegisterPage extends Component {
                         {!this.props.supervisor
                           ? ""
                           : this.props.supervisor.map(d => (
-                            <Option key={d.supervisor_id}>{d.name}</Option>
+                            <Option key={d.employee_number}>{d.name}</Option>
                           ))}
                       </Select>
                     </FormItem>

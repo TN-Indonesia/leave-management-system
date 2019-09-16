@@ -112,7 +112,7 @@ class AdminEditPage extends Component {
       let role = {
         ...this.props.user,
         role: value,
-        supervisor_id: Number()
+        employee_number: Number()
       };
       this.props.handleEdit(role);
     }
@@ -121,7 +121,7 @@ class AdminEditPage extends Component {
   handleChangeSupervisor(value) {
     let supervisor = {
       ...this.props.user,
-      supervisor_id: Number(value)
+      employee_number: Number(value)
     };
     this.props.handleEdit(supervisor);
   }
@@ -160,11 +160,11 @@ class AdminEditPage extends Component {
     if (this.props.supervisor) {
       this.props.supervisor.map(d => {
         if (
-          d.supervisor_id === this.props.user.supervisor_id &&
+          d.employee_number === this.props.user.employee_number &&
           d.name !== this.props.user.name
         ) {
           supervisorName = d.name;
-        } else if (d.supervisor_id === this.props.user.employee_number) {
+        } else if (d.employee_number === this.props.user.employee_number) {
           d.name = "";
           supervisorName = d.name;
         }
@@ -319,8 +319,8 @@ class AdminEditPage extends Component {
                   {this.props.user.role === "employee" ? (
                     <FormItem {...formItemLayout} label="Supervisor">
                       <Select
-                        id="supervisor_id"
-                        name="supervisor_id"
+                        id="employee_number"
+                        name="employee_number"
                         placeholder="Select Supervisor"
                         optionFilterProp="children"
                         onChange={this.handleChangeSupervisor}
@@ -338,7 +338,7 @@ class AdminEditPage extends Component {
                         value={supervisorName}
                       >
                         {this.props.supervisor.map(d => (
-                          <Option key={d.supervisor_id}>{d.name}</Option>
+                          <Option key={d.employee_number}>{d.name}</Option>
                         ))}
                       </Select>
                     </FormItem>

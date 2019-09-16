@@ -13,7 +13,7 @@ const registerState = {
 	email: '',
 	password: '',
 	role: '',
-	supervisor_id: null
+	employee_number: null
 }
 
 export default function registerReducer(state = registerState, action) {
