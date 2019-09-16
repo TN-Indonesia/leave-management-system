@@ -44,6 +44,7 @@ func UserLogin(loginData *structAPI.ReqLogin) (respLogin structAPI.RespLogin, er
 
 		respLogin.Token = token
 		respLogin.Role = respGet.Role
+		respLogin.ID = respGet.EmployeeNumber
 	}
 
 	return respLogin, err
