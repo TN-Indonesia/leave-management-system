@@ -151,7 +151,13 @@ func CancelRequestLeave(id int64) (err error) {
 		return errUp
 	}
 
-	errDelete := DBLeave.DeleteRequest(id)
+	LeaveIDInt, errcon := strconv.ParseInt(getLeave.ID, 10, 64)
+	if errcon != nil {
+		helpers.CheckErr("Error update cancel leave request @CancelRequestLeave - logicAdmin", errUp)
+		o.Rollback()
+		return errors.New("Converting ID failed, it could be no request from this ID")
+	}
+	errDelete := DBLeave.DeleteRequest(LeaveIDInt)
 	if errDelete != nil {
 		helpers.CheckErr("Error delete leave request @CancelRequestLeave - logicAdmin", errDelete)
 		o.Rollback()

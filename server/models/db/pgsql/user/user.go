@@ -192,7 +192,7 @@ func (u *User) GetSupervisors() (supervisor []structLogic.GetSupervisors, err er
 	}
 
 	qb.Select(
-		dbSupervisor.TableName()+".id",
+		dbSupervisor.TableName()+".employee_number",
 		dbSupervisor.TableName()+".name").
 		From(dbSupervisor.TableName()).
 		Where(`role = ? `)
