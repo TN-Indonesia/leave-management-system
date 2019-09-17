@@ -52,7 +52,7 @@ class AdminLandingPage extends Component {
           <span>
             <Button
               onClick={() => {
-                this.editUser(this.props.users, record.id);
+                this.editUser(this.props.users, record.employee_number);
               }}
               type="primary"
             >
@@ -64,7 +64,7 @@ class AdminLandingPage extends Component {
               placement="top"
               title={"Are you sure delete this employee?"}
               onConfirm={() => {
-                this.adminDeleteUser(this.props.users, record.id);
+                this.adminDeleteUser(this.props.users, record.employee_number);
                 message.success("Employee has been delete!");
               }}
               okText="Yes"
@@ -76,7 +76,7 @@ class AdminLandingPage extends Component {
             {record.role === "supervisor" || record.role === "employee" ? (
               <Button
                 onClick={() => {
-                  this.editBalance(record.id);
+                  this.editBalance(record.employee_number);
                 }}
                 type="primary"
               >
@@ -144,7 +144,7 @@ class AdminLandingPage extends Component {
                 <Table
                   columns={this.columns}
                   dataSource={this.props.users}
-                  rowKey={record => record.id}
+                  rowKey={record => record.employee_number}
                   pagination={{
                     className: "my-pagination",
                     defaultCurrent: 1,

@@ -100,7 +100,7 @@ class DirectorPendingPage extends Component {
       data: data
         .map(record => {
           console.log("record=========", record);
-          const match = String(record.id).match(reg);
+          const match = String(record.employee_number).match(reg);
           if (!match) {
             return null;
           }
@@ -152,7 +152,7 @@ class DirectorPendingPage extends Component {
 
   handleOk = () => {
     const id = this.state.user && this.state.user.id;
-    const employeeNumber = this.state.user && this.state.user.employee_id;
+    const employeeNumber = this.state.user && this.state.user.employee_number;
 
     this.setState({ loadingA: true });
     this.directorApproveRequest(this.props.leaves, id, employeeNumber);
@@ -163,7 +163,7 @@ class DirectorPendingPage extends Component {
 
   handleReject = () => {
     const id = this.state.user && this.state.user.id;
-    const employeeNumber = this.state.user && this.state.user.employee_id;
+    const employeeNumber = this.state.user && this.state.user.employee_number;
 
     this.setState({ loadingR: true });
     this.directorRejectRequest(
@@ -354,7 +354,7 @@ class DirectorPendingPage extends Component {
               <Table
                 columns={columns}
                 dataSource={this.state.data}
-                rowKey={record => record.id}
+                rowKey={record => record.employee_number}
                 onRowClick={this.onSelectChange}
                 pagination={{
                   className: "my-pagination",

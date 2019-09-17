@@ -92,7 +92,7 @@ class DirectorRejectPage extends Component {
       filtered: !!searchID,
       data: data
         .map(record => {
-          const match = String(record.id).match(reg);
+          const match = String(record.employee_number).match(reg);
           if (!match) {
             return null;
           }
@@ -294,7 +294,7 @@ class DirectorRejectPage extends Component {
               <Table
                 columns={columns}
                 dataSource={this.state.data}
-                rowKey={record => record.id}
+                rowKey={record => record.employee_number}
                 onRowClick={this.onSelectChange}
                 pagination={{
                   className: "my-pagination",

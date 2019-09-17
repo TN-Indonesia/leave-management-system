@@ -414,7 +414,7 @@ class RegisterPage extends Component {
                         {!this.props.supervisor
                           ? ""
                           : this.props.supervisor.map(d => (
-                            <Option key={d.supervisor_id}>{d.name}</Option>
+                            <Option key={d.employee_number}>{d.name}</Option>
                           ))}
                       </Select>
                     </FormItem>

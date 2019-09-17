@@ -96,7 +96,7 @@ func (u *Supervisor) GetEmployeeApproved(supervisorID int64) (reqApprove []struc
 	}
 
 	qb.Select(
-		// leave.TableName()+".id",
+		leave.TableName()+".id",
 		user.TableName()+".employee_number",
 		user.TableName()+".name",
 		user.TableName()+".gender",
@@ -160,7 +160,7 @@ func (u *Supervisor) GetEmployeeRejected(supervisorID int64) (reqReject []struct
 	}
 
 	qb.Select(
-		// leave.TableName()+".id",
+		leave.TableName()+".id",
 		user.TableName()+".employee_number",
 		user.TableName()+".name",
 		user.TableName()+".gender",

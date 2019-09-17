@@ -1,0 +1,1039 @@
+{
+	"info": {
+		"_postman_id": "b25b1adf-aba0-4605-ba92-f70f2a7f7dae",
+		"name": "E-Leave",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\":\"azinudin.ac@tnis.com\",\n\t\"password\":\"udin12345\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Password Reset",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\":\"azinudin.ac@tnis.com\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/user/password-reset",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"password-reset"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update new password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"old_password\":\"tn12345\",\n\t\"new_password\":\"udin12345\",\n\t\"confirm_password\":\"udin12345\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/user/update/12345",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"update",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get employee summary",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/user/summary/12345",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"summary",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get employee type leave",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/user/type-leave/12345",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"type-leave",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post employee type leave",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n        {\n            \"type_id\": \"11\",\n            \"type_name\": \"Annual Leave\",\n            \"leave_remaining\": 12\n        },\n        {\n            \"type_id\": \"22\",\n            \"type_name\": \"Errand Leave\",\n            \"leave_remaining\": 3\n        },\n        {\n            \"type_id\": \"33\",\n            \"type_name\": \"Sick Leave\",\n            \"leave_remaining\": 29\n        },\n        {\n            \"type_id\": \"44\",\n            \"type_name\": \"Marriage Leave\",\n            \"leave_remaining\": 2\n        },\n        {\n            \"type_id\": \"66\",\n            \"type_name\": \"Other Leave\",\n            \"leave_remaining\": 2\n        }\n]"
+						},
+						"url": {
+							"raw": "{{host}}/api/user/type-leave/12345",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"type-leave",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get type leave",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/user/type-leave",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"type-leave"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get supervisor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/user/supervisor",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"supervisor"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"employee_number\":12345,\n\t\"name\":\"Azinudin Achzab\",\n\t\"gender\":\"Male\",\n\t\"position\":\"Fullstack Engineer\",\n\t\"start_working_date\":\"2019-08-01\",\n\t\"mobile_phone\":\"081809936104\",\n\t\"email\":\"azinudin.ac@tnis.com\",\n\t\"password\":\"udin12345\",\n\t\"role\":\"employee\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/admin/user/register",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/admin/user",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get one user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/admin/user/12345",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"user",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get one user and update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"employee_number\":12345,\n\t\"name\":\"Azinudin Achzab Ganteng\",\n\t\"gender\":\"Alpha Male\",\n\t\"position\":\"Fullstack Engineer1\",\n\t\"start_working_date\":\"2019-08-02\",\n\t\"mobile_phone\":\"081809936105\",\n\t\"email\":\"azinudin.ac@tniss.com\",\n\t\"role\":\"employeex\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/admin/user/12345",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"user",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get one user and delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/admin/user/12346",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"user",
+								"12346"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/admin/user/delete/12346",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"user",
+								"delete",
+								"12346"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get request pending",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/admin/leave/pending",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"leave",
+								"pending"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get request accept",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/admin/leave/accept",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"leave",
+								"accept"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get request reject",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/admin/leave/reject",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"leave",
+								"reject"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset balance",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/admin/leave/reset_balance",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"leave",
+								"reset_balance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Canceled leave request",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/admin/leave/cancel/11111/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"leave",
+								"cancel",
+								"11111",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Director",
+			"item": [
+				{
+					"name": "Director Accept",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/api/director/accept/12351/12345",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"director",
+								"accept",
+								"12351",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Director Reject",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"reject_reason\":\"Cuti lu dah habis broh!\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/director/reject/12353/12348",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"director",
+								"reject",
+								"12353",
+								"12348"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pending List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/director/pending",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"director",
+								"pending"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Accept List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/director/accept",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"director",
+								"accept"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reject List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/director/reject",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"director",
+								"reject"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Supervisor",
+			"item": [
+				{
+					"name": "Supervisor Accept",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/api/supervisor/accept/12351/12345",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"supervisor",
+								"accept",
+								"12351",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Supervisor Reject",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"reject_reason\":\"Cuti lu dah habis broh!\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/supervisor/reject/12355/12345",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"supervisor",
+								"reject",
+								"12355",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pending List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/supervisor/pending/12348",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"supervisor",
+								"pending",
+								"12348"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Accept List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/supervisor/accept/12348",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"supervisor",
+								"accept",
+								"12348"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reject List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/supervisor/reject/12348",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"supervisor",
+								"reject",
+								"12348"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Employee",
+			"item": [
+				{
+					"name": "Get Pending List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/employee/pending/12345",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"employee",
+								"pending",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Accept List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/employee/accept/12345",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"employee",
+								"accept",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reject List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/employee/reject/12345",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"employee",
+								"reject",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Leave request",
+			"item": [
+				{
+					"name": "Create leave request for admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\t\"employee_number\": 11111,\n\t\t\"type_leave_id\": 33,\n\t\t\"reason\":\"SAKIT\",\n\t\t\"date_from\":\"2020-09-15\",\n\t\t\"date_to\":\"2020-09-15\",\n\t\t\"total\":1,\n\t\t\"back_on\":\"2020-09-16\",\n\t\t\"contact_address\":\"pamulang\",\n\t\t\"contact_number\":\"02174646111\",\n\t\t\"notes\":\"hehe\"\n}\n"
+						},
+						"url": {
+							"raw": "{{host}}/api/admin/leave",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"leave"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create leave request for supervisor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\t\"type_leave_id\": 33,\n\t\t\"reason\":\"SAKIT\",\n\t\t\"date_from\":\"2020-09-15\",\n\t\t\"date_to\":\"2020-09-15\",\n\t\t\"total\":1,\n\t\t\"back_on\":\"2020-09-16\",\n\t\t\"contact_address\":\"pamulang\",\n\t\t\"contact_number\":\"02174646111\",\n\t\t\"notes\":\"hehe\"\n}\n"
+						},
+						"url": {
+							"raw": "{{host}}/api/supervisor/leave/12348",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"supervisor",
+								"leave",
+								"12348"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create leave request for employee",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\t\"type_leave_id\": 33,\n\t\t\"reason\":\"SAKIT\",\n\t\t\"date_from\":\"2020-09-15\",\n\t\t\"date_to\":\"2020-09-15\",\n\t\t\"total\":1,\n\t\t\"back_on\":\"2020-09-16\",\n\t\t\"contact_address\":\"pamulang\",\n\t\t\"contact_number\":\"02174646111\",\n\t\t\"notes\":\"hehe\"\n}\n"
+						},
+						"url": {
+							"raw": "{{host}}/api/employee/leave/12345",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"employee",
+								"leave",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update leave request for employee",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\t\"type_leave_id\": 33,\n\t\t\"reason\":\"TERJATUH DAN BANGKIT LAGI\",\n\t\t\"date_from\":\"2020-09-15\",\n\t\t\"date_to\":\"2020-09-15\",\n\t\t\"total\":1,\n\t\t\"back_on\":\"2020-09-16\",\n\t\t\"contact_address\":\"pamulang\",\n\t\t\"contact_number\":\"02174646111\",\n\t\t\"notes\":\"hehe\"\n}\n"
+						},
+						"url": {
+							"raw": "{{host}}/api/employee/leave/12353",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"employee",
+								"leave",
+								"12353"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete leave request for employee",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/employee/leave/12354",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"employee",
+								"leave",
+								"12354"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download report on CSV",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/leave/report?fromDate=2019-01-01&toDate=2019-12-30",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"leave",
+								"report"
+							],
+							"query": [
+								{
+									"key": "fromDate",
+									"value": "2019-01-01"
+								},
+								{
+									"key": "toDate",
+									"value": "2019-12-30"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get report leave request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/leave/reports?fromDate=2020-01-01&toDate=2020-12-30",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"leave",
+								"reports"
+							],
+							"query": [
+								{
+									"key": "fromDate",
+									"value": "2020-01-01"
+								},
+								{
+									"key": "toDate",
+									"value": "2020-12-30"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get report type leave",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/leave/report/type?fromDate=2020-01-01&toDate=2020-12-30&typeID=33",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"leave",
+								"report",
+								"type"
+							],
+							"query": [
+								{
+									"key": "fromDate",
+									"value": "2020-01-01"
+								},
+								{
+									"key": "toDate",
+									"value": "2020-12-30"
+								},
+								{
+									"key": "typeID",
+									"value": "33"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Public Holiday",
+			"item": [
+				{
+					"name": "Get Public Holiday List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/holidays/public",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"holidays",
+								"public"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
