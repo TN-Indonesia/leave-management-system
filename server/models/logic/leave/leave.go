@@ -50,17 +50,17 @@ func CreateLeaveRequestEmployee(
 		}
 	}
 
-	getSupervisorID, errGetSupervisorID := DBUser.GetSupervisor(employeeNumber)
-	helpers.CheckErr("Error get supervisor id @CreateLeaveRequestEmployee", errGetSupervisorID)
-
-	getSupervisor, errGetSupervisor := DBUser.GetEmployee(getSupervisorID.SupervisorID)
-	helpers.CheckErr("Error get supervisor @CreateLeaveRequestEmployee", errGetSupervisor)
-
 	errInsert := DBLeave.CreateLeaveRequestEmployee(employeeNumber, typeLeaveID, reason, dateFrom, dateTo, halfDates, backOn, total, address, contactLeave, status, notes)
 	if errInsert != nil {
 		helpers.CheckErr("Error delete leave request @CreateLeaveRequestEmployee - logicLeave", errInsert)
 		return errInsert
 	}
+
+	getSupervisorID, errGetSupervisorID := DBUser.GetSupervisor(employeeNumber)
+	helpers.CheckErr("Error get supervisor id @CreateLeaveRequestEmployee", errGetSupervisorID)
+
+	getSupervisor, errGetSupervisor := DBUser.GetEmployee(getSupervisorID.SupervisorID)
+	helpers.CheckErr("Error get supervisor @CreateLeaveRequestEmployee", errGetSupervisor)
 
 	go func() {
 		helpers.GoMailSupervisor(getSupervisor.Email, getEmployee.Name, getSupervisor.Name)
