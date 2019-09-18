@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"server/models/db"
 
 	_ "server/routers"
@@ -10,7 +11,6 @@ import (
 	"github.com/astaxie/beego/plugins/cors"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
@@ -26,11 +26,11 @@ func main() {
 }
 
 func init() {
-	err := godotenv.Load()
+	path := os.Getenv("GOPATH") + "/src/" + os.Getenv("GOAPP") + "/conf/env"
+	err := godotenv.Load(path)
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	} else {
-		//db.RegisterSQLite()
 		db.RegisterPGSQL()
 	}
 }
