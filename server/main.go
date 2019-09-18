@@ -1,15 +1,12 @@
 package main
 
 import (
-	"log"
-	"os"
 	"server/models/db"
 
 	_ "server/routers"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/plugins/cors"
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
