@@ -26,11 +26,13 @@ func main() {
 }
 
 func init() {
-	path := os.Getenv("GOPATH") + "/src/" + os.Getenv("GOAPP") + "/conf/env"
-	err := godotenv.Load(path)
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	} else {
-		db.RegisterPGSQL()
-	}
+	db.RegisterPGSQL()
+
+	// path := os.Getenv("GOPATH") + "/src/" + os.Getenv("GOAPP") + "/conf/env"
+	// err := godotenv.Load(path)
+	// if err != nil {
+	// 	log.Fatal("Error loading .env file")
+	// } else {
+	// 	db.RegisterPGSQL()
+	// }
 }
