@@ -95,7 +95,7 @@ func (e *Employee) GetApprovedRequest(employeeNumber int64) (reqApprove []struct
 	}
 
 	qb.Select(
-		// leave.TableName()+".id",
+		leave.TableName()+".id",
 		user.TableName()+".employee_number",
 		user.TableName()+".name",
 		user.TableName()+".gender",
@@ -157,7 +157,7 @@ func (e *Employee) GetRejectedRequest(employeeNumber int64) (reqReject []structL
 	}
 
 	qb.Select(
-		// leave.TableName()+".id",
+		leave.TableName()+".id",
 		user.TableName()+".employee_number",
 		user.TableName()+".name",
 		user.TableName()+".gender",

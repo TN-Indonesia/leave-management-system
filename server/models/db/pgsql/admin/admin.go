@@ -91,7 +91,7 @@ func (u *Admin) GetUsers() (users []structDB.User, err error) {
 	roles = append(roles, "employee", "supervisor", "director")
 
 	o := orm.NewOrm()
-	count, err := o.Raw("SELECT * FROM "+dbUser.TableName()+" WHERE role IN (?,?,?)", roles).QueryRows(&users)
+	count, err := o.Raw("SELECT * FROM "+dbUser.TableName()+" WHERE role IN (?,?,?) ORDER BY employee_number", roles).QueryRows(&users)
 	if err != nil {
 		helpers.CheckErr("Failed get users @GetUsers", err)
 		return users, err
