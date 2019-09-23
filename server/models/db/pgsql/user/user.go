@@ -8,6 +8,7 @@ import (
 	structAPI "server/structs/api"
 	structDB "server/structs/db"
 	structLogic "server/structs/logic"
+	"time"
 
 	"github.com/astaxie/beego/orm"
 )
@@ -118,7 +119,7 @@ func (u *User) UpdatePassword(p *structLogic.NewPassword, employeeNumber int64) 
 		if len(bsNewPassword) < 7 && len(bsConfirmPassword) < 7 {
 			return errors.New("Password length minimum must be 7")
 		} else if p.NewPassword == p.ConfirmPassword {
-			qb.Update(dbUser.TableName()).Set("password = ?").
+			qb.Update(dbUser.TableName()).Set("password = ?, updated_at = ?").
 				Where(`employee_number = ?`)
 			sql := qb.String()
 
@@ -127,7 +128,7 @@ func (u *User) UpdatePassword(p *structLogic.NewPassword, employeeNumber int64) 
 				helpers.CheckErr("err hash password @UpdatePassword", errHash)
 			}
 
-			res, errRaw := o.Raw(sql, resPassword, employeeNumber).Exec()
+			res, errRaw := o.Raw(sql, resPassword, time.Now(), employeeNumber).Exec()
 
 			if errRaw != nil {
 				helpers.CheckErr("err update password @UpdatePassword", errRaw)
