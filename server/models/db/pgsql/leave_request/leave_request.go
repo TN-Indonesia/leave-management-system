@@ -20,7 +20,6 @@ type LeaveRequest struct{}
 func (l *LeaveRequest) InquiryLeaveRequest(
 	employeeNumber int64,
 	fromDate string,
-	typeLeaveID int64,
 ) error {
 	var result structLogic.GetLeave
 	var dbLeave structDB.LeaveRequest
@@ -35,16 +34,16 @@ func (l *LeaveRequest) InquiryLeaveRequest(
 	qb.Select(dbLeave.TableName() + ".id").
 		From(dbLeave.TableName()).
 		Where(dbLeave.TableName() + `.employee_number = ? `).
-		And(dbLeave.TableName() + `.date_from = ? `).
-		And(dbLeave.TableName() + `.type_leave_id = ? `)
+		And(dbLeave.TableName() + `.date_from = ? `)
 	qb.Limit(1)
 	sql := qb.String()
 
-	errRaw := o.Raw(sql, employeeNumber, fromDate, typeLeaveID).QueryRow(&result)
-	if errRaw == nil {
-		helpers.CheckErr("Failed query select @GetLeave", errRaw)
+	o.Raw(sql, employeeNumber, fromDate).QueryRow(&result)
+
+	if (structLogic.GetLeave{}) != result {
 		return errors.New("The same request already exist on the date")
 	}
+
 	return nil
 }
 

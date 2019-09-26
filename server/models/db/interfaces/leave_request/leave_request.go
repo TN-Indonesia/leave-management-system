@@ -97,6 +97,5 @@ type IBaseLeaveRequest interface {
 	InquiryLeaveRequest(
 		employeeNumber int64,
 		fromDate string,
-		typeLeaveID int64,
 	) error
 }
