@@ -334,10 +334,20 @@ class EmployeeApprovePage extends Component {
                       <td>&nbsp;:</td>
                       <td>&nbsp;{this.state.user && this.state.user.total} day(s)</td>
                     </tr>
-                    <tr>
+                    {/* <tr>
                       <td>Leave Balance</td>
                       <td>&nbsp;:</td>
                       <td>&nbsp;{this.state.user && this.state.user.leave_remaining} days</td>
+                    </tr> */}
+                    <tr>
+                      <td>Before Leave Balance</td>
+                      <td>&nbsp;:</td>
+                      <td>&nbsp;{this.state.user && this.state.user.before_leave_balance} days</td>
+                    </tr>
+                    <tr>
+                      <td>After Leave Balance</td>
+                      <td>&nbsp;:</td>
+                      <td>&nbsp;{this.state.user && this.state.user.after_leave_balance} days</td>
                     </tr>
                     <tr>
                       <td>Contact Address</td>

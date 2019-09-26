@@ -74,7 +74,9 @@ func ApproveByDirector(id int64, employeeNumber int64) error {
 
 	actionBy := getDirector.Name
 
-	errApprove := DBDirector.ApproveByDirector(id, employeeNumber, actionBy)
+	beforeLeaveBalance := resGet.LeaveRemaining
+	afterLeaveBalance := resGet.LeaveRemaining - getLeave.Total
+	errApprove := DBDirector.ApproveByDirector(id, employeeNumber, actionBy, beforeLeaveBalance, afterLeaveBalance)
 	if errApprove != nil {
 		helpers.CheckErr("Error approved request @ApproveByDirector - logicDirector", errApprove)
 		o.Rollback()
