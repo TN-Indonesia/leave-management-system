@@ -106,6 +106,8 @@ func (u *Director) GetEmployeeApproved() (reqApprove []structLogic.RequestAccept
 		user.TableName()+".role",
 		typeLeave.TableName()+".type_name",
 		userTypeLeave.TableName()+".leave_remaining",
+		leave.TableName()+".before_leave_balance",
+		leave.TableName()+".after_leave_balance",
 		leave.TableName()+".reason",
 		leave.TableName()+".date_from",
 		leave.TableName()+".date_to",
