@@ -92,4 +92,11 @@ type IBaseLeaveRequest interface {
 		report []structLogic.ReportLeaveRequest,
 		err error,
 	)
+
+	// InquiryLeaveRequest
+	InquiryLeaveRequest(
+		employeeNumber int64,
+		fromDate string,
+		typeLeaveID int64,
+	) error
 }

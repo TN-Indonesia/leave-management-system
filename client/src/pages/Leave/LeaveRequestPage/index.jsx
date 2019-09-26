@@ -190,17 +190,19 @@ class LeaveRequestPage extends Component {
     } else {
       hiddenDiv.style.display = "none";
     }
-    console.log(`checked add hald day = ${e.target.checked}`);
+    console.log(`checked add half day = ${e.target.checked}`);
   }
 
   onChangeIsHalfDay(e, value) {
     console.log(`${e.target.value} checked is ${e.target.checked}`);
-
+    let parentDiv = document.getElementById("add_half_day");
     if (e.target.checked) {
+      parentDiv.disabled = true
       this.setState(prevState => ({
         halfDate: update(prevState.halfDate, { $push: [e.target.value] })
       }));
     } else {
+      parentDiv.disabled = false
       let array = this.state.halfDate;
       let index = array.indexOf(e.target.value);
       this.setState(prevState => ({

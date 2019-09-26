@@ -16,6 +16,38 @@ import (
 // LeaveRequest ...
 type LeaveRequest struct{}
 
+// InquiryLeaveRequest ...
+func (l *LeaveRequest) InquiryLeaveRequest(
+	employeeNumber int64,
+	fromDate string,
+	typeLeaveID int64,
+) error {
+	var result structLogic.GetLeave
+	var dbLeave structDB.LeaveRequest
+
+	o := orm.NewOrm()
+	qb, errQB := orm.NewQueryBuilder("mysql")
+	if errQB != nil {
+		helpers.CheckErr("Query builder failed @GetLeave", errQB)
+		return errQB
+	}
+
+	qb.Select(dbLeave.TableName() + ".id").
+		From(dbLeave.TableName()).
+		Where(dbLeave.TableName() + `.employee_number = ? `).
+		And(dbLeave.TableName() + `.date_from = ? `).
+		And(dbLeave.TableName() + `.type_leave_id = ? `)
+	qb.Limit(1)
+	sql := qb.String()
+
+	errRaw := o.Raw(sql, employeeNumber, fromDate, typeLeaveID).QueryRow(&result)
+	if errRaw == nil {
+		helpers.CheckErr("Failed query select @GetLeave", errRaw)
+		return errors.New("The same request already exist on the date")
+	}
+	return nil
+}
+
 // CreateLeaveRequestEmployee ...
 func (l *LeaveRequest) CreateLeaveRequestEmployee(
 	employeeNumber int64,

@@ -50,6 +50,13 @@ func CreateLeaveRequestEmployee(
 		}
 	}
 
+	//inquiry leave on the date
+	errInquiry := DBLeave.InquiryLeaveRequest(employeeNumber, dateFrom, typeLeaveID)
+	if errInquiry != nil {
+		helpers.CheckErr("Error delete leave request @CreateLeaveRequestEmployee - logicLeave", errInquiry)
+		return errInquiry
+	}
+
 	errInsert := DBLeave.CreateLeaveRequestEmployee(employeeNumber, typeLeaveID, reason, dateFrom, dateTo, halfDates, backOn, total, address, contactLeave, status, notes)
 	if errInsert != nil {
 		helpers.CheckErr("Error delete leave request @CreateLeaveRequestEmployee - logicLeave", errInsert)
