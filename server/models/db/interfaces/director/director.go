@@ -28,6 +28,8 @@ type IBaseDirector interface {
 		id int64,
 		employeeNumber int64,
 		actionBy string,
+		beforeLeaveBalance float64,
+		afterLeaveBalance float64,
 	) (err error)
 	// RejectByDirector
 	RejectByDirector(

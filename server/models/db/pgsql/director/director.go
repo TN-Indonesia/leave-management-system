@@ -206,14 +206,22 @@ func (u *Director) GetEmployeeRejected() (reqReject []structLogic.RequestReject,
 }
 
 // ApproveByDirector ...
-func (u *Director) ApproveByDirector(id int64, employeeNumber int64, actionBy string) (err error) {
+func (u *Director) ApproveByDirector(id int64, employeeNumber int64, actionBy string, beforeLeaveBalance float64, afterLeaveBalance float64) (err error) {
 	var dbLeave structDB.LeaveRequest
 
 	o := orm.NewOrm()
 
 	statAcceptDirector := constant.StatusSuccessInDirector
 
-	_, errRAW := o.Raw(`UPDATE `+dbLeave.TableName()+` SET status = ?, action_by = ? WHERE id = ? AND employee_number = ?`, statAcceptDirector, actionBy, id, employeeNumber).Exec()
+	_, errRAW := o.Raw(`UPDATE `+dbLeave.TableName()+
+		` SET status = ?, action_by = ?, before_leave_balance = ?, after_leave_balance = ? 
+		WHERE id = ? AND employee_number = ?`,
+		statAcceptDirector,
+		actionBy,
+		beforeLeaveBalance,
+		afterLeaveBalance,
+		id,
+		employeeNumber).Exec()
 	if errRAW != nil {
 		helpers.CheckErr("Error update status success @ApproveByDirector", errRAW)
 	}
