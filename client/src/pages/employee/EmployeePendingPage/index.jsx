@@ -266,6 +266,7 @@ class EmployeePendingPage extends Component {
             }}
           >
             <div style={{ padding: 20, background: "#fff" }}>
+            <h3>List of Pending Request</h3>
               <Table
                 columns={columns}
                 dataSource={this.state.data}

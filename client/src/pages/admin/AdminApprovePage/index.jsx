@@ -404,6 +404,7 @@ class AdminApprovePage extends Component {
             }}
           >
             <div style={{ padding: "20px", backgroundColor: "#fff" }}>
+              <h3>List of Approve Request</h3>
               <Form
                 id="myForm"
                 layout="inline"
