@@ -94,7 +94,7 @@ func (c *LeaveController) PostLeaveRequestEmployee() {
 	} else if req.BackOn != realBackOn && len(req.HalfDates) == 0 {
 		beego.Warning("Error leave balance @PostLeaveRequestEmployee - controller ", realBackOn, req.BackOn)
 		c.Ctx.Output.SetStatus(400)
-		resp.Error = errors.New("Your Backon Date should be on " + realBackOn).Error()
+		resp.Error = errors.New("Your Back to Work Date should be on " + realBackOn).Error()
 	} else {
 		errAddLeave := logicLeave.CreateLeaveRequestEmployee(
 			leave.EmployeeNumber,

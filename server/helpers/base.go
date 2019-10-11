@@ -120,15 +120,20 @@ func PredictBackOn(date string, total float64) string {
 	result := ""
 	t, _ := time.Parse("02-01-2006", date)
 	totalint := int(total)
-	t = t.AddDate(0, 0, totalint)
-	if t.Weekday() == 6 {
-		t = t.AddDate(0, 0, 2)
-	} else if t.Weekday() == 7 {
-		t = t.AddDate(0, 0, 1)
-	}
+	t = t.AddDate(0, 0, 1)
+
+	beego.Warning(totalint, t.String()[0:10])
+
 	split := t.String()[0:10]
 	result = split[8:10] + "-" + split[5:7] + "-" + split[0:4]
+
+	if t.Weekday() == 6 || t.Weekday() == 0 || result == "2019-12-25" || result == "2019-12-24" {
+		beego.Warning(time.Weekday(6))
+		return PredictBackOn(result, total)
+	}
+
 	return result
+
 }
 
 //TODO: ADD PUBLIC HOLIDAY AND MAKE IT RECURSIVE
