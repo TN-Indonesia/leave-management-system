@@ -250,6 +250,7 @@ class EmployeeRejectPage extends Component {
             }}
           >
             <div style={{ padding: 20, background: "#fff" }}>
+              <h3>List of Reject Request</h3>
               <Table
                 columns={columns}
                 dataSource={this.state.data}

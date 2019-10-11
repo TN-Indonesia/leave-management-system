@@ -221,6 +221,7 @@ class EmployeeApprovePage extends Component {
             }}
           >
             <div style={{ padding: 20, background: "#fff" }}>
+              <h3>List of Approve Request</h3>
               <Table
                 columns={columns}
                 dataSource={this.state.data}

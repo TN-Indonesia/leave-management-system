@@ -310,6 +310,7 @@ class AdminPendingPage extends Component {
             }}
           >
             <div style={{ padding: "20px", backgroundColor: "#fff", width: "1700px" }}>
+              <h3>List of Pending Request</h3>
               <Table
                 columns={columns}
                 dataSource={this.state.data}
