@@ -20,7 +20,7 @@ type LeaveRequest struct{}
 func (l *LeaveRequest) InquiryLeaveRequest(
 	employeeNumber int64,
 	fromDate string,
-) error {
+) (err error) {
 	var result structLogic.GetLeave
 	var dbLeave structDB.LeaveRequest
 
@@ -44,7 +44,36 @@ func (l *LeaveRequest) InquiryLeaveRequest(
 		return errors.New("The same request already exist on the date")
 	}
 
-	return nil
+	return err
+}
+
+// InquiryLeaveRequestSpecial ...
+func (l *LeaveRequest) InquiryLeaveRequestSpecial(
+	employeeNumber int64,
+) (err error) {
+	var result structLogic.GetLeave
+	var dbLeave structDB.LeaveRequest
+
+	o := orm.NewOrm()
+	qb, errQB := orm.NewQueryBuilder("mysql")
+	if errQB != nil {
+		helpers.CheckErr("Query builder failed @GetLeave", errQB)
+		return errQB
+	}
+
+	qb.Select(dbLeave.TableName() + ".id").
+		From(dbLeave.TableName()).
+		Where(dbLeave.TableName() + `.employee_number = ? AND (leave_request.type_leave_id = 44 OR leave_request.type_leave_id = 55 OR leave_request.type_leave_id = 66)`)
+	qb.Limit(1)
+	sql := qb.String()
+
+	o.Raw(sql, employeeNumber).QueryRow(&result)
+	beego.Warning(result)
+	if (structLogic.GetLeave{}) != result {
+		return errors.New("Special leave request has been made please delete it first")
+	}
+
+	return err
 }
 
 // CreateLeaveRequestEmployee ...

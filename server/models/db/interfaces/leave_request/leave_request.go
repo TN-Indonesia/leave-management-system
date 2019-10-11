@@ -97,5 +97,10 @@ type IBaseLeaveRequest interface {
 	InquiryLeaveRequest(
 		employeeNumber int64,
 		fromDate string,
-	) error
+	) (err error)
+
+	// InquiryLeaveRequestSpecial
+	InquiryLeaveRequestSpecial(
+		employeeNumber int64,
+	) (err error)
 }

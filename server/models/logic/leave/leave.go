@@ -57,6 +57,14 @@ func CreateLeaveRequestEmployee(
 		return errInquiry
 	}
 
+	if typeLeaveID == 44 || typeLeaveID == 55 || typeLeaveID == 66 {
+		errSpecial := DBLeave.InquiryLeaveRequestSpecial(employeeNumber)
+		if errSpecial != nil {
+			helpers.CheckErr("Special Leave - logicLeave", errSpecial)
+			return errSpecial
+		}
+	}
+
 	errInsert := DBLeave.CreateLeaveRequestEmployee(employeeNumber, typeLeaveID, reason, dateFrom, dateTo, halfDates, backOn, total, address, contactLeave, status, notes)
 	if errInsert != nil {
 		helpers.CheckErr("Error delete leave request @CreateLeaveRequestEmployee - logicLeave", errInsert)
