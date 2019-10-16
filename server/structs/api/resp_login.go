@@ -5,4 +5,5 @@ type RespLogin struct {
 	Token string
 	ID    int64
 	Role  string
+	Name  string
 }
