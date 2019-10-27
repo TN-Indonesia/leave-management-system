@@ -136,4 +136,12 @@ func PredictBackOn(date string, total float64) string {
 
 }
 
+// InTimeSpan ...
+func InTimeSpan(start, end, check string) bool {
+	tanggaldari, _ := time.Parse("02-01-2006", start)
+	tanggalsampai, _ := time.Parse("02-01-2006", end)
+	tanggalcheck, _ := time.Parse("02-01-2006", check)
+	return tanggalcheck.After(tanggaldari) && tanggalcheck.Before(tanggalsampai)
+}
+
 //TODO: ADD PUBLIC HOLIDAY AND MAKE IT RECURSIVE

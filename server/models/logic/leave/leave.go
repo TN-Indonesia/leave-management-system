@@ -57,6 +57,11 @@ func CreateLeaveRequestEmployee(
 		return errInquiry
 	}
 
+	if typeLeaveID == 22 && total > 1 {
+		err := errors.New("Cannot do errand leave on 2 or more consecutive days")
+		return err
+	}
+
 	if typeLeaveID == 44 || typeLeaveID == 55 || typeLeaveID == 66 {
 		errSpecial := DBLeave.InquiryLeaveRequestSpecial(employeeNumber)
 		if errSpecial != nil {
@@ -104,6 +109,19 @@ func CreateLeaveRequestSupervisor(
 	if errGetEmployee != nil {
 		helpers.CheckErr("Error get employee @CreateLeaveRequestSupervisor - logicLeave", errGetEmployee)
 		return errGetEmployee
+	}
+
+	if typeLeaveID == 22 && total > 1 {
+		err := errors.New("Cannot do errand leave on 2 or more consecutive days")
+		return err
+	}
+
+	if typeLeaveID == 44 || typeLeaveID == 55 || typeLeaveID == 66 {
+		errSpecial := DBLeave.InquiryLeaveRequestSpecial(employeeNumber)
+		if errSpecial != nil {
+			helpers.CheckErr("Special Leave - logicLeave", errSpecial)
+			return errSpecial
+		}
 	}
 
 	// Check Working date must < 1 year for annual leave = 11
