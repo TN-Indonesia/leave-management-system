@@ -89,7 +89,7 @@ func (c *LeaveController) PostLeaveRequestEmployee() {
 	} else if result > float64(resGet.LeaveRemaining) {
 		beego.Warning("Error leave balance @PostLeaveRequestEmployee - controller")
 		c.Ctx.Output.SetStatus(400)
-		resp.Error = errors.New("Your total leave is " + strTotal + " day and your " + resGet.TypeName + " balance is " + strBalance + " day left").Error()
+		resp.Error = errors.New("Your total leave request is " + strTotal + " day and your current " + resGet.TypeName + " balance is " + strBalance + " day left").Error()
 
 	} else if req.BackOn != realBackOn && len(req.HalfDates) == 0 {
 		beego.Warning("Error leave balance @PostLeaveRequestEmployee - controller ", realBackOn, req.BackOn)
@@ -195,7 +195,7 @@ func (c *LeaveController) PostLeaveRequestSupervisor() {
 	} else if result > float64(resGet.LeaveRemaining) {
 		beego.Warning("Error leave balance @PostLeaveRequestSupervisor - controller")
 		c.Ctx.Output.SetStatus(400)
-		resp.Error = errors.New("Your total leave is " + strTotal + " day and your " + resGet.TypeName + " balance is " + strBalance + " day left").Error()
+		resp.Error = errors.New("Your total leave request is " + strTotal + " day and your current " + resGet.TypeName + " balance is " + strBalance + " day left").Error()
 
 	} else if req.BackOn != realBackOn && len(req.HalfDates) == 0 {
 		beego.Warning("Error leave balance @PostLeaveRequestSupervisor - controller ", realBackOn, req.BackOn)
