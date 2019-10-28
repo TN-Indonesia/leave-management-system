@@ -20,11 +20,11 @@ export function getSupervisors() {
 				body,
 				error
 			}) => {
+				const data = body.map(({ employee_number, name }) => ({ key:employee_number, id: employee_number, name: name }));
 				let payload = {
-					supervisor: body
+					supervisor: data
 				}
 				dispatch(fetchSupervisors(payload))
-
 				if (error !== null) {
 					console.error("error not null @getSupervisors: ", error)
 				}

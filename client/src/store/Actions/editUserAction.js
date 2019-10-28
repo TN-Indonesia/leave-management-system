@@ -47,7 +47,7 @@ export function fetchedEdit(user) {
 
 export function saveEditUser(savedUser, pusher) {
 	return (dispatch) => {
-		fetch(`${ROOT_API}/api/admin/user/${savedUser.id}`, {
+		fetch(`${ROOT_API}/api/admin/user/${savedUser.employee_number}`, {
 				method: 'PUT',
 				body: JSON.stringify(savedUser)
 			})

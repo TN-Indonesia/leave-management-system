@@ -38,18 +38,12 @@ class AdminEditPage extends Component {
     if (localStorage.getItem("role") !== "admin") {
       this.props.history.push("/");
     }
-    // console.log(
-    //   this.props.history.location,
-    //   "ini didmount",
-    //   this.props.history.location.state === undefined
-    // );
-
     if (this.props.history.location.state === undefined) {
       this.props.history.push("/");
     } else {
-      let id = Number(this.props.history.location.pathname.split("/").pop());
+      let employee_number = Number(this.props.history.location.pathname.split("/").pop());
       let user = this.props.history.location.state.users.filter(
-        el => el.id === id
+        el => el.employee_number === employee_number
       );
       this.props.fetchedEdit(user[0]);
       this.props.getSupervisors();
@@ -57,6 +51,7 @@ class AdminEditPage extends Component {
   }
 
   saveEdit = () => {
+    console.log(this.props.user)
     this.props.saveEditUser(this.props.user, url => {
       this.props.history.push(url);
     });
@@ -157,14 +152,15 @@ class AdminEditPage extends Component {
     const dateFormat = "DD-MM-YYYY";
     let supervisorName;
 
+
     if (this.props.supervisor) {
       this.props.supervisor.map(d => {
         if (
-          d.supervisor_id === this.props.user.supervisor_id &&
+          d.id === this.props.user.supervisor_id &&
           d.name !== this.props.user.name
         ) {
           supervisorName = d.name;
-        } else if (d.supervisor_id === this.props.user.employee_number) {
+        } else if (d.id === this.props.user.employee_number) {
           d.name = "";
           supervisorName = d.name;
         }
@@ -338,7 +334,7 @@ class AdminEditPage extends Component {
                         value={supervisorName}
                       >
                         {this.props.supervisor.map(d => (
-                          <Option key={d.supervisor_id}>{d.name}</Option>
+                          <Option key={d.id}>{d.name}</Option>
                         ))}
                       </Select>
                     </FormItem>
