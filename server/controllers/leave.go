@@ -71,8 +71,8 @@ func (c *LeaveController) PostLeaveRequestEmployee() {
 		Notes:          req.Notes,
 	}
 
-	strBalance := strconv.FormatFloat(resGet.LeaveRemaining, 'f', 1, 64)
-	strTotal := strconv.FormatFloat(result, 'f', 1, 64)
+	strBalance := strconv.FormatFloat(resGet.LeaveRemaining, 'f', -1, 64)
+	strTotal := strconv.FormatFloat(result, 'f', -1, 64)
 
 	realBackOn := helpers.PredictBackOn(req.DateTo, result)
 
@@ -177,8 +177,8 @@ func (c *LeaveController) PostLeaveRequestSupervisor() {
 		Notes:          req.Notes,
 	}
 
-	strBalance := strconv.FormatFloat(resGet.LeaveRemaining, 'f', 1, 64)
-	strTotal := strconv.FormatFloat(result, 'f', 1, 64)
+	strBalance := strconv.FormatFloat(resGet.LeaveRemaining, 'f', -1, 64)
+	strTotal := strconv.FormatFloat(result, 'f', -1, 64)
 
 	realBackOn := helpers.PredictBackOn(req.DateTo, result)
 
