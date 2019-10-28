@@ -111,6 +111,13 @@ func CreateLeaveRequestSupervisor(
 		return errGetEmployee
 	}
 
+	//inquiry leave on the date
+	errInquiry := DBLeave.InquiryLeaveRequest(employeeNumber, dateFrom)
+	if errInquiry != nil {
+		helpers.CheckErr("Error delete leave request @CreateLeaveRequestEmployee - logicLeave", errInquiry)
+		return errInquiry
+	}
+
 	if typeLeaveID == 22 && total > 1 {
 		err := errors.New("Cannot do errand leave on 2 or more consecutive days")
 		return err
