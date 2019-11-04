@@ -130,6 +130,7 @@ class RegisterPage extends Component {
   }
 
   handleChangeSupervisor(value) {
+    console.log(value)
     let supervisor = {
       ...this.props.signupForm,
       supervisor_id: Number(value)
@@ -414,7 +415,7 @@ class RegisterPage extends Component {
                         {!this.props.supervisor
                           ? ""
                           : this.props.supervisor.map(d => (
-                            <Option key={d.employee_number} value={d.employee_number}>{d.name}</Option>
+                            <Option key={d.id} value={d.id}>{d.name}</Option>
                           ))}
                       </Select>
                     </FormItem>
