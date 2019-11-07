@@ -67,7 +67,7 @@ class ProfilePage extends Component {
     let supervisorName;
     if (this.props.supervisor) {
       this.props.supervisor.map(d => {
-        if (d.employee_number === this.props.user.supervisor_id) {
+        if (d.id === this.props.user.supervisor_id) {
           supervisorName = d.name;
         }
         return d;
@@ -199,7 +199,7 @@ class ProfilePage extends Component {
                         value={supervisorName}
                       >
                         {this.props.supervisor.map(d => (
-                          <Option key={d.employee_number} disabled>
+                          <Option key={d.id} disabled>
                             {d.name}
                           </Option>
                         ))}
