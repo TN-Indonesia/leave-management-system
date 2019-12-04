@@ -50,4 +50,16 @@ type (
 		TypeName       string  `json:"type_name"`
 		LeaveRemaining float64 `json:"leave_remaining"`
 	}
+
+	// BackToWork ...
+	BackToWork struct {
+		ToDate    string
+		HalfDates string
+	}
+
+	// BackToWorkDate ...
+	BackToWorkDate struct {
+		// Status       string `json:"status" orm:"column(status)"`
+		BackToWorkDate string `json:"back_to_work_date" orm:"column(reject_reason)"`
+	}
 )
