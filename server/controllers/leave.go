@@ -7,6 +7,7 @@ import (
 	"server/helpers"
 	"server/helpers/constant"
 	db "server/models/db/pgsql/leave_request"
+	logicHoliday "server/models/logic/holiday"
 	logicLeave "server/models/logic/leave"
 	logicUser "server/models/logic/user"
 	structAPI "server/structs/api"
@@ -202,8 +203,26 @@ func (c *LeaveController) PostLeaveRequestSupervisor() {
 		c.Ctx.Output.SetStatus(400)
 		resp.Error = errors.New("Your Back to Work Date should be on " + realBackOn).Error()
 	} else {
-		if helpers.InTimeSpan(leave.DateFrom, leave.DateTo, "24-12-2019") && helpers.InTimeSpan(leave.DateFrom, leave.DateTo, "25-12-2019") {
-			leave.Total = leave.Total - 2
+		//check if in range of leave date there are public holiday
+
+		// if helpers.InTimeSpan(leave.DateFrom, leave.DateTo, "24-12-2019") && helpers.InTimeSpan(leave.DateFrom, leave.DateTo, "25-12-2019") {
+		// 	leave.Total = leave.Total - 2
+		// }
+
+		//get all public holiday in 1 year
+		allPublicHoliday, errPublicHoliday := logicHoliday.GetAllPublicHoliday()
+		helpers.CheckErr("Error get public holiday @PostLeaveRequestSupervisor - controller", errPublicHoliday)
+
+		for _, holiday := range allPublicHoliday {
+			allDayWithinRange := helpers.GetAllDateWithinRange(holiday.DateStart, holiday.DateEnd) // dapatkan seluruh hari dalam range public holiday
+
+			for _, d := range allDayWithinRange { // iterate every date inside range of public holiday
+				//if public holiday date are in range then total - 1
+				if helpers.InTimeSpan(leave.DateFrom, leave.DateTo, d) {
+					leave.Total = leave.Total - 1
+				}
+			}
+
 		}
 
 		errAddLeave := logicLeave.CreateLeaveRequestSupervisor(

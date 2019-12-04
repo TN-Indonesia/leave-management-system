@@ -8,12 +8,12 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// Public Holiday Controller
+// PublicHolidayController ...
 type PublicHolidayController struct {
 	beego.Controller
 }
 
-// GetAllPublicHoliday
+// GetAllPublicHoliday ...
 func (c *PublicHolidayController) GetAllPublicHoliday() {
 	var resp structAPI.RespData
 

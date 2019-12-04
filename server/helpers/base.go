@@ -145,3 +145,29 @@ func InTimeSpan(start, end, check string) bool {
 }
 
 //TODO: ADD PUBLIC HOLIDAY AND MAKE IT RECURSIVE
+
+//return slice of string contain all dates of given range
+
+// GetAllDateWithinRange ...
+func GetAllDateWithinRange(start, end string) []string {
+	var allDayWithinRange []string
+
+	startDate, _ := time.Parse("02-01-2006", start)
+	endDate, _ := time.Parse("02-01-2006", end)
+
+	days := endDate.Sub(startDate).Hours() / 24 // get number of days between 2 dates
+	day := int(days)
+
+	dayAfter := startDate
+
+	fmt.Println(days)
+
+	allDayWithinRange = append(allDayWithinRange, start)
+	for i := 0; i < day; i++ {
+		dayAfter = dayAfter.AddDate(0, 0, 1)
+		dayAfterStr := dayAfter.Format("02-01-2006")
+		allDayWithinRange = append(allDayWithinRange, dayAfterStr)
+	}
+
+	return allDayWithinRange
+}

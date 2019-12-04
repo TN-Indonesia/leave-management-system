@@ -1,5 +1,5 @@
 export const ROOT_API = 'http://35.197.155.131:8080'; // GCP
-//export const ROOT_API = 'http://localhost:8080'; // local
+// export const ROOT_API = 'http://localhost:8080'; // local
 
 export const CLEAR_FIELD = "CLEAR_FIELD"
 
