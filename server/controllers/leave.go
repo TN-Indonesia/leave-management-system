@@ -92,9 +92,24 @@ func (c *LeaveController) PostLeaveRequestEmployee() {
 
 	} else {
 
-		if helpers.InTimeSpan(leave.DateFrom, leave.DateTo, "24-12-2019") && helpers.InTimeSpan(leave.DateFrom, leave.DateTo, "25-12-2019") {
-			leave.Total = leave.Total - 2
+		//check if in range of leave date there are public holiday
+
+		//get all public holiday in 1 year
+		allPublicHoliday, errPublicHoliday := logicHoliday.GetAllPublicHoliday()
+		helpers.CheckErr("Error get public holiday @PostLeaveRequestSupervisor - controller", errPublicHoliday)
+
+		for _, holiday := range allPublicHoliday {
+			allDayWithinRange := helpers.GetAllDateWithinRange(holiday.DateStart, holiday.DateEnd) // dapatkan seluruh hari dalam range public holiday
+
+			for _, d := range allDayWithinRange { // iterate every date inside range of public holiday
+				//if public holiday date are in range then total - 1
+				if helpers.InTimeSpan(leave.DateFrom, leave.DateTo, d) {
+					leave.Total = leave.Total - 1
+				}
+			}
+
 		}
+
 		errAddLeave := logicLeave.CreateLeaveRequestEmployee(
 			leave.EmployeeNumber,
 			leave.TypeLeaveID,
@@ -175,14 +190,6 @@ func (c *LeaveController) PostLeaveRequestSupervisor() {
 	strBalance := strconv.FormatFloat(resGet.LeaveRemaining, 'f', -1, 64)
 	strTotal := strconv.FormatFloat(result, 'f', -1, 64)
 
-	// realBackOn := helpers.PredictBackOn(req.DateTo)
-
-	// else if req.BackOn != realBackOn && len(req.HalfDates) == 0 {
-	// 	beego.Warning("Error leave balance @PostLeaveRequestSupervisor - controller ", realBackOn, req.BackOn)
-	// 	c.Ctx.Output.SetStatus(400)
-	// 	resp.Error = errors.New("Your Back to Work Date should be on " + realBackOn).Error()
-	// }
-
 	if req.TypeLeaveID != 11 && req.TypeLeaveID != 22 && req.TypeLeaveID != 33 && req.TypeLeaveID != 44 && req.TypeLeaveID != 55 && req.TypeLeaveID != 66 {
 		beego.Warning("Error empty field type leave @PostLeaveRequestSupervisor - controller")
 		c.Ctx.Output.SetStatus(400)
@@ -200,10 +207,6 @@ func (c *LeaveController) PostLeaveRequestSupervisor() {
 
 	} else {
 		//check if in range of leave date there are public holiday
-
-		// if helpers.InTimeSpan(leave.DateFrom, leave.DateTo, "24-12-2019") && helpers.InTimeSpan(leave.DateFrom, leave.DateTo, "25-12-2019") {
-		// 	leave.Total = leave.Total - 2
-		// }
 
 		//get all public holiday in 1 year
 		allPublicHoliday, errPublicHoliday := logicHoliday.GetAllPublicHoliday()
@@ -298,6 +301,24 @@ func (c *LeaveController) PostLeaveRequestAdmin() {
 		resp.Error = errors.New("Error empty field").Error()
 
 	} else {
+		//check if in range of leave date there are public holiday
+
+		//get all public holiday in 1 year
+		allPublicHoliday, errPublicHoliday := logicHoliday.GetAllPublicHoliday()
+		helpers.CheckErr("Error get public holiday @PostLeaveRequestSupervisor - controller", errPublicHoliday)
+
+		for _, holiday := range allPublicHoliday {
+			allDayWithinRange := helpers.GetAllDateWithinRange(holiday.DateStart, holiday.DateEnd) // dapatkan seluruh hari dalam range public holiday
+
+			for _, d := range allDayWithinRange { // iterate every date inside range of public holiday
+				//if public holiday date are in range then total - 1
+				if helpers.InTimeSpan(leave.DateFrom, leave.DateTo, d) {
+					leave.Total = leave.Total - 1
+				}
+			}
+
+		}
+
 		errAddLeave := logicLeave.CreateLeaveRequestAdmin(
 			leave.EmployeeNumber,
 			leave.TypeLeaveID,
@@ -502,7 +523,12 @@ func (c *LeaveController) GetBackToWorkDate() {
 		}
 		res = structAPI.BackToWorkDate{}
 	)
-	realBackOn := helpers.PredictBackOn(req.ToDate)
+
+	//Get all day in public holiday
+	allPublicHoliday, errPublicHoliday := logicHoliday.GetAllPublicHoliday()
+	helpers.CheckErr("Error get public holiday @PostLeaveRequestSupervisor - controller", errPublicHoliday)
+
+	realBackOn := helpers.PredictBackOn(req.ToDate, allPublicHoliday)
 	res = structAPI.BackToWorkDate{
 		BackToWorkDate: realBackOn,
 	}

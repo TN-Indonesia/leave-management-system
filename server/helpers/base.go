@@ -6,6 +6,8 @@ import (
 	"strings"
 	"time"
 
+	structLogic "server/structs/logic"
+
 	"github.com/astaxie/beego"
 )
 
@@ -116,7 +118,7 @@ func NowLoc(timeLoc string) (
 }
 
 //PredictBackOn ...
-func PredictBackOn(date string) string {
+func PredictBackOn(date string, allPublicHoliday []structLogic.GetAllPublicHoliday) string {
 	result := ""
 	t, _ := time.Parse("02-01-2006", date)
 	t = t.AddDate(0, 0, 1)
@@ -124,9 +126,20 @@ func PredictBackOn(date string) string {
 	split := t.String()[0:10]
 	result = split[8:10] + "-" + split[5:7] + "-" + split[0:4]
 
-	if t.Weekday() == 6 || t.Weekday() == 0 || result == "2019-12-25" || result == "2019-12-24" {
+	if t.Weekday() == 6 || t.Weekday() == 0 {
 		beego.Warning(time.Weekday(6))
-		return PredictBackOn(result)
+		return PredictBackOn(result, allPublicHoliday)
+	}
+
+	//Check if back to work date is within public holiday
+	for _, holiday := range allPublicHoliday {
+		allDayWithinRange := GetAllDateWithinRange(holiday.DateStart, holiday.DateEnd)
+
+		for _, d := range allDayWithinRange { // iterate every date inside range of public holiday
+			if result == d {
+				return PredictBackOn(result, allPublicHoliday)
+			}
+		}
 	}
 
 	return result
