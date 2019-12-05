@@ -86,6 +86,12 @@ func init() {
 			"get:GetReportLeaveRequestTypeLeave",
 		),
 
+		// get back to work date
+		beego.NSRouter("/leave/back-to-work",
+			&controllers.LeaveController{},
+			"get:GetBackToWorkDate",
+		),
+
 		// ========================= admin ========================= //
 		// register user
 		beego.NSRouter("/admin/user/register",

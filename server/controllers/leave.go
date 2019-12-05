@@ -75,8 +75,6 @@ func (c *LeaveController) PostLeaveRequestEmployee() {
 	strBalance := strconv.FormatFloat(resGet.LeaveRemaining, 'f', -1, 64)
 	strTotal := strconv.FormatFloat(result, 'f', -1, 64)
 
-	realBackOn := helpers.PredictBackOn(req.DateTo, result)
-
 	if req.TypeLeaveID != 11 && req.TypeLeaveID != 22 && req.TypeLeaveID != 33 && req.TypeLeaveID != 44 && req.TypeLeaveID != 55 && req.TypeLeaveID != 66 {
 		beego.Warning("Error empty field type leave @PostLeaveRequestEmployee - controller")
 		c.Ctx.Output.SetStatus(400)
@@ -92,10 +90,6 @@ func (c *LeaveController) PostLeaveRequestEmployee() {
 		c.Ctx.Output.SetStatus(400)
 		resp.Error = errors.New("Your total leave request is " + strTotal + " day and your current " + resGet.TypeName + " balance is " + strBalance + " day left").Error()
 
-	} else if req.BackOn != realBackOn && len(req.HalfDates) == 0 {
-		beego.Warning("Error leave balance @PostLeaveRequestEmployee - controller ", realBackOn, req.BackOn)
-		c.Ctx.Output.SetStatus(400)
-		resp.Error = errors.New("Your Back to Work Date should be on " + realBackOn).Error()
 	} else {
 
 		if helpers.InTimeSpan(leave.DateFrom, leave.DateTo, "24-12-2019") && helpers.InTimeSpan(leave.DateFrom, leave.DateTo, "25-12-2019") {
@@ -181,7 +175,13 @@ func (c *LeaveController) PostLeaveRequestSupervisor() {
 	strBalance := strconv.FormatFloat(resGet.LeaveRemaining, 'f', -1, 64)
 	strTotal := strconv.FormatFloat(result, 'f', -1, 64)
 
-	realBackOn := helpers.PredictBackOn(req.DateTo, result)
+	// realBackOn := helpers.PredictBackOn(req.DateTo)
+
+	// else if req.BackOn != realBackOn && len(req.HalfDates) == 0 {
+	// 	beego.Warning("Error leave balance @PostLeaveRequestSupervisor - controller ", realBackOn, req.BackOn)
+	// 	c.Ctx.Output.SetStatus(400)
+	// 	resp.Error = errors.New("Your Back to Work Date should be on " + realBackOn).Error()
+	// }
 
 	if req.TypeLeaveID != 11 && req.TypeLeaveID != 22 && req.TypeLeaveID != 33 && req.TypeLeaveID != 44 && req.TypeLeaveID != 55 && req.TypeLeaveID != 66 {
 		beego.Warning("Error empty field type leave @PostLeaveRequestSupervisor - controller")
@@ -198,10 +198,6 @@ func (c *LeaveController) PostLeaveRequestSupervisor() {
 		c.Ctx.Output.SetStatus(400)
 		resp.Error = errors.New("Your total leave request is " + strTotal + " day and your current " + resGet.TypeName + " balance is " + strBalance + " day left").Error()
 
-	} else if req.BackOn != realBackOn && len(req.HalfDates) == 0 {
-		beego.Warning("Error leave balance @PostLeaveRequestSupervisor - controller ", realBackOn, req.BackOn)
-		c.Ctx.Output.SetStatus(400)
-		resp.Error = errors.New("Your Back to Work Date should be on " + realBackOn).Error()
 	} else {
 		//check if in range of leave date there are public holiday
 
@@ -489,6 +485,28 @@ func (c *LeaveController) GetReportLeaveRequestTypeLeave() {
 	} else {
 		resp.Body = resGet
 	}
+
+	err := c.Ctx.Output.JSON(resp, false, false)
+	if err != nil {
+		helpers.CheckErr("failed giving output @GetReportLeaveRequest - controller", err)
+	}
+}
+
+// GetBackToWorkDate ...
+func (c *LeaveController) GetBackToWorkDate() {
+	var (
+		resp structAPI.RespData
+		req  = structAPI.BackToWork{
+			ToDate:    c.Ctx.Input.Query("toDate"),
+			HalfDates: c.Ctx.Input.Query("halfDates"),
+		}
+		res = structAPI.BackToWorkDate{}
+	)
+	realBackOn := helpers.PredictBackOn(req.ToDate)
+	res = structAPI.BackToWorkDate{
+		BackToWorkDate: realBackOn,
+	}
+	resp.Body = res
 
 	err := c.Ctx.Output.JSON(resp, false, false)
 	if err != nil {
