@@ -136,6 +136,23 @@ func (c *UserController) GetUserSummary() {
 		resp.Error = errGetSummary.Error()
 		c.Ctx.Output.SetStatus(400)
 	} else {
+		for i, val := range resGet {
+			switch val.TypeLeaveID {
+			case 11:
+				resGet[i].LeaveRemaining = 12 - val.Used
+			case 22:
+				resGet[i].LeaveRemaining = 3 - val.Used
+			case 33:
+				resGet[i].LeaveRemaining = 30 - val.Used
+			case 44:
+				resGet[i].LeaveRemaining = 2 - val.Used
+			case 55:
+				resGet[i].LeaveRemaining = 90 - val.Used
+			default:
+				resGet[i].LeaveRemaining = 2 - val.Used
+			}
+		}
+
 		resp.Body = resGet
 	}
 

@@ -415,6 +415,7 @@ func (u *User) GetSumarry(employeeNumber int64) (sumarry []structLogic.UserSumar
 
 	qb.Select(
 		dbTypeLeave.TableName()+".type_name",
+		dbTypeLeave.TableName()+".id as type_id",
 		"SUM("+dbLeave.TableName()+".total) as used").
 		From(dbLeave.TableName()).
 		InnerJoin(dbTypeLeave.TableName()).
@@ -422,7 +423,7 @@ func (u *User) GetSumarry(employeeNumber int64) (sumarry []structLogic.UserSumar
 		Where(dbLeave.TableName() + `.employee_number = ? `).
 		And(dbLeave.TableName() + `.status = ?`).
 		And("EXTRACT(YEAR FROM " + dbLeave.TableName() + ".created_at) = EXTRACT(YEAR from DATE(NOW()))").
-		GroupBy(dbTypeLeave.TableName() + `.type_name`)
+		GroupBy(dbTypeLeave.TableName() + `.type_name, ` + dbTypeLeave.TableName() + `.id`)
 	sql := qb.String()
 
 	statSuccessInDirector := constant.StatusSuccessInDirector
