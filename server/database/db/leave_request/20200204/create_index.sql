@@ -1,0 +1,1 @@
+CREATE INDEX user_leave_request_index ON leave_request (employee_number, type_leave_id, date_from, date_to, status);

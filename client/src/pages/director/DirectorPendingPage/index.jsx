@@ -361,7 +361,7 @@ class DirectorPendingPage extends Component {
                   className: "my-pagination",
                   defaultCurrent: 1,
                   defaultPageSize: 5,
-                  total: 50,
+                  total: `${this.state.data && this.state.data.length}`,
                   showSizeChanger: this.onShowSizeChange
                 }}
               />
