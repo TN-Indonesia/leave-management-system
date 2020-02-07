@@ -42,6 +42,8 @@ class LeaveRequestPage extends Component {
       halfDate: [],
       publicHolidayDates: null,
       totalDays: 0,
+      backOnDate : false,
+      dateBackOn : "",
     };
 
     this.handleOnChange = this.handleOnChange.bind(this);
@@ -193,11 +195,62 @@ class LeaveRequestPage extends Component {
     console.log(`checked add half day = ${e.target.checked}`);
   }
 
-  onChangeIsHalfDay(e, value) {
+  onChangeBackoptionMorning(e, max) {
+    if (e.target.checked === true) {
+        let backOn = {
+          ...this.props.leaveForm,
+          back_on: max,
+          half_dates: this.state.halfDate,
+          total: Number(this.state.totalDays)
+        };
+        this.props.formOnChange(backOn);
+        this.setState( {dateBackOn: max})
+        const myDate = moment(max, 'YYYY-MM-DD').toDate();
+      console.log("cekilis",myDate);
+      // this.onBackOn;
+    } else {
+      console.log("uncekilis");
+      this.setState({dateBackOn:""})
+    }
+  }
+  //TODO Make weekend and holliday
+  onChangeBackoptionNoon(e, max) {
+    if (e.target.checked === true) {
+        
+        var myDate = moment(max, 'YYYY-MM-DD');
+        console.log("masuk", myDate)
+        myDate.add(1,"days")
+        console.log("masuk 1", myDate)
+
+        let time = moment(myDate).format('DD-MM-YYYY');
+        console.log("masuk2", time)
+
+      let backOn = {
+          ...this.props.leaveForm,
+          back_on: time,
+          half_dates: this.state.halfDate,
+          total: Number(this.state.totalDays)
+        };
+        this.props.formOnChange(backOn);
+        this.setState( {dateBackOn: time})
+        console.log("cekilis asoy",this.state.dateBackOn);
+
+    } else {
+      console.log("uncekilis");
+      this.setState({dateBackOn:""})
+    }
+  }
+
+  onChangeIsHalfDay(e, value, last) {
     console.log(`${e.target.value} checked is ${e.target.checked}`);
+    console.log("udah masuk", last)
     let parentDiv = document.getElementById("add_half_day");
     if (e.target.checked) {
       parentDiv.disabled = true
+      if(e.target.value === last ) {
+        console.log("masuk pak eko")
+        this.setState({ backOnDate: true });
+      }
       this.setState(prevState => ({
         halfDate: update(prevState.halfDate, { $push: [e.target.value] })
       }));
@@ -205,6 +258,9 @@ class LeaveRequestPage extends Component {
       parentDiv.disabled = false
       let array = this.state.halfDate;
       let index = array.indexOf(e.target.value);
+      if(e.target.value === last ) {
+        this.setState({ backOnDate: false });
+      }
       this.setState(prevState => ({
         halfDate: update(prevState.halfDate, { $splice: [[index, 1]] })
       }));
@@ -375,7 +431,7 @@ class LeaveRequestPage extends Component {
       }
     }
 
-    let result = ((end - start) / 86400000 - weekend_count) + 1;
+    let result = (((end - start) / 86400000) - weekend_count) + 1;
     return result
   }
 
@@ -389,12 +445,13 @@ class LeaveRequestPage extends Component {
 
 
   render() {
-    const { from, to, start, end, endOpen } = this.state;
+    const { from, to, start, end, endOpen ,backOnDate} = this.state;
     const { getFieldDecorator } = this.props.form;
     const dates = this.getDates(start, end);
     const elements = [];
     const dateFormat = "DD-MM-YYYY";
     const role = localStorage.getItem("role");
+
 
     const formItemLayout = {
       labelCol: {
@@ -420,13 +477,15 @@ class LeaveRequestPage extends Component {
       </Select>
     );
 
+
+    //TODO make backon for half leave
     for (let i = 0; i < dates.length; i++) {
       elements.push(
         <Checkbox
           key={i}
           id="is_half_day"
           name="is_half_day"
-          onChange={e => this.onChangeIsHalfDay(e, dates[i])}
+          onChange={e => this.onChangeIsHalfDay(e, dates[i], dates[dates.length-1])}
           value={dates[i]}
         >
           {dates[i]}
@@ -598,15 +657,42 @@ class LeaveRequestPage extends Component {
                   Add Half Day
                 </Checkbox>
               </FormItem>
-
+              
               <div id="halfDay">
                 <FormItem {...formItemLayout} label="Half Day">
                   {elements}
                 </FormItem>
+                { backOnDate ? (
+                  <div>
+                  <FormItem >
+                  <Checkbox
+                    id="on_back_date"
+                    name="on_back_date"
+                    style={formStyle}
+                    onChange= {e => this.onChangeBackoptionMorning(e, dates[dates.length-1])}
+                   
+                  >
+                  Morning
+                  </Checkbox>
+                </FormItem>
+                <FormItem>
+                  <Checkbox
+                    id="on_back_date"
+                    name="on_back_date"
+                    style={formStyle}
+                    onChange= {e => this.onChangeBackoptionNoon(e, dates[dates.length-1])}
+                  >
+                  Afternoon
+                  </Checkbox>
+                </FormItem>
+                </div>
+              ) : (
+                  <div></div>
+                )}
+             
               </div>
-
               <FormItem {...formItemLayout} label="Back to work on">
-                {getFieldDecorator("back to work", {
+                {/* {getFieldDecorator("back to work", {
                   rules: [
                     {
                       required: true
@@ -622,7 +708,15 @@ class LeaveRequestPage extends Component {
                     placeholder="Back to work"
                     style={formStyle}
                   />
-                )}
+                )} */}
+              <Input
+                    type="text"
+                    id="back_on"
+                    name="back_on"
+                    disabled
+                    value={this.state.dateBackOn}
+                    style={formStyle}
+                  />
               </FormItem>
 
               <FormItem {...formItemLayout} label="Contact Address">
