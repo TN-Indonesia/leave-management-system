@@ -30,7 +30,14 @@ func RegisterPGSQL() {
 		adapter.CallPGSQL(),
 		maxIdle, maxConn)
 	if errRegisterDataBase != nil {
-		helpers.CheckErr("error while register DB @RegisterPGSQL", errRegisterDataBase)
+		helpers.CheckErr("error while register DB E-Leave @RegisterPGSQL", errRegisterDataBase)
+	}
+
+	errRegisterDataBase = orm.RegisterDataBase("dbMeal", "postgres",
+		adapter.CallPGSQLMeal(),
+		maxIdle, maxConn)
+	if errRegisterDataBase != nil {
+		helpers.CheckErr("error while register DB Overtime Meals @RegisterPGSQL", errRegisterDataBase)
 	}
 
 	RegisterModel()
@@ -72,6 +79,7 @@ func RegisterModel() {
 	orm.RegisterModel(new(dbStruct.TypeLeave))
 	orm.RegisterModel(new(dbStruct.UserTypeLeave))
 	orm.RegisterModel(new(dbStruct.PublicHoliday))
+	orm.RegisterModel(new(dbStruct.MealRequest))
 }
 
 // CreateTableUser ...

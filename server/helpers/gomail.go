@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"path/filepath"
 	"server/helpers/constant"
+	structLogic "server/structs/logic"
 
 	gomail "gopkg.in/gomail.v2"
 )
@@ -472,6 +473,118 @@ func GoMailDirectorFromSupervisor(mailTo string, employeeName string, directorNa
 	m.SetHeader("From", authEmail)
 	m.SetHeader("To", mailTo)
 	m.SetHeader("Subject", "Request Leave")
+	m.Embed(filePrefix + "/tnis.png")
+	m.SetBody("text/html", mailHTML)
+
+	d := gomail.NewDialer(authHost, port, authEmail, authPassword)
+
+	if err := d.DialAndSend(m); err != nil {
+		CheckErr("error email", err)
+	}
+}
+
+// ================================== Overtime Meals ==================================
+
+// GoMailSupervisorApproval ...
+func GoMailSupervisorApproval(mailTo string, infoHTML structLogic.InfoMailSupervisorApproval) {
+	var errParse error
+
+	filePrefix, _ := filepath.Abs("./views")
+	t := template.New("supervisor_approval.html")
+	t, errParse = t.ParseFiles(filePrefix + "/supervisor_approval.html")
+	if errParse != nil {
+		CheckErr("errParse ", errParse)
+	}
+
+	var tpl bytes.Buffer
+	if err := t.Execute(&tpl, infoHTML); err != nil {
+		CheckErr("err ", err)
+	}
+	mailHTML := tpl.String()
+
+	authEmail := constant.EmailNoReply
+	authPassword := constant.GetPass()
+	authHost := "smtp.gmail.com"
+	port := 587
+
+	m := gomail.NewMessage()
+	m.SetHeader("From", authEmail)
+	m.SetHeader("To", mailTo)
+	m.SetHeader("Subject", "Overtime Meals Request")
+	m.Embed(filePrefix + "/tnis.png")
+	m.SetBody("text/html", mailHTML)
+
+	d := gomail.NewDialer(authHost, port, authEmail, authPassword)
+
+	if err := d.DialAndSend(m); err != nil {
+		CheckErr("error email", err)
+	}
+}
+
+// GoMailApprovedRequest ...
+func GoMailApprovedRequest(mailTo string, infoHTML structLogic.InfoMailApprovedRequest) {
+	var errParse error
+
+	filePrefix, _ := filepath.Abs("./views")
+	t := template.New("approved_request.html")
+
+	t, errParse = t.ParseFiles(filePrefix + "/approved_request.html")
+	if errParse != nil {
+		CheckErr("errParse ", errParse)
+	}
+
+	var tpl bytes.Buffer
+	if err := t.Execute(&tpl, infoHTML); err != nil {
+		CheckErr("err ", err)
+	}
+	mailHTML := tpl.String()
+
+	authEmail := constant.EmailNoReply
+	authPassword := constant.GetPass()
+	authHost := "smtp.gmail.com"
+	port := 587
+
+	m := gomail.NewMessage()
+	m.SetHeader("From", authEmail)
+	m.SetHeader("To", mailTo)
+	m.SetHeader("Subject", "Overtime Meals Request Approved")
+	m.Embed(filePrefix + "/tnis.png")
+	m.SetBody("text/html", mailHTML)
+
+	d := gomail.NewDialer(authHost, port, authEmail, authPassword)
+
+	if err := d.DialAndSend(m); err != nil {
+		CheckErr("error email", err)
+	}
+}
+
+// GoMailSubmittedRequest ...
+func GoMailSubmittedRequest(mailTo string, infoHTML structLogic.InfoMailSubmittedRequest) {
+	var errParse error
+
+	filePrefix, _ := filepath.Abs("./views")
+	t := template.New("submitted_request.html")
+
+	t, errParse = t.ParseFiles(filePrefix + "/submitted_request.html")
+	if errParse != nil {
+		CheckErr("errParse ", errParse)
+	}
+
+	var tpl bytes.Buffer
+	if err := t.Execute(&tpl, infoHTML); err != nil {
+		CheckErr("err ", err)
+	}
+	mailHTML := tpl.String()
+
+	authEmail := constant.EmailNoReply
+	authPassword := constant.GetPass()
+	authHost := "smtp.gmail.com"
+	port := 587
+
+	m := gomail.NewMessage()
+	m.SetHeader("From", authEmail)
+	m.SetHeader("To", mailTo)
+	m.SetHeader("Subject", "Overtime Meals Request "+infoHTML.Status)
 	m.Embed(filePrefix + "/tnis.png")
 	m.SetBody("text/html", mailHTML)
 

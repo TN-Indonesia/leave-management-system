@@ -11,6 +11,9 @@ func init() {
 	beego.Router("/", &controllers.MainController{})
 	ns := beego.NewNamespace("/api",
 
+		// ========================================================================== //
+		// ===========================  E-Leave (Start)   =========================== //
+
 		// ========================= user ========================= //
 		// login
 		beego.NSRouter("/login",
@@ -216,6 +219,61 @@ func init() {
 			&controllers.PublicHolidayController{},
 			"get:GetAllPublicHoliday",
 		),
+
+		// ===========================   E-Leave (End)    =========================== //
+		// ========================================================================== //
+
+		// ========================================================================== //
+		// ========================= Overtime Meals (Start) ========================= //
+
+		// ========================= meal-request ========================= //
+		// get meal request(ID : meal_request_id), create meal request(ID : employee_number)
+		beego.NSRouter("/meal/:id:int",
+			&controllers.MealController{},
+			"get:GetMealRequestByID;post:PostMealRequest",
+		),
+		// approval link from email
+		beego.NSRouter("meal/approval/",
+			&controllers.MealController{},
+			"post:PostApprovalMealRequest",
+		),
+		//download overtime meal form request pdf
+		beego.NSRouter("/meal/form/:id:int",
+			&controllers.MealController{},
+			"get:GetDownloadFormPDF",
+		),
+		//Inquiry Meals Request for Employee
+		beego.NSRouter("/meals/employee/:id:int/:status:string",
+			&controllers.MealController{},
+			"get:GetMealRequestForEmployeeInquiry",
+		),
+		//Inquiry Meals Request for Supervisor
+		beego.NSRouter("/meals/supervisor/:id:int/:status:string",
+			&controllers.MealController{},
+			"get:GetMealRequestForSupervisorInquiry",
+		),
+		//Inquiry Meals Request for Admin
+		beego.NSRouter("/meals/admin",
+			&controllers.MealController{},
+			"get:GetMealRequestForAdminInquiry",
+		),
+
+		// ========================= employee ========================= //
+		// get employee(ID : employee_number)
+		beego.NSRouter("/employee/:id:int",
+			&controllers.UserController{},
+			"get:GetEmployeeByEmployeeNumber",
+		),
+		// get list employee
+		beego.NSRouter("/employee/list",
+			&controllers.UserController{},
+			"get:GetListEmployee",
+		),
+
+		// ========================= Overtime Meals (End)   ========================= //
+		// ========================================================================== //
+
 	)
 	beego.AddNamespace(ns)
+	beego.SetStaticPath("/storages", "storages")
 }

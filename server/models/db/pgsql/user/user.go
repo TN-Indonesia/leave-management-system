@@ -2,12 +2,15 @@ package user
 
 import (
 	"errors"
+	"fmt"
+	"log"
 	"server/helpers"
 	"server/helpers/constant"
 	userLogic "server/models/db/pgsql/admin"
 	structAPI "server/structs/api"
 	structDB "server/structs/db"
 	structLogic "server/structs/logic"
+	"strconv"
 	"time"
 
 	"github.com/astaxie/beego/orm"
@@ -467,4 +470,186 @@ func (u *User) GetUserLeaveRemaining(typeID int64, employeeNumber int64) (userTy
 	}
 
 	return userTypeLeave, err
+}
+
+// =============================== Overtime Meals ===============================
+
+// GetUserByEmployeeNumber ...
+func (u *User) GetUserByEmployeeNumber(employeeNumber int64) (
+	user structAPI.Employee,
+	err error,
+) {
+	var dbUser structDB.User
+
+	o := orm.NewOrm()
+	qb, errQB := orm.NewQueryBuilder("mysql")
+	if errQB != nil {
+		helpers.CheckErr("Query builder failed @GetUserByEmployeeNumber", errQB)
+		err = errQB
+		return
+	}
+
+	qb.Select("*").
+		From(dbUser.TableName()).
+		Where(dbUser.TableName() + `.employee_number = ? `)
+	qb.Limit(1)
+	sql := qb.String()
+	// log.Println(sql)
+
+	errRaw := o.Raw(sql, employeeNumber).QueryRow(&user)
+	if errRaw != nil {
+		helpers.CheckErr("Failed query select @GetUserByEmployeeNumber", errRaw)
+		err = errors.New("No User with employee_number = " + strconv.Itoa(int(employeeNumber)))
+		return
+	}
+
+	return
+}
+
+// GetListEmployee ...
+func (u *User) GetListEmployee() (
+	listEmployee []structAPI.ListEmployee,
+	err error,
+) {
+	var dbUser structDB.User
+
+	o := orm.NewOrm()
+	qb, errQB := orm.NewQueryBuilder("mysql")
+	if errQB != nil {
+		helpers.CheckErr("Query builder failed @GetListEmployee", errQB)
+		err = errQB
+		return
+	}
+
+	log.Println("MASUK====================================")
+	qb.Select(
+		dbUser.TableName()+".employee_number",
+		dbUser.TableName()+".name",
+	).
+		From(dbUser.TableName()).
+		Where(dbUser.TableName() + ".role in ('" + constant.RoleEmployee + "','" + constant.RoleSupervisor + "')")
+	sql := qb.String()
+	// log.Println(sql)
+
+	_, errRaw := o.Raw(sql).QueryRows(&listEmployee)
+	if errRaw != nil {
+		helpers.CheckErr("Failed query select @GetListEmployee", errRaw)
+		err = errRaw
+		return
+	}
+
+	return
+}
+
+// GetOtherRequestorNameByEmployeeNumbers ...
+func (u *User) GetOtherRequestorNameByEmployeeNumbers(employeeNumbers string) (
+	OtherRequestorName []structLogic.GetOtherRequestorNameByEmployeeNumbers,
+	err error,
+) {
+	if employeeNumbers == "" {
+		return
+	}
+
+	var dbUser structDB.User
+	o := orm.NewOrm()
+
+	qb, errQB := orm.NewQueryBuilder("mysql")
+	if errQB != nil {
+		helpers.CheckErr("Query builder failed @GetOtherRequestorNameByEmployeeNumbers", errQB)
+		return OtherRequestorName, errQB
+	}
+
+	qb.Select(
+		dbUser.TableName() + ".name",
+	).
+		From(dbUser.TableName()).
+		Where(dbUser.TableName() + `.employee_number IN (` + employeeNumbers + `) `)
+	sql := qb.String()
+	// log.Println(sql)
+
+	_, errRaw := o.Raw(sql).QueryRows(&OtherRequestorName)
+	if errRaw != nil {
+		helpers.CheckErr("Failed query select @GetOtherRequestorNameByEmployeeNumbers", errRaw)
+		return OtherRequestorName, fmt.Errorf("No User with employee_number IN %s", employeeNumbers)
+	}
+
+	return OtherRequestorName, err
+}
+
+// GetSupervisorEmailByMealRequestID ...
+func (u *User) GetSupervisorEmailByMealRequestID(ID int64) (email string, err error) {
+	var supervisorID *int64
+
+	var dbMeal structDB.MealRequest
+	oMeal := orm.NewOrm()
+	oMeal.Using(dbMeal.OrmDBName())
+
+	qbMeal, errQbMeal := orm.NewQueryBuilder("mysql")
+	if errQbMeal != nil {
+		helpers.CheckErr("Query builder meal failed @GetSupervisorEmailByMealRequestID", errQbMeal)
+		return "", errQbMeal
+	}
+
+	qbMeal.Select("supervisor_id").From(dbMeal.TableName()).Where(`id = ?`)
+	sqlMeal := qbMeal.String()
+
+	errGetSupervisor := oMeal.Raw(sqlMeal, ID).QueryRow(&supervisorID)
+	if errGetSupervisor != nil {
+		return "", errGetSupervisor
+	}
+
+	var dbUser structDB.User
+
+	oUser := orm.NewOrm()
+	qbUser, errQbUser := orm.NewQueryBuilder("mysql")
+	if errQbUser != nil {
+		helpers.CheckErr("Query builder user failed @GetSupervisorEmailByMealRequestID", errQbUser)
+		return "", errQbUser
+	}
+
+	qbUser.Select("email").From(dbUser.TableName()).Where(`supervisor_id = ?`)
+	sqlUser := qbUser.String()
+
+	var result *string
+	errGetEmail := oUser.Raw(sqlUser, supervisorID).QueryRow(&result)
+	if errGetEmail != nil {
+		return "", errGetEmail
+	}
+
+	return *result, nil
+}
+
+// GetUserHRD ...
+func (u *User) GetUserHRD() (user structDB.User, err error) {
+	var dbUser structDB.User
+
+	o := orm.NewOrm()
+	qb, err := orm.NewQueryBuilder("mysql")
+	if err != nil {
+		helpers.CheckErr("Query builder failed @GetUserHRD", err)
+		return
+	}
+
+	qb.Select(
+		dbUser.TableName()+".employee_number",
+		dbUser.TableName()+".name",
+		dbUser.TableName()+".mobile_phone",
+		dbUser.TableName()+".email",
+		dbUser.TableName()+".role",
+		dbUser.TableName()+".supervisor_id",
+	).
+		From(dbUser.TableName()).
+		Where(dbUser.TableName() + `.position = ?`)
+	qb.Limit(1)
+	sql := qb.String()
+	// log.Println(sql)
+
+	err = o.Raw(sql, constant.RoleHRD).QueryRow(&user)
+	if err != nil {
+		helpers.CheckErr("Failed query select @GetUserHRD", err)
+		err = errors.New("No User with position = " + constant.RoleHRD)
+		return
+	}
+
+	return
 }

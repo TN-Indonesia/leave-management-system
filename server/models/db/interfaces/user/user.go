@@ -83,4 +83,24 @@ type IBaseUser interface {
 		userTypeLeave structLogic.UserTypeLeave,
 		err error,
 	)
+
+	// =================== Overtime Meals ================
+	GetUserByEmployeeNumber(employeeNumber int64) (
+		user structAPI.Employee,
+		err error,
+	)
+
+	GetListEmployee() (
+		listEmployee []structAPI.ListEmployee,
+		err error,
+	)
+
+	GetOtherRequestorNameByEmployeeNumbers(employeeNumbers string) (
+		OtherRequestorName []structLogic.GetOtherRequestorNameByEmployeeNumbers,
+		err error,
+	)
+
+	GetSupervisorEmailByMealRequestID(ID int64) (email string, err error)
+
+	GetUserHRD() (user structDB.User, err error)
 }

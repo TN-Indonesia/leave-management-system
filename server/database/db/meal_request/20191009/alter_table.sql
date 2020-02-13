@@ -1,0 +1,1 @@
+ALTER TABLE meal_request ALTER COLUMN id SET DEFAULT NEXTVAL('meal_request_id_seq'::regclass);

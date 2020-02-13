@@ -1,0 +1,1 @@
+DROP SEQUENCE meal_request_id_seq;

@@ -16,6 +16,8 @@ Package=(
 		"github.com/dgrijalva/jwt-go"		
 		"github.com/satori/go.uuid"
 		"github.com/smartystreets/goconvey/convey"	
+		"github.com/dustin/go-humanize"
+		"github.com/jung-kurt/gofpdf"
 )
 
 arrayPackage=${#Package[@]}

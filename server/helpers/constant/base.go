@@ -15,3 +15,12 @@ func GetPassReset() string {
 	GOPWDRESET := os.Getenv("GOPWDRESET")
 	return GOPWDRESET
 }
+
+// GetClientURL ...
+func GetClientURL() string {
+	protocol := os.Getenv("client_protocol")
+	addr := os.Getenv("client_addr")
+	port := os.Getenv("client_port")
+
+	return protocol + "://" + addr + ":" + port
+}

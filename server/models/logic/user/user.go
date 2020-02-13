@@ -174,3 +174,25 @@ func GetUserLeaveRemaining(typeID int64, employeeNumber int64) (structLogic.User
 
 	return respGet, errGet
 }
+
+// ====================================== Overtime Meals ======================================
+
+// GetUserByEmployeeNumber ...
+func GetUserByEmployeeNumber(employeeNumber int64) (employee structAPI.Employee, err error) {
+	respGet, errGet := DBPostUser.GetUserByEmployeeNumber(employeeNumber)
+	if errGet != nil {
+		helpers.CheckErr("Error get pending request @GetUserByEmployeeNumber - logicUser", errGet)
+	}
+
+	return respGet, errGet
+}
+
+// GetListEmployee ...
+func GetListEmployee() (listEmployee []structAPI.ListEmployee, err error) {
+	respGet, errGet := DBPostUser.GetListEmployee()
+	if errGet != nil {
+		helpers.CheckErr("Error get pending request @GetListEmployee - logicUser", errGet)
+	}
+
+	return respGet, errGet
+}
