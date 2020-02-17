@@ -62,7 +62,7 @@ func (u *Supervisor) GetEmployeePending(supervisorID int64) (reqPending []struct
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		Where(`status = ? `).And(`supervisor_id = ? `).
-		OrderBy(leave.TableName() + ".created_at DESC")
+		OrderBy(leave.TableName() + ".id DESC")
 	sql := qb.String()
 
 	beego.Warning("Query : ", sql)
@@ -128,7 +128,7 @@ func (u *Supervisor) GetEmployeeApproved(supervisorID int64) (reqApprove []struc
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		Where(`(status = ? OR status = ? OR status = ? )`).And(user.TableName() + `.supervisor_id = ? `).
-		OrderBy(leave.TableName() + ".created_at DESC")
+		OrderBy(leave.TableName() + ".id DESC")
 	sql := qb.String()
 
 	statPendingInDirector := constant.StatusPendingInDirector
@@ -193,7 +193,7 @@ func (u *Supervisor) GetEmployeeRejected(supervisorID int64) (reqReject []struct
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		Where(`status = ?`).And(user.TableName() + `.supervisor_id = ? `).
-		OrderBy(leave.TableName() + ".created_at DESC")
+		OrderBy(leave.TableName() + ".id DESC")
 	sql := qb.String()
 
 	statRejectInSupervisor := constant.StatusRejectInSuperVisor

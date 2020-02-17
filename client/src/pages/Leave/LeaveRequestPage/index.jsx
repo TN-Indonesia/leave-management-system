@@ -21,6 +21,7 @@ import {
   Select,
   Button,
   Checkbox,
+  Radio,
   DatePicker
 } from "antd";
 const { Content } = Layout;
@@ -44,6 +45,8 @@ class LeaveRequestPage extends Component {
       totalDays: 0,
       backOnDate : false,
       dateBackOn : "",
+      toDate: null,
+      halfDayChecked: false
     };
 
     this.handleOnChange = this.handleOnChange.bind(this);
@@ -56,6 +59,9 @@ class LeaveRequestPage extends Component {
     this.disabledDate = this.disabledDate.bind(this);
     this.disabledDateSick = this.disabledDateSick.bind(this);
     this.disabledDateBack = this.disabledDateBack.bind(this);
+    this.onChangeBackoptionMorning = this.onChangeBackoptionMorning.bind(this);
+    this.onChangeBackoptionNoon = this.onChangeBackoptionNoon.bind(this);
+    this.validationHolliday = this.validationHolliday.bind(this);
   }
 
   componentWillMount() {
@@ -96,6 +102,14 @@ class LeaveRequestPage extends Component {
     });
   };
 
+  radioBackDate = (e, dates) => {
+    if (e.target.value === 1){
+      this.onChangeBackoptionMorning(dates)
+    } else {
+      this.onChangeBackoptionNoon(dates)
+    }
+  }
+
   handleOnChangeNumber = (value, field) => {
     this.onChange(field, Number(value));
     console.log("input=======>", value);
@@ -109,8 +123,22 @@ class LeaveRequestPage extends Component {
     this.props.formOnChange(newLeave);
   };
 
-  handleSubmit = e => {
+  handleSubmit =async e => {
     e.preventDefault();
+    let dateStart = new Date(this.state.start);
+    let dateEnd = new Date(this.state.end);
+    
+    totalDays = this.countTotalDay(dateStart, dateEnd);
+    console.log("tanggal mulai", dateStart)
+    console.log("tanggal akhir", dateEnd)
+    console.log("jumlah tanggal", totalDays)
+    let backOn = {
+      ...this.props.leaveForm,
+      half_dates: this.state.halfDate,
+      total: totalDays
+    };
+    
+    await this.props.formOnChange(backOn);
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log("Received values of form: ", values);
@@ -119,10 +147,26 @@ class LeaveRequestPage extends Component {
     this.props.SumbitLeave(this.props.leaveForm, url => {
       this.props.history.push(url);
     });
+    console.log("Ynag dikirim :", this.props.leaveForm)
+
   };
 
-  handleSubmitSupervisor = e => {
+  handleSubmitSupervisor =async e => {
     e.preventDefault();
+    let dateStart = new Date(this.state.start);
+    let dateEnd = new Date(this.state.end);
+    
+    totalDays = this.countTotalDay(dateStart, dateEnd);
+    console.log("tanggal mulai", dateStart)
+    console.log("tanggal akhir", dateEnd)
+    console.log("jumlah tanggal", totalDays)
+    let backOn = {
+      ...this.props.leaveForm,
+      half_dates: this.state.halfDate,
+      total: totalDays
+    };
+    
+    await this.props.formOnChange(backOn);
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log("Received values of form: ", values);
@@ -185,60 +229,56 @@ class LeaveRequestPage extends Component {
     this.props.formOnChange(employee_num);
   };
 
-  onChangeAddHalfDay(e) {
+  onChangeAddHalfDay(e, max) {
     let hiddenDiv = document.getElementById("halfDay");
     if (e.target.checked === true) {
       hiddenDiv.style.display = "block";
+      this.setState({halfDayChecked : true})
     } else {
       hiddenDiv.style.display = "none";
+      this.setState({halfDayChecked : false})
+      this.onChangeBackoptionNoon(max);
     }
     console.log(`checked add half day = ${e.target.checked}`);
   }
 
-  onChangeBackoptionMorning(e, max) {
-    if (e.target.checked === true) {
+  onChangeBackoptionMorning(max) {
         let backOn = {
           ...this.props.leaveForm,
           back_on: max,
-          half_dates: this.state.halfDate,
-          total: Number(this.state.totalDays)
         };
         this.props.formOnChange(backOn);
         this.setState( {dateBackOn: max})
-        const myDate = moment(max, 'YYYY-MM-DD').toDate();
-      console.log("cekilis",myDate);
-      // this.onBackOn;
-    } else {
-      console.log("uncekilis");
-      this.setState({dateBackOn:""})
-    }
+  }
+
+  validationHolliday(day) {
+    const publicHolidayDates = this.state.publicHolidayDates;
+    let current= moment(day,"DD-MM-YYYY")
+    console.log("adakah isinya:", publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY")))
+  if (publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
+      || moment(current._d).format("dddd") === "Saturday"
+      || moment(current._d).format("dddd") === "Sunday") {
+          current.add(1,"days")
+          console.log("isinya",moment(current).format('DD-MM-YYYY'))
+          return this.validationHolliday(moment(current).format('DD-MM-YYYY'));
+      }
+    return (moment(current).format('DD-MM-YYYY'));
   }
   //TODO Make weekend and holliday
-  onChangeBackoptionNoon(e, max) {
-    if (e.target.checked === true) {
-        
-        var myDate = moment(max, 'YYYY-MM-DD');
-        console.log("masuk", myDate)
+  async onChangeBackoptionNoon(max) {
+   
+        var myDate = moment(max, 'DD-MM-YYYY');
         myDate.add(1,"days")
-        console.log("masuk 1", myDate)
-
         let time = moment(myDate).format('DD-MM-YYYY');
-        console.log("masuk2", time)
-
+        time = this.validationHolliday(time);
+        console.log("cekilis 2 asoy",this.state.totalDays);
       let backOn = {
           ...this.props.leaveForm,
           back_on: time,
-          half_dates: this.state.halfDate,
-          total: Number(this.state.totalDays)
         };
         this.props.formOnChange(backOn);
+        await  console.log("cekilis asoy",this.props.leaveForm);
         this.setState( {dateBackOn: time})
-        console.log("cekilis asoy",this.state.dateBackOn);
-
-    } else {
-      console.log("uncekilis");
-      this.setState({dateBackOn:""})
-    }
   }
 
   onChangeIsHalfDay(e, value, last) {
@@ -247,23 +287,24 @@ class LeaveRequestPage extends Component {
     let parentDiv = document.getElementById("add_half_day");
     if (e.target.checked) {
       parentDiv.disabled = true
-      if(e.target.value === last ) {
-        console.log("masuk pak eko")
-        this.setState({ backOnDate: true });
-      }
       this.setState(prevState => ({
         halfDate: update(prevState.halfDate, { $push: [e.target.value] })
       }));
+      if(e.target.value === last ) {
+        console.log("masuk pak eko")
+        this.setState({ backOnDate: true });
+      };
     } else {
       parentDiv.disabled = false
       let array = this.state.halfDate;
       let index = array.indexOf(e.target.value);
-      if(e.target.value === last ) {
-        this.setState({ backOnDate: false });
-      }
       this.setState(prevState => ({
         halfDate: update(prevState.halfDate, { $splice: [[index, 1]] })
       }));
+      if(e.target.value === last ) {
+        this.setState({ backOnDate: false });
+        this.onChangeBackoptionNoon(last);
+      };
     }
   }
 
@@ -279,14 +320,24 @@ class LeaveRequestPage extends Component {
         ...this.props.leaveForm,
         date_from: newDate
       };
-
+        if (!this.formTo) {
+          this.setState({ formTo : true});
+      }
+      this.setState({ halfDate : [],
+        halfDayChecked : false,
+        backOnDate: false
+      })
+      let hiddenDiv = document.getElementById("halfDay");
+      hiddenDiv.style.display = "none";
+      let parentDiv = document.getElementById("add_half_day");
+      parentDiv.disabled = false;
       this.props.formOnChange(dateFrom);
       this.onChange("start", newStart);
     }
     this.onChange("from", value);
   };
 
-  onEndChange = value => {
+  onEndChange =async value => {
     if (value !== null) {
       const date = new Date(value._d),
         mnth = ("0" + (date.getMonth() + 1)).slice(-2),
@@ -296,9 +347,21 @@ class LeaveRequestPage extends Component {
       let dateTo = {
         ...this.props.leaveForm,
         date_to: newDate,
-
       };
-      this.props.formOnChange(dateTo);
+      // this.setState({ toDate: newDate });
+      await this.props.formOnChange(dateTo);
+      this.setState({ 
+        halfDate : [],
+        halfDayChecked : false,
+        backOnDate: false
+       })
+      let parentDiv = document.getElementById("add_half_day");
+        parentDiv.disabled = false;
+        let hiddenDiv = document.getElementById("halfDay");
+      hiddenDiv.style.display = "none";
+      this.onChangeBackoptionNoon(newDate);
+      console.log("Date To ", newDate)
+      console.log("Date To ", dateTo)
       this.onChange("end", newEnd);
     }
     this.onChange("to", value);
@@ -343,8 +406,7 @@ class LeaveRequestPage extends Component {
 
   disabledDate(current) {
     const publicHolidayDates = this.state.publicHolidayDates;
-    return current < moment().startOf("day")
-      || publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
+    return current < moment().startOf("day") || publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
       || moment(current._d).format("dddd") === "Saturday"
       || moment(current._d).format("dddd") === "Sunday";
   }
@@ -451,6 +513,8 @@ class LeaveRequestPage extends Component {
     const elements = [];
     const dateFormat = "DD-MM-YYYY";
     const role = localStorage.getItem("role");
+    console.log("Props :", this.props.leaveForm);
+    console.log("State  :", this.state);
 
 
     const formItemLayout = {
@@ -467,6 +531,11 @@ class LeaveRequestPage extends Component {
     const formStyle = {
       width: "100%"
     };
+    const disableStyle = {
+      width: "100%",
+    backgroundColor: "lightgray",
+    color: "black"
+    }
 
     const prefixSelector = getFieldDecorator("prefix", {
       initialValue: "+62"
@@ -485,6 +554,7 @@ class LeaveRequestPage extends Component {
           key={i}
           id="is_half_day"
           name="is_half_day"
+          checked= {this.state.halfDate.find(a =>a.includes(dates[i]))}
           onChange={e => this.onChangeIsHalfDay(e, dates[i], dates[dates.length-1])}
           value={dates[i]}
         >
@@ -500,7 +570,7 @@ class LeaveRequestPage extends Component {
       totalDays = this.countTotalDay(dateStart, dateEnd)
     }
 
-    console.log("========>", this.state)
+    console.log("========> isi total", this.state)
 
     return (
       <Layout>
@@ -632,13 +702,15 @@ class LeaveRequestPage extends Component {
                       required: true
                     }
                   ]
-                })(
+                })( 
+                  
                   <DatePicker
                     id="date_to"
                     name="date_to"
                     disabledDate={this.disabledEndDate}
                     format={dateFormat}
                     value={to}
+                    disabled= {!this.state.formTo}
                     placeholder="End"
                     onChange={this.onEndChange}
                     open={endOpen}
@@ -651,7 +723,8 @@ class LeaveRequestPage extends Component {
                 <Checkbox
                   id="add_half_day"
                   name="add_half_day"
-                  onChange={this.onChangeAddHalfDay}
+                  checked={this.state.halfDayChecked}
+                  onChange={e => this.onChangeAddHalfDay(e,dates[dates.length-1] )}
                   style={formStyle}
                 >
                   Add Half Day
@@ -664,27 +737,20 @@ class LeaveRequestPage extends Component {
                 </FormItem>
                 { backOnDate ? (
                   <div>
-                  <FormItem >
-                  <Checkbox
+                    <row>
+                    <Radio.Group 
+                    onChange={e => this.radioBackDate(e, dates[dates.length-1])} 
+                    defaultValue = {2}
                     id="on_back_date"
                     name="on_back_date"
                     style={formStyle}
-                    onChange= {e => this.onChangeBackoptionMorning(e, dates[dates.length-1])}
-                   
-                  >
-                  Morning
-                  </Checkbox>
+                    >
+                        <Radio value={1}>Morning</Radio>
+                        <Radio value={2}>Afternoon</Radio>
+                    </Radio.Group>
+                    <FormItem >
                 </FormItem>
-                <FormItem>
-                  <Checkbox
-                    id="on_back_date"
-                    name="on_back_date"
-                    style={formStyle}
-                    onChange= {e => this.onChangeBackoptionNoon(e, dates[dates.length-1])}
-                  >
-                  Afternoon
-                  </Checkbox>
-                </FormItem>
+                  </row>
                 </div>
               ) : (
                   <div></div>
@@ -715,7 +781,8 @@ class LeaveRequestPage extends Component {
                     name="back_on"
                     disabled
                     value={this.state.dateBackOn}
-                    style={formStyle}
+                    style={disableStyle}
+
                   />
               </FormItem>
 

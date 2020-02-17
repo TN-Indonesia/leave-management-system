@@ -62,7 +62,7 @@ func (e *Employee) GetPendingRequest(employeeNumber int64) (reqPending []structL
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		Where(`(status = ? OR status = ? )`).And(user.TableName() + `.employee_number = ? `).
-		OrderBy(leave.TableName() + ".created_at DESC")
+		OrderBy(leave.TableName() + ".id DESC")
 	sql := qb.String()
 
 	statPendingSupervisor := constant.StatusPendingInSupervisor
@@ -127,7 +127,7 @@ func (e *Employee) GetApprovedRequest(employeeNumber int64) (reqApprove []struct
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		Where(`status = ?`).And(user.TableName() + `.employee_number = ? `).
-		OrderBy(leave.TableName() + ".created_at DESC")
+		OrderBy(leave.TableName() + ".id DESC")
 	sql := qb.String()
 
 	statApproveDirector := constant.StatusSuccessInDirector
@@ -190,7 +190,7 @@ func (e *Employee) GetRejectedRequest(employeeNumber int64) (reqReject []structL
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		Where(`(status = ? OR status = ? )`).And(user.TableName() + `.employee_number = ? `).
-		OrderBy(leave.TableName() + ".created_at DESC")
+		OrderBy(leave.TableName() + ".id DESC")
 	sql := qb.String()
 
 	statRejectSupervisor := constant.StatusRejectInSuperVisor

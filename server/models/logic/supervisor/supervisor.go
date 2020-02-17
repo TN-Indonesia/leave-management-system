@@ -51,7 +51,7 @@ func ApproveBySupervisor(id int64, employeeNumber int64) error {
 	getDirector, errGetDirector := DBUser.GetDirector()
 	helpers.CheckErr("Error get director @ApproveBySupervisor - logicSupervisor", errGetDirector)
 
-	getLeave, errGetLeave := DBLeave.GetLeave(employeeNumber)
+	getLeave, errGetLeave := DBLeave.GetLeave(id)
 	helpers.CheckErr("Error get leave @ApproveBySupervisor - logicSupervisor", errGetLeave)
 
 	actionBy := getSupervisor.Name
@@ -82,7 +82,7 @@ func RejectBySupervisor(l *structLogic.LeaveReason, id int64, employeeNumber int
 	getSupervisor, errGetSupervisor := DBUser.GetEmployee(getSupervisorID.SupervisorID)
 	helpers.CheckErr("Error get supervisor @RejectBySupervisor - logicSupervisor", errGetSupervisor)
 
-	getLeave, errGetLeave := DBLeave.GetLeave(employeeNumber)
+	getLeave, errGetLeave := DBLeave.GetLeave(id)
 	helpers.CheckErr("Error get leave @RejectBySupervisor - logicSupervisor", errGetLeave)
 
 	rejectReason := l.RejectReason

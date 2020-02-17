@@ -1,3 +1,4 @@
+-- Dont Input Public Holliday for weekend --
 INSERT INTO public_holiday
 VALUES
   	(1,'01-01-2019','01-01-2019','New Years Day'),
@@ -24,12 +25,13 @@ VALUES
 	(22,'01-05-2020','01-05-2020','Labour Day​'),
 	(23,'07-05-2020','07-05-2020','Waisak Day 2564'),
 	(24,'21-05-2020','21-05-2020','Ascension Day of Jesus Christ​'),
-	(25,'22-05-2020','27-05-2020','Hari Raya Idul Fitri 1441 Hijriyah'),
-	(26,'01-06-2020','01-06-2020','Pancasila Day​​'),
-	(27,'31-07-2020','31-07-2020','Idul Adha 1441 Hijriyah​'),
-	(28,'17-08-2020','17-08-2020','Independence Day'),
-	(29,'20-08-2020','20-08-2020','Islamic New Year 1442 Hijriyah​'),
-	(30,'29-10-2020','29-10-2020','Prophet Muhammads Birthday'),
-	(31,'25-12-2020','25-12-2020','Christmas Holiday​')
+	(25,'22-05-2020','22-05-2020','Hari Raya Idul Fitri 1441 Hijriyah'),
+	(26,'25-05-2020','27-05-2020','Hari Raya Idul Fitri 1441 Hijriyah'),
+	(27,'01-06-2020','01-06-2020','Pancasila Day​​'),
+	(28,'31-07-2020','31-07-2020','Idul Adha 1441 Hijriyah​'),
+	(29,'17-08-2020','17-08-2020','Independence Day'),
+	(30,'20-08-2020','20-08-2020','Islamic New Year 1442 Hijriyah​'),
+	(31,'29-10-2020','29-10-2020','Prophet Muhammads Birthday'),
+	(32,'25-12-2020','25-12-2020','Christmas Holiday​')
 ON CONFLICT (id)
 DO NOTHING;

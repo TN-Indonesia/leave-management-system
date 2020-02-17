@@ -63,7 +63,7 @@ func (u *Director) GetEmployeePending() (reqPending []structLogic.RequestPending
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		Where(`status = ? `).
-		OrderBy(leave.TableName() + ".created_at DESC")
+		OrderBy(leave.TableName() + ".id DESC")
 	sql := qb.String()
 
 	statPendingDirector := constant.StatusPendingInDirector
@@ -128,7 +128,7 @@ func (u *Director) GetEmployeeApproved() (reqApprove []structLogic.RequestAccept
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		Where(`status = ? `).
-		OrderBy(leave.TableName() + ".created_at DESC")
+		OrderBy(leave.TableName() + ".id DESC")
 	sql := qb.String()
 
 	statApproveDirector := constant.StatusSuccessInDirector
@@ -192,7 +192,7 @@ func (u *Director) GetEmployeeRejected() (reqReject []structLogic.RequestReject,
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
 		Where(`status = ? `).
-		OrderBy(leave.TableName() + ".created_at DESC")
+		OrderBy(leave.TableName() + ".id DESC")
 	sql := qb.String()
 
 	StatRejectInDirector := constant.StatusRejectInDirector

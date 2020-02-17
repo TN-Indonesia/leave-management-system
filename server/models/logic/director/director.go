@@ -58,7 +58,7 @@ func ApproveByDirector(id int64, employeeNumber int64) error {
 	getEmployee, errGetEmployee := DBUser.GetEmployee(employeeNumber)
 	helpers.CheckErr("Error get employee @ApproveByDirector - logicDirector", errGetEmployee)
 
-	getLeave, errGetLeave := DBLeave.GetLeave(employeeNumber)
+	getLeave, errGetLeave := DBLeave.GetLeave(id)
 	helpers.CheckErr("Error get leave @ApproveByDirector", errGetLeave)
 
 	resGet, errGet := DBUser.GetUserLeaveRemaining(getLeave.TypeLeaveID, employeeNumber)
@@ -114,7 +114,7 @@ func RejectByDirector(l *structDB.LeaveRequest, id int64, employeeNumber int64) 
 	getEmployee, errGetEmployee := DBUser.GetEmployee(employeeNumber)
 	helpers.CheckErr("Error get employee @RejectByDirector - logicDirector", errGetEmployee)
 
-	getLeave, errGetLeave := DBLeave.GetLeave(employeeNumber)
+	getLeave, errGetLeave := DBLeave.GetLeave(id)
 	helpers.CheckErr("Error get leave @RejectByDirector - logicDirector", errGetLeave)
 
 	rejectReason := l.RejectReason
