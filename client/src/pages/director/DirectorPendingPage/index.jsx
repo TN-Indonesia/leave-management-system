@@ -355,7 +355,7 @@ class DirectorPendingPage extends Component {
               <Table
                 columns={columns}
                 dataSource={this.state.data}
-                rowKey={record => record.employee_number}
+                rowKey={record => record.id}
                 onRowClick={this.onSelectChange}
                 pagination={{
                   className: "my-pagination",

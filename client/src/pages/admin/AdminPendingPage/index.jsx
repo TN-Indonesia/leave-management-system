@@ -321,7 +321,7 @@ class AdminPendingPage extends Component {
                   defaultCurrent: 1,
                   defaultPageSize: 5,
                   total: `${this.state.data && this.state.data.length}`,
-                  // showSizeChanger: this.onShowSizeChange
+                  showSizeChanger: this.onShowSizeChange
                 }}
               />
             </div>
