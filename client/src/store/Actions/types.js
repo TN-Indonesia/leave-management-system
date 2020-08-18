@@ -1,4 +1,4 @@
-export const ROOT_API = 'http://35.197.155.131:8080'; // GCP
+export const ROOT_API = 'http://34.87.121.8:8080'; // GCP
 // export const ROOT_API = 'http://localhost:8080'; // local
 
 export const CLEAR_FIELD = "CLEAR_FIELD"
@@ -55,3 +55,4 @@ export const EDIT_LEAVE = " EDIT_LEAVE"
 export const UPDATE_REQUEST_PENDING = " UPDATE_REQUEST_PENDING"
 
 export const FETCH_PUBLIC_HOLIDAY = "FETCH_PUBLIC_HOLIDAY"
+export const FETCH_PICKED_DATE_LEAVE = "FETCH_PICKED_DATE_LEAVE"
