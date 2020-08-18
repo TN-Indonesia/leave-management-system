@@ -4,10 +4,11 @@ import { connect } from "react-redux";
 import { adminGetUsers, adminDeleteUser } from "../../../store/Actions/adminActions";
 import HeaderAdmin from "../../../pages/menu/HeaderAdmin";
 import Loading from "../../../components/Loading";
+import Footer from "../../../components/Footer";
 // import Footer from "../../../components/Footer";
 import "./style.css";
 import { Layout, Table, Button, Divider, Popconfirm, message } from "antd";
-const { Content, Footer } = Layout;
+const { Content } = Layout;
 
 class AdminLandingPage extends Component {
   constructor(props) {
@@ -155,12 +156,7 @@ class AdminLandingPage extends Component {
                 />
               </div>
             </Content>
-            <Footer className="App-footer-s">
-              <p>
-                <a href="http://www.tnis.com">PT. TNIS Service Indonesia</a> &copy; 2018. All
-                Right Reserved.
-              </p>
-            </Footer>
+            <Footer />
           </Layout>
         </div>
       );

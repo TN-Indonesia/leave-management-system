@@ -47,6 +47,37 @@ func (l *LeaveRequest) InquiryLeaveRequest(
 	return err
 }
 
+// InquiryLeaveRequest ...
+func (l *LeaveRequest) InquiryLeaveRequestByAccount(
+	employeeNumber int64,
+) (result []structLogic.GetPickedDateLeave, err error) {
+	var dbLeave structDB.LeaveRequest
+
+	o := orm.NewOrm()
+	qb, errQB := orm.NewQueryBuilder("mysql")
+	if errQB != nil {
+		helpers.CheckErr("Query builder failed @GetPickedDateLeave", errQB)
+		return result, errQB
+	}
+
+	qb.Select(
+		dbLeave.TableName()+".id",
+		dbLeave.TableName()+".date_from",
+		dbLeave.TableName()+".date_to").
+		From(dbLeave.TableName()).
+		Where(dbLeave.TableName() + `.employee_number = ? `)
+	sql := qb.String()
+
+	count, errRaw := o.Raw(sql, employeeNumber).QueryRows(&result)
+	if errRaw != nil {
+		helpers.CheckErr("Failed query select @GetPickedDateLeave", errRaw)
+		return result, errors.New("employeeNumber not exist")
+	}
+	beego.Debug("Total Picked Date Leave=", count)
+
+	return result, err
+}
+
 // InquiryLeaveRequestSpecial ...
 func (l *LeaveRequest) InquiryLeaveRequestSpecial(
 	employeeNumber int64,

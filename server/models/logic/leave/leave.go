@@ -286,3 +286,23 @@ func ReportLeaveRequestTypeLeave(query *structAPI.RequestReportTypeLeave) (repor
 
 	return respGet, errGet
 }
+
+// GetCheckedDateLeave ...
+func GetCheckedDateLeave(employeeNumber int64) (result []structLogic.GetPickedDateLeaveConverted, err error) {
+	resultDB, errInquiry := DBLeave.InquiryLeaveRequestByAccount(employeeNumber)
+	var datum structLogic.GetPickedDateLeaveConverted
+	if errInquiry != nil {
+		helpers.CheckErr("Error update leave balance @UpdateLeaveRemaningCancel - logicLeave", errInquiry)
+		return result, errInquiry
+	}
+	for _, val := range resultDB {
+		datum = structLogic.GetPickedDateLeaveConverted{
+			ID:        val.ID,
+			DateStart: val.DateFrom,
+			DateEnd:   val.DateTo,
+		}
+		result = append(result, datum)
+	}
+
+	return result, errInquiry
+}

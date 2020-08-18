@@ -99,6 +99,13 @@ type IBaseLeaveRequest interface {
 		fromDate string,
 	) (err error)
 
+	// InquiryLeaveRequest
+	InquiryLeaveRequestByAccount(
+		employeeNumber int64,
+	) (result []structLogic.GetPickedDateLeave,
+		err error,
+	)
+
 	// InquiryLeaveRequestSpecial
 	InquiryLeaveRequestSpecial(
 		employeeNumber int64,

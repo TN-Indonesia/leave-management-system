@@ -1,11 +1,19 @@
 import {
 	ROOT_API,
-	FETCH_PUBLIC_HOLIDAY
+	FETCH_PUBLIC_HOLIDAY,
+	FETCH_PICKED_DATE_LEAVE
 } from "./types"
 
 function publicHolidayFetch(payload) {
 	return {
 		type: FETCH_PUBLIC_HOLIDAY,
+		payload: payload
+	}
+}
+
+function pickedDateLeaveFetch(payload) {
+	return {
+		type: FETCH_PICKED_DATE_LEAVE,
 		payload: payload
 	}
 }
@@ -21,6 +29,7 @@ export function publicHolidayFetchData() {
 				error
 			}) => {
 				let publicHoliday = seperateDate(body)
+				console.log("aman pak eko 123", publicHoliday)
 				let payload = {
 					publicHoliday
 				}
@@ -32,6 +41,34 @@ export function publicHolidayFetchData() {
 			})
 			.catch(error => {
 				console.error("error @publicHolidayFetchData: ", error)
+			})
+	}
+}
+
+export function pickedDateLeaveFetchData() {
+	const employeeNumber = localStorage.getItem('id')
+	return (dispatch) => {
+		fetch(`${ROOT_API}/api/checked-leave/${employeeNumber}`, {
+				method: 'GET',
+			})
+			.then((resp) => resp.json())
+			.then(({
+				body,
+				error
+			}) => {
+				let pickedLeave = seperateDate(body)
+				console.log("aman pak eko", pickedLeave)
+				let payload = {
+					pickedLeave
+				}
+				dispatch(pickedDateLeaveFetch(payload))
+
+				if (error !== null) {
+					console.error("error not null @pickedDateLeaveFetchData: ", error)
+				}
+			})
+			.catch(error => {
+				console.error("error @pickedDateLeaveFetchData: ", error)
 			})
 	}
 }

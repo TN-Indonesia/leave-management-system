@@ -9,6 +9,7 @@ import (
 	db "server/models/db/pgsql/leave_request"
 	logicHoliday "server/models/logic/holiday"
 	logicLeave "server/models/logic/leave"
+	logicPickedLeave "server/models/logic/leave"
 	logicUser "server/models/logic/user"
 	structAPI "server/structs/api"
 	"strconv"
@@ -97,6 +98,9 @@ func (c *LeaveController) PostLeaveRequestEmployee() {
 		//get all public holiday in 1 year
 		allPublicHoliday, errPublicHoliday := logicHoliday.GetAllPublicHoliday()
 		helpers.CheckErr("Error get public holiday @PostLeaveRequestSupervisor - controller", errPublicHoliday)
+		//get all picked leave
+		allPickedLeave, errPickedLeave := logicPickedLeave.GetCheckedDateLeave(employeeNumber)
+		helpers.CheckErr("Error get public holiday @PostLeaveRequestSupervisor - controller", errPickedLeave)
 
 		for _, holiday := range allPublicHoliday {
 			allDayWithinRange := helpers.GetAllDateWithinRange(holiday.DateStart, holiday.DateEnd) // dapatkan seluruh hari dalam range public holiday
@@ -108,6 +112,17 @@ func (c *LeaveController) PostLeaveRequestEmployee() {
 				}
 			}
 
+		}
+
+		for _, picked := range allPickedLeave {
+			allDayLeaveWithinRange := helpers.GetAllDateWithinRange(picked.DateStart, picked.DateEnd) // dapatkan seluruh hari dalam range public holiday
+
+			for _, l := range allDayLeaveWithinRange { // iterate every date inside range of public holiday
+				//if public holiday date are in range then total - 1
+				if helpers.InTimeSpan(leave.DateFrom, leave.DateTo, l) {
+					leave.Total = leave.Total - 1
+				}
+			}
 		}
 
 		errAddLeave := logicLeave.CreateLeaveRequestEmployee(
@@ -211,6 +226,9 @@ func (c *LeaveController) PostLeaveRequestSupervisor() {
 		//get all public holiday in 1 year
 		allPublicHoliday, errPublicHoliday := logicHoliday.GetAllPublicHoliday()
 		helpers.CheckErr("Error get public holiday @PostLeaveRequestSupervisor - controller", errPublicHoliday)
+		//get all picked leave
+		allPickedLeave, errPickedLeave := logicPickedLeave.GetCheckedDateLeave(employeeNumber)
+		helpers.CheckErr("Error get public holiday @PostLeaveRequestSupervisor - controller", errPickedLeave)
 
 		for _, holiday := range allPublicHoliday {
 			allDayWithinRange := helpers.GetAllDateWithinRange(holiday.DateStart, holiday.DateEnd) // dapatkan seluruh hari dalam range public holiday
@@ -222,6 +240,17 @@ func (c *LeaveController) PostLeaveRequestSupervisor() {
 				}
 			}
 
+		}
+
+		for _, picked := range allPickedLeave {
+			allDayLeaveWithinRange := helpers.GetAllDateWithinRange(picked.DateStart, picked.DateEnd) // dapatkan seluruh hari dalam range public holiday
+
+			for _, l := range allDayLeaveWithinRange { // iterate every date inside range of public holiday
+				//if public holiday date are in range then total - 1
+				if helpers.InTimeSpan(leave.DateFrom, leave.DateTo, l) {
+					leave.Total = leave.Total - 1
+				}
+			}
 		}
 
 		errAddLeave := logicLeave.CreateLeaveRequestSupervisor(
@@ -307,6 +336,10 @@ func (c *LeaveController) PostLeaveRequestAdmin() {
 		allPublicHoliday, errPublicHoliday := logicHoliday.GetAllPublicHoliday()
 		helpers.CheckErr("Error get public holiday @PostLeaveRequestSupervisor - controller", errPublicHoliday)
 
+		//get all picked leave
+		allPickedLeave, errPickedLeave := logicPickedLeave.GetCheckedDateLeave(req.EmployeeNumber)
+		helpers.CheckErr("Error get public holiday @PostLeaveRequestSupervisor - controller", errPickedLeave)
+
 		for _, holiday := range allPublicHoliday {
 			allDayWithinRange := helpers.GetAllDateWithinRange(holiday.DateStart, holiday.DateEnd) // dapatkan seluruh hari dalam range public holiday
 
@@ -316,7 +349,16 @@ func (c *LeaveController) PostLeaveRequestAdmin() {
 					leave.Total = leave.Total - 1
 				}
 			}
+		}
+		for _, picked := range allPickedLeave {
+			allDayLeaveWithinRange := helpers.GetAllDateWithinRange(picked.DateStart, picked.DateEnd) // dapatkan seluruh hari dalam range public holiday
 
+			for _, l := range allDayLeaveWithinRange { // iterate every date inside range of public holiday
+				//if public holiday date are in range then total - 1
+				if helpers.InTimeSpan(leave.DateFrom, leave.DateTo, l) {
+					leave.Total = leave.Total - 1
+				}
+			}
 		}
 
 		errAddLeave := logicLeave.CreateLeaveRequestAdmin(
@@ -537,5 +579,31 @@ func (c *LeaveController) GetBackToWorkDate() {
 	err := c.Ctx.Output.JSON(resp, false, false)
 	if err != nil {
 		helpers.CheckErr("failed giving output @GetReportLeaveRequest - controller", err)
+	}
+}
+
+// GetCheckedDateLeave ...
+func (c *LeaveController) GetCheckedDateLeave() {
+	var resp structAPI.RespData
+
+	idStr := c.Ctx.Input.Param(":id")
+	employeeNumber, errCon := strconv.ParseInt(idStr, 0, 64)
+	if errCon != nil {
+		helpers.CheckErr("Convert id failed @GetCheckedDateLeave - controller", errCon)
+		resp.Error = errors.New("Convert id failed").Error()
+		return
+	}
+
+	res, errGet := logicLeave.GetCheckedDateLeave(employeeNumber)
+	if errGet != nil {
+		resp.Error = errGet.Error()
+		c.Ctx.Output.SetStatus(400)
+	} else {
+		resp.Body = res
+	}
+
+	err := c.Ctx.Output.JSON(resp, false, false)
+	if err != nil {
+		helpers.CheckErr("Failed giving output @GetCheckedDateLeave - controller", err)
 	}
 }

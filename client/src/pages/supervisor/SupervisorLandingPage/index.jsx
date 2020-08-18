@@ -51,12 +51,6 @@ export class SupervisorLandingPage extends React.Component {
             } days of 12 days`}
           </p>
         );
-      } else if (dataType[j].type_name === "Errand Leave") {
-        typeLeave.push(
-          <p>{`${dataType[j].type_name} : ${
-            dataType[j].leave_remaining
-          } days of 3 days`}</p>
-        );
       } else if (dataType[j].type_name === "Sick Leave") {
         typeLeave.push(
           <p>{`${dataType[j].type_name} : ${
@@ -79,15 +73,7 @@ export class SupervisorLandingPage extends React.Component {
             } days of 90 days`}
           </p>
         );
-      } else if (dataType[j].type_name === "Other Leave") {
-        typeLeave.push(
-          <p>
-            {`${dataType[j].type_name} : ${
-              dataType[j].leave_remaining
-            } days of 2 days`}
-          </p>
-        );
-      }
+      } 
     }
 
     if (this.props.loading) {

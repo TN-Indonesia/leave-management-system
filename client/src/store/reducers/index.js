@@ -26,6 +26,7 @@ import fetchUserLoginReducer from './fetchUserLoginReducer';
 import AddSupervisorReducer from './AddSupervisorReducer';
 
 import fetchPublicHolidayReducer from './fetchPublicHolidayReducer';
+import fetchDatePickedLeaveReducer from './fetchDatePickedLeaveReducer';
 
 
 const appStore = combineReducers({
@@ -54,6 +55,7 @@ const appStore = combineReducers({
 	AddSupervisorReducer,
 
 	fetchPublicHolidayReducer,
+	fetchDatePickedLeaveReducer,
 });
 
 export default appStore

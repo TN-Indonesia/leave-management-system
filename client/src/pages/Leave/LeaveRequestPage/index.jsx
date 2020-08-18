@@ -10,7 +10,7 @@ import {
 } from "../../../store/Actions/leaveRequestAction";
 import { typeLeaveFetchData } from "../../../store/Actions/typeLeaveAction";
 import { userLoginFetchData } from "../../../store/Actions/userLoginAction";
-import { publicHolidayFetchData } from "../../../store/Actions/publicHolidayAction";
+import { publicHolidayFetchData, pickedDateLeaveFetchData } from "../../../store/Actions/publicHolidayAction";
 import HeaderNav from "../../../pages/menu/HeaderNav";
 import Footer from "../../../components/Footer";
 import "./style.css";
@@ -42,6 +42,7 @@ class LeaveRequestPage extends Component {
       contactID: "+62",
       halfDate: [],
       publicHolidayDates: null,
+      pickedDateLeave: null,
       totalDays: 0,
       backOnDate : false,
       dateBackOn : "",
@@ -80,12 +81,19 @@ class LeaveRequestPage extends Component {
     this.props.typeLeaveFetchData();
     this.props.userLoginFetchData();
     this.props.publicHolidayFetchData();
+    this.props.pickedDateLeaveFetchData();
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.publicHoliday !== this.props.publicHoliday) {
       this.setState({ publicHolidayDates: nextProps.publicHoliday });
     }
+    
+    if (nextProps.pickedLeave !== this.props.pickedLeave) {
+      this.setState({ pickedDateLeave: nextProps.pickedLeave });
+    }
+    console.log("aalah apa lagi ===>>>",nextProps.pickedLeave)
+    
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -253,9 +261,12 @@ class LeaveRequestPage extends Component {
 
   validationHolliday(day) {
     const publicHolidayDates = this.state.publicHolidayDates;
+    const pickedDateLeave = this.state.pickedDateLeave;
+    console.log("bacot 123", publicHolidayDates)
+    console.log("bacot", pickedDateLeave)
     let current= moment(day,"DD-MM-YYYY")
-    console.log("adakah isinya:", publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY")))
-  if (publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
+  if (   publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
+      || pickedDateLeave.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
       || moment(current._d).format("dddd") === "Saturday"
       || moment(current._d).format("dddd") === "Sunday") {
           current.add(1,"days")
@@ -291,7 +302,6 @@ class LeaveRequestPage extends Component {
         halfDate: update(prevState.halfDate, { $push: [e.target.value] })
       }));
       if(e.target.value === last ) {
-        console.log("masuk pak eko")
         this.setState({ backOnDate: true });
       };
     } else {
@@ -393,6 +403,7 @@ class LeaveRequestPage extends Component {
 
   disabledEndDate = endValue => {
     const publicHolidayDates = this.state.publicHolidayDates;
+    const pickedDateLeave = this.state.pickedDateLeave;
     const startValue = this.state.from;
     if (!endValue || !startValue) {
       return false;
@@ -400,19 +411,24 @@ class LeaveRequestPage extends Component {
 
     return endValue.valueOf() <= startValue.valueOf()
       || publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(endValue).format("DDMMYYYY"))
+      || pickedDateLeave.find(d => moment(d).format("DDMMYYYY") === moment(endValue).format("DDMMYYYY"))
       || moment(endValue).format("dddd") === "Saturday"
       || moment(endValue).format("dddd") === "Sunday";
   };
 
   disabledDate(current) {
     const publicHolidayDates = this.state.publicHolidayDates;
-    return current < moment().startOf("day") || publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
+    const pickedDateLeave = this.state.pickedDateLeave;
+    return current < moment().startOf("day") 
+    || publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
+    || pickedDateLeave.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
       || moment(current._d).format("dddd") === "Saturday"
       || moment(current._d).format("dddd") === "Sunday";
   }
 
   disabledDateSick(current) {
     const publicHolidayDates = this.state.publicHolidayDates;
+    const pickedDateLeave = this.state.pickedDateLeave;
     return (
       current &&
       current <
@@ -421,20 +437,24 @@ class LeaveRequestPage extends Component {
         .startOf("day")
     )
       || publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
+      || pickedDateLeave.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
       || moment(current._d).format("dddd") === "Saturday"
       || moment(current._d).format("dddd") === "Sunday";
   }
 
   disabledDateBack(current) {
     const publicHolidayDates = this.state.publicHolidayDates;
+    const pickedDateLeave = this.state.pickedDateLeave;
     return this.state.to > current
       || publicHolidayDates.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
+      || pickedDateLeave.find(d => moment(d).format("DDMMYYYY") === moment(current._d).format("DDMMYYYY"))
       || moment(current._d).format("dddd") === "Saturday"
       || moment(current._d).format("dddd") === "Sunday";
   }
 
   getDates(start, end) {
     let publicHolidayDates = this.state.publicHolidayDates;
+    let pickedDateLeave = this.state.pickedDateLeave;
     let startDate = new Date(start);
     let endDate = new Date(end);
     let dates = [];
@@ -470,20 +490,44 @@ class LeaveRequestPage extends Component {
       }
     }
 
+    if (pickedDateLeave) {
+      let newDate = []
+      for (let i = 0; i < pickedDateLeave.length; i++) {
+        let date = pickedDateLeave[i].split("-").reverse().join("-")
+        newDate.push(date)
+      }
+
+      for (let i = 0; i < dates.length; i++) {
+        for (let j = 0; j < newDate.length; j++) {
+          if (dates[i] === newDate[j]) {
+            dates.splice(i, 1);
+          }
+        }
+      }
+    }
+
     return dates;
   }
 
   countTotalDay(startDate, endDate) {
-    let disabledDays = this.state.publicHolidayDates;
+    let publicHoliday = this.state.publicHolidayDates;
+    let pickedDateLeave = this.state.pickedDateLeave;
+
     let start = new Date(startDate);
     let end = new Date(endDate);
     let weekend_count = 0;
     for (let i = start.valueOf(); i <= end.valueOf(); i += 86400000) {
       let temp = new Date(i);
-      let holiday;
-      for (let j = 0; j < disabledDays.length; j++) {
-        holiday = disabledDays[j];
+      let holiday,picked;
+      for (let j = 0; j < publicHoliday.length; j++) {
+        holiday = publicHoliday[j];
         if (!(temp < new Date(holiday)) && !(temp > new Date(holiday))) {
+          weekend_count++
+        }
+      }
+      for (let k = 0; k < pickedDateLeave.length; k++) {
+        picked = pickedDateLeave[k];
+        if (!(temp < new Date(picked)) && !(temp > new Date(picked))) {
           weekend_count++
         }
       }
@@ -549,6 +593,7 @@ class LeaveRequestPage extends Component {
 
     //TODO make backon for half leave
     for (let i = 0; i < dates.length; i++) {
+      if (i === 0 || i === dates.length - 1){
       elements.push(
         <Checkbox
           key={i}
@@ -562,6 +607,7 @@ class LeaveRequestPage extends Component {
         </Checkbox>,
         <br />
       );
+    }
     }
 
     if (this.state.start !== null && this.state.end !== null) {
@@ -624,7 +670,7 @@ class LeaveRequestPage extends Component {
                     style={formStyle}
                   >
                     {this.props.typeLeave.map(d => (
-                      <Option key={d.id} value={d.id}>{d.type_name}</Option>
+                      d.id !== 22? ( <Option key={d.id} value={d.id}>{d.type_name}</Option>):""
                     ))}
 
                   </Select>
@@ -867,7 +913,8 @@ const mapStateToProps = state => ({
   leaveForm: state.leaveRequestReducer,
   typeLeave: state.fetchTypeLeaveReducer.typeLeave,
   user: state.fetchUserLoginReducer.user,
-  publicHoliday: state.fetchPublicHolidayReducer.publicHoliday
+  publicHoliday: state.fetchPublicHolidayReducer.publicHoliday,
+  pickedLeave: state.fetchDatePickedLeaveReducer.pickedLeave
 });
 
 const WrappedLeaveForm = Form.create()(LeaveRequestPage);
@@ -880,7 +927,8 @@ const mapDispatchToProps = dispatch =>
       SumbitLeaveSupervisor,
       typeLeaveFetchData,
       userLoginFetchData,
-      publicHolidayFetchData
+      publicHolidayFetchData,
+      pickedDateLeaveFetchData
     },
     dispatch
   );

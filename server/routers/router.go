@@ -64,6 +64,11 @@ func init() {
 			&controllers.LeaveController{},
 			"post:PostLeaveRequestSupervisor",
 		),
+		// inquiry checkedDateLeave
+		beego.NSRouter("/checked-leave/:id:int ",
+			&controllers.LeaveController{},
+			"get:GetCheckedDateLeave",
+		),
 		// create leave request for admin/Director
 		beego.NSRouter("/admin/leave ",
 			&controllers.LeaveController{},
