@@ -42,7 +42,7 @@ class LeaveRequestPage extends Component {
       contactID: "+62",
       halfDate: [],
       publicHolidayDates: null,
-      pickedDateLeave: null,
+      pickedDateLeave: ["2019-01-01"],
       totalDays: 0,
       backOnDate : false,
       dateBackOn : "",
