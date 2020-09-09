@@ -1,0 +1,28 @@
+[Unit]
+Description=E-Leave Server
+After=network.target
+[Service]
+# GCP
+# ExecStart=/home/ubuntu/e-leave/src/server/export.sh
+# Local
+ExecStart=/home/tnisindo/Work/TN-Indo/E-Leave/src/server/export.sh
+Restart=on-failure
+Type=simple
+# GCP
+User=ubuntu
+# Local
+User=tnisindo
+# GCP
+# Group=ubuntu
+# Local
+Group=tnisindo
+# GCP
+# Environment=PATH=/usr/bin:/usr/local/bin:/home/ubuntu/GOBIN/bee
+# Local
+Environment=PATH=/usr/bin:/usr/local/bin:/home/tnisindo/go/bin
+# GCP
+# WorkingDirectory=/home/ubuntu/e-leave/src/server
+# Local
+WorkingDirectory=/home/tnisindo/Work/TN-Indo/E-Leave/src/server
+[Install]
+# WantedBy=multi-user.target
