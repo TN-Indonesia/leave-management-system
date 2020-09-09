@@ -17,7 +17,7 @@ Group=ubuntu
 # Local
 # Group=tnisindo
 # GCP
-Environment=PATH=/usr/bin:/usr/local/bin:/home/ubuntu/GOBIN
+Environment=PATH=/usr/bin:/usr/local/bin:/home/ubuntu/GOBIN:/usr/local/go/bin
 # Local
 # Environment=PATH=/usr/bin:/usr/local/bin:/home/tnisindo/go/bin
 # GCP
