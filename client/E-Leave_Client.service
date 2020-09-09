@@ -2,24 +2,21 @@
 Description=E-Leave Client
 After=network.target
 [Service]
-# GCP
-# ExecStart=serve -s -l 3000 build
-# Local
 ExecStart=serve -s -l 3000 build
 Restart=on-failure
 Type=simple
 # GCP
-# User=ubuntu
+User=ubuntu
 # Local
-User=tnisindo
+# User=tnisindo
 # GCP
-# Group=ubuntu
+Group=ubuntu
 # Local
-Group=tnisindo
+# Group=tnisindo
 Environment=PATH=/usr/bin:/usr/local/bin
 # GCP
-# WorkingDirectory=/home/ubuntu/e-leave/src/client
+WorkingDirectory=/home/ubuntu/e-leave/src/client
 # Local
-WorkingDirectory=/home/tnisindo/Work/TN-Indo/E-Leave/src/client
+# WorkingDirectory=/home/tnisindo/Work/TN-Indo/E-Leave/src/client
 [Install]
 # WantedBy=multi-user.target
