@@ -63,30 +63,30 @@ func (c *AdminController) CreateUser() {
 	go func() {
 		if reqUser.Gender == "Male" && reqUser.Role == "employee" {
 			logicUser.CreateUserTypeLeave(lastRowID, 11, 12.0)
-			logicUser.CreateUserTypeLeave(lastRowID, 22, 3.0)
+			// logicUser.CreateUserTypeLeave(lastRowID, 22, 3.0)
 			logicUser.CreateUserTypeLeave(lastRowID, 33, 30.0)
 			logicUser.CreateUserTypeLeave(lastRowID, 44, 2.0)
-			logicUser.CreateUserTypeLeave(lastRowID, 66, 2.0)
+			logicUser.CreateUserTypeLeave(lastRowID, 66, 99.0)
 		} else if reqUser.Gender == "Male" && reqUser.Role == "supervisor" {
 			logicUser.CreateUserTypeLeave(lastRowID, 11, 12.0)
-			logicUser.CreateUserTypeLeave(lastRowID, 22, 3.0)
+			// logicUser.CreateUserTypeLeave(lastRowID, 22, 3.0)
 			logicUser.CreateUserTypeLeave(lastRowID, 33, 30.0)
 			logicUser.CreateUserTypeLeave(lastRowID, 44, 2.0)
-			logicUser.CreateUserTypeLeave(lastRowID, 66, 2.0)
+			logicUser.CreateUserTypeLeave(lastRowID, 66, 99.0)
 		} else if reqUser.Gender == "Female" && reqUser.Role == "employee" {
 			logicUser.CreateUserTypeLeave(lastRowID, 11, 12.0)
-			logicUser.CreateUserTypeLeave(lastRowID, 22, 3.0)
+			// logicUser.CreateUserTypeLeave(lastRowID, 22, 3.0)
 			logicUser.CreateUserTypeLeave(lastRowID, 33, 30.0)
 			logicUser.CreateUserTypeLeave(lastRowID, 44, 2.0)
 			logicUser.CreateUserTypeLeave(lastRowID, 55, 90.0)
-			logicUser.CreateUserTypeLeave(lastRowID, 66, 2.0)
+			logicUser.CreateUserTypeLeave(lastRowID, 66, 99.0)
 		} else if reqUser.Gender == "Female" && reqUser.Role == "supervisor" {
 			logicUser.CreateUserTypeLeave(lastRowID, 11, 12.0)
-			logicUser.CreateUserTypeLeave(lastRowID, 22, 3.0)
+			// logicUser.CreateUserTypeLeave(lastRowID, 22, 3.0)
 			logicUser.CreateUserTypeLeave(lastRowID, 33, 30.0)
 			logicUser.CreateUserTypeLeave(lastRowID, 44, 2.0)
 			logicUser.CreateUserTypeLeave(lastRowID, 55, 90.0)
-			logicUser.CreateUserTypeLeave(lastRowID, 66, 2.0)
+			logicUser.CreateUserTypeLeave(lastRowID, 66, 99.0)
 		}
 	}()
 
@@ -306,12 +306,12 @@ func (c *AdminController) CancelRequestLeave() {
 func (c *AdminController) ResetLeaveBalance() {
 	var resp structAPI.RespData
 
-	errReset := logicAdmin.ResetUserTypeLeave(12, 11)
-	errReset = logicAdmin.ResetUserTypeLeave(3, 22)
-	errReset = logicAdmin.ResetUserTypeLeave(30, 33)
-	errReset = logicAdmin.ResetUserTypeLeave(2, 44)
-	errReset = logicAdmin.ResetUserTypeLeave(90, 55)
-	errReset = logicAdmin.ResetUserTypeLeave(2, 66)
+	errReset := logicAdmin.ResetUserTypeLeave(12.0, 11)
+	// errReset = logicAdmin.ResetUserTypeLeave(3, 22)
+	errReset = logicAdmin.ResetUserTypeLeave(30.0, 33)
+	errReset = logicAdmin.ResetUserTypeLeave(2.0, 44)
+	errReset = logicAdmin.ResetUserTypeLeave(90.0, 55)
+	errReset = logicAdmin.ResetUserTypeLeave(99.0, 66)
 
 	if errReset != nil {
 		resp.Error = errReset.Error()

@@ -78,7 +78,7 @@ func init() {
 		// download report leave request csv
 		beego.NSRouter("/leave/report",
 			&controllers.LeaveController{},
-			"get:GetDownloadReportCSV",
+			"post:GetDownloadReportCSV",
 		),
 		// get report leave request
 		beego.NSRouter("/leave/reports",

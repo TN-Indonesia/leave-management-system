@@ -132,7 +132,6 @@ class AdminApprovePage extends Component {
                         text
                       ) // eslint-disable-line
                 )}
-                }
               </span>
             )
           };
@@ -470,7 +469,6 @@ class AdminApprovePage extends Component {
                     onChange={this.handleChangeSelect}
                   >
                     <Option value="11">Annual Leave</Option>
-                    <Option value="22">Errand Leave</Option>
                     <Option value="33">Sick Leave</Option>
                     <Option value="44">Marriage Leave</Option>
                     <Option value="55">Maternity Leave</Option>

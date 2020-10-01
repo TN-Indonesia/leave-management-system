@@ -120,7 +120,6 @@ class SupervisorPendingPage extends Component {
                         text
                       ) // eslint-disable-line
                 )}
-                }
               </span>
             )
           };
@@ -505,7 +504,7 @@ class SupervisorPendingPage extends Component {
                     <tr>
                       <td>Leave Balance</td>
                       <td>&nbsp;:</td>
-                      <td>&nbsp;{this.state.user && this.state.user.leave_remaining} days</td>
+                      <td>&nbsp;{this.state.user  && this.state.user.type_name !== "Other Leave" && this.state.user.leave_remaining} days</td>
                     </tr>
                     <tr>
                       <td>Contact Address</td>

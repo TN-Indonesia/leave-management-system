@@ -13,7 +13,6 @@ import (
 	logicUser "server/models/logic/user"
 	structAPI "server/structs/api"
 	"strconv"
-	"time"
 
 	"github.com/astaxie/beego"
 )
@@ -473,16 +472,23 @@ func (c *LeaveController) DeleteRequest() {
 
 // GetDownloadReportCSV ...
 func (c *LeaveController) GetDownloadReportCSV() {
-	var reqDt = structAPI.RequestReport{
-		FromDate: c.Ctx.Input.Query("fromDate"),
-		ToDate:   c.Ctx.Input.Query("toDate"),
+	var (
+		req  structAPI.RequestReport
+		resp structAPI.RespData
+	)
+	body := c.Ctx.Input.RequestBody
+	fmt.Println("GET-DOWNLOAD-CSV-REQUEST=======>", string(body))
+
+	errMarshal := json.Unmarshal(body, &req)
+	if errMarshal != nil {
+		helpers.CheckErr("Failed unmarshall req body @PostLeaveRequestEmployee - controller", errMarshal)
+		resp.Error = errors.New("Type request malform").Error()
+		c.Ctx.Output.SetStatus(400)
+		c.Ctx.Output.JSON(resp, false, false)
+		return
 	}
 
-	dt := time.Now()
-	fileName := "report_leave_request_" + dt.Format("20060102")
-	path := constant.GOPATH + "/src/" + constant.GOAPP + "/storages/" + fileName + ".csv"
-
-	errGet := logicLeave.DownloadReportCSV(&reqDt, path)
+	errGet := logicLeave.DownloadReportCSV(req)
 	if errGet != nil {
 		beego.Debug("Error get csv @GetDownloadReportCSV", errGet)
 	}
@@ -504,7 +510,7 @@ func (c *LeaveController) GetDownloadReportCSV() {
 	// c.Ctx.Output.Header("Cache-Control", "no-cache, no-store, must-revalidate")
 	// c.Ctx.Output.Header("Pragma", "no-cache")
 
-	c.Ctx.Output.Download(path, fileName+".csv")
+	c.Ctx.Output.Download(constant.GOPATH + "/src/server/report.xlsx")
 	// http.ServeFile(c.Ctx.Output.Context.ResponseWriter, c.Ctx.Output.Context.Request, path)
 }
 

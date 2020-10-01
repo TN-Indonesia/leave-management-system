@@ -75,7 +75,6 @@ class EmployeeApprovePage extends Component {
                         text
                       ) // eslint-disable-line
                 )}
-                }
               </span>
             )
           };
@@ -343,12 +342,12 @@ class EmployeeApprovePage extends Component {
                     <tr>
                       <td>Before Leave Balance</td>
                       <td>&nbsp;:</td>
-                      <td>&nbsp;{this.state.user && this.state.user.before_leave_balance} days</td>
+                      <td>&nbsp;{this.state.user && this.state.user.type_name !== "Other Leave" && this.state.user.before_leave_balance} days</td>
                     </tr>
                     <tr>
                       <td>After Leave Balance</td>
                       <td>&nbsp;:</td>
-                      <td>&nbsp;{this.state.user && this.state.user.after_leave_balance} days</td>
+                      <td>&nbsp;{this.state.user && this.state.user.type_name !== "Other Leave" && this.state.user.after_leave_balance} days</td>
                     </tr>
                     <tr>
                       <td>Contact Address</td>

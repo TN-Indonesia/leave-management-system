@@ -574,16 +574,17 @@ func (l *LeaveRequest) ReportLeaveRequest(fromDate string, toDate string) (
 		InnerJoin(userTypeLeave.TableName()).
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
-		Where("DATE(" + leave.TableName() + ".date_from) >= DATE(?)").
-		And("DATE(" + leave.TableName() + ".date_from) <= DATE(?)").
+		Where("TO_DATE(" + leave.TableName() + ".date_from,'DD-MM-YYYYY') >= TO_DATE(?,'DD-MM-YYYYY')").
+		And("TO_DATE(" + leave.TableName() + ".date_to,'DD-MM-YYYYY') <= TO_DATE(?,'DD-MM-YYYYY')").
 		And(leave.TableName() + `.status = ? `).
-		OrderBy("DATE(" + leave.TableName() + ".date_from) ASC ")
+		OrderBy("TO_DATE(" + leave.TableName() + ".date_from,'DD-MM-YYYYY') ASC ")
 	sql := qb.String()
 
 	statApprovedDirector := constant.StatusSuccessInDirector
 
 	count, errRaw := o.Raw(sql, fromDate, toDate, statApprovedDirector).QueryRows(&report)
 	if errRaw != nil {
+		beego.Warning(fromDate)
 		beego.Warning(toDate)
 		helpers.CheckErr("Failed query select @ReportLeaveRequest", errRaw)
 		return report, errRaw
@@ -642,11 +643,11 @@ func (l *LeaveRequest) ReportLeaveRequestTypeLeave(
 		InnerJoin(userTypeLeave.TableName()).
 		On(userTypeLeave.TableName() + ".type_leave_id" + "=" + leave.TableName() + ".type_leave_id").
 		And(userTypeLeave.TableName() + ".employee_number" + "=" + leave.TableName() + ".employee_number").
-		Where("DATE(" + leave.TableName() + ".date_from) >= DATE(?)").
-		And("DATE(" + leave.TableName() + ".date_from) <= DATE(?)").
+		Where("TO_DATE(" + leave.TableName() + ".date_from,'DD-MM-YYYYY') >= TO_DATE(?,'DD-MM-YYYYY')").
+		And("TO_DATE(" + leave.TableName() + ".date_to,'DD-MM-YYYYY') <= TO_DATE(?,'DD-MM-YYYYY')").
 		And(leave.TableName() + `.status = ?`).
 		And(leave.TableName() + `.type_leave_id = ?`).
-		OrderBy("DATE(" + leave.TableName() + ".date_from) ASC ")
+		OrderBy("TO_DATE(" + leave.TableName() + ".date_from,'DD-MM-YYYYY') ASC ")
 	sql := qb.String()
 
 	// id, errCon := strconv.ParseInt(query.TypeLeaveID, 0, 64)

@@ -2,11 +2,16 @@ package leave
 
 import (
 	"errors"
+	"fmt"
 	"server/helpers"
+	"server/helpers/constant"
 	"server/models/logic/user"
+	"time"
+
 	structAPI "server/structs/api"
 	structLogic "server/structs/logic"
-	"time"
+
+	"github.com/360EntSecGroup-Skylar/excelize"
 )
 
 // CreateLeaveRequestEmployee ...
@@ -258,13 +263,56 @@ func UpdateLeaveRemaningCancel(total float64, employeeNumber int64, typeID int64
 }
 
 // DownloadReportCSV ...
-func DownloadReportCSV(query *structAPI.RequestReport, path string) error {
-	errGet := DBLeave.DownloadReportCSV(query.FromDate, query.ToDate, path)
-	if errGet != nil {
-		helpers.CheckErr("Error get report @DownloadReportCSV - logicLeave", errGet)
+func DownloadReportCSV(query structAPI.RequestReport) (err error) {
+	Data := []structLogic.ReportLeaveRequest{}
+	path := constant.GOPATH + "/src/server/views/"
+	xlsx, err := excelize.OpenFile(path + "template.xlsx")
+	if err != nil {
+		helpers.CheckErr("Error OpenFile @DownloadReportCSV - logicLeave", err)
 	}
+	sheet1Name := "Sheet1"
+	if query.TypeLeaveID != "" {
+		Data, err = DBLeave.ReportLeaveRequestTypeLeave(query.FromDate, query.ToDate, query.TypeLeaveID)
+		if err != nil {
+			helpers.CheckErr("Error get report type leave @ReportLeaveRequestTypeLeave - logicLeave", err)
+		}
+	} else {
+		Data, err = DBLeave.ReportLeaveRequest(query.FromDate, query.ToDate)
+		if err != nil {
+			helpers.CheckErr("Error get report @DownloadReportCSV - logicLeave", err)
+		}
+	}
+	for index, val := range Data {
+		timeFrom := ""
+		timeUntil := ""
+		if val.HalfDates != "{}" {
+			inputFmt := val.HalfDates[1 : len(val.HalfDates)-1]
+			if val.BackOn == inputFmt {
+				timeFrom = "08:00"
+				timeUntil = "12:00"
+			} else {
+				timeFrom = "13:00"
+				timeUntil = "17:00"
+			}
+		}
 
-	return errGet
+		xlsx.SetCellValue(sheet1Name, fmt.Sprintf("A%d", index+3), index+1)
+		xlsx.SetCellValue(sheet1Name, fmt.Sprintf("B%d", index+3), val.EmployeeNumber)
+		xlsx.SetCellValue(sheet1Name, fmt.Sprintf("C%d", index+3), val.Name)
+		xlsx.SetCellValue(sheet1Name, fmt.Sprintf("D%d", index+3), val.Position)
+		xlsx.SetCellValue(sheet1Name, fmt.Sprintf("E%d", index+3), val.TypeName)
+		xlsx.SetCellValue(sheet1Name, fmt.Sprintf("F%d", index+3), val.DateFrom)
+		xlsx.SetCellValue(sheet1Name, fmt.Sprintf("G%d", index+3), val.DateTo)
+		xlsx.SetCellValue(sheet1Name, fmt.Sprintf("H%d", index+3), timeFrom)
+		xlsx.SetCellValue(sheet1Name, fmt.Sprintf("I%d", index+3), timeUntil)
+		xlsx.SetCellValue(sheet1Name, fmt.Sprintf("J%d", index+3), val.Total)
+		xlsx.SetCellValue(sheet1Name, fmt.Sprintf("K%d", index+3), val.Reason)
+	}
+	err = xlsx.SaveAs("./report.xlsx")
+	if err != nil {
+		fmt.Println(err)
+	}
+	return err
 }
 
 // ReportLeaveRequest ...

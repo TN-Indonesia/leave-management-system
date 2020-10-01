@@ -112,7 +112,6 @@ class AdminPendingPage extends Component {
                         text
                       ) // eslint-disable-line
                 )}
-                }
               </span>
             )
           };

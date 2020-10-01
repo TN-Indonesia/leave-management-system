@@ -15,10 +15,9 @@ let adminState = {
 	leaves: [],
 	balances: [
 		{ type_name: "Annual Leave", leave_remaining: 12 },
-		{ type_name: "Errand Leave", leave_remaining: 3 },
 		{ type_name: "Sick Leave", leave_remaining: 30 },
 		{ type_name: "Marriage Leave", leave_remaining: 2 },
-		{ type_name: "Other Leave", leave_remaining: 2 }
+		{ type_name: "Other Leave", leave_remaining: 99 }
 	],
 }
 

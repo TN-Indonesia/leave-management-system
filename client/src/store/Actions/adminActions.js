@@ -334,17 +334,22 @@ export function cancelRequestLeave(users, id, enumber) {
 }
 
 export function downloadReport(from, to) {
+	var struct = {
+		fromDate : from,
+		toDate : to,
+		typeLeaveID:""
+	}
 	return (dispatch) => {
-		fetch(`${ROOT_API}/api/leave/reports?fromDate=${from}&toDate=${to}`, {
-				method: 'GET'
+		fetch(`${ROOT_API}/api/leave/report`, {
+				method: 'POST',
+				body: JSON.stringify(struct),
 			})
-			.then((resp) => resp.json())
-			.then(({
-				body,
-				error
-			}) => {
-				if (body !== null) {
-					const url = window.URL.createObjectURL(new Blob([arrayToCSV(body)]));
+			.then((resp) => resp.blob())
+			.then((blob) => {
+				if (blob !== null) {
+					const url = window.URL.createObjectURL(
+						new Blob([blob]),
+					  );
 					const link = document.createElement('a');
 					link.href = url;
 					link.setAttribute('download', 'report_leave_request.xlsx');
@@ -352,10 +357,8 @@ export function downloadReport(from, to) {
 					link.click();
 					message.success('Download success')
 					window.location.reload();
-				} else if (body === null) {
+				} else if (blob === null) {
 					message.error('Data is not available')
-				} else {
-					message.error(error)
 				}
 			})
 			.catch(error => {
@@ -365,32 +368,35 @@ export function downloadReport(from, to) {
 }
 
 export function downloadReportTypeLeave(from, to, id) {
+	var struct = {
+		fromDate : from,
+		toDate : to,
+		typeLeaveID:id
+	}
 	return (dispatch) => {
-		fetch(`${ROOT_API}/api/leave/report/type?fromDate=${from}&toDate=${to}&typeID=${id}`, {
-				method: 'GET'
+		fetch(`${ROOT_API}/api/leave/report`, {
+				method: 'POST',
+				body: JSON.stringify(struct),
 			})
-			.then((resp) => resp.json())
-			.then(({
-				body,
-				error
-			}) => {
-				if (body !== null) {
-					const url = window.URL.createObjectURL(new Blob([arrayToCSV(body)]));
+			.then((resp) => resp.blob())
+			.then((blob) => {
+				if (blob !== null) {
+					const url = window.URL.createObjectURL(
+						new Blob([blob]),
+					  );
 					const link = document.createElement('a');
 					link.href = url;
-					link.setAttribute('download', 'report_leave_request_by_type_leave.xlsx');
+					link.setAttribute('download', 'report_leave_request.xlsx');
 					document.body.appendChild(link);
 					link.click();
 					message.success('Download success')
 					window.location.reload();
-				} else if (body === null) {
+				} else if (blob === null) {
 					message.error('Data is not available')
-				} else {
-					message.error(error)
 				}
 			})
 			.catch(error => {
-				console.error("error @downloadReportTypeLeave: ", error)
+				console.error("error @downloadReport: ", error)
 			})
 	}
 }
